@@ -1,0 +1,9 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>OSIDocker</groupId>
+  <artifactId>OSIDocker</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>OpenSourceInDocker</name>
+  <description>此项目主要打算用来将我在工作中用到的所有好用的功能全部开源出来提供给开源爱好者一起使用，丰富大家可使用的功能</description>
+</project>
