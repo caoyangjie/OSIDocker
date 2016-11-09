@@ -2,15 +2,14 @@ package org.osidocker.gw.service.caller;
 
 import org.osidocker.gw.service.api.HelloService;
 import org.osidocker.gw.service.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-
 @Controller
 public class StartController {
-	
-	@Reference
+
+	@Autowired
 	protected HelloService hsAPI;
 	
 	@RequestMapping("/api")

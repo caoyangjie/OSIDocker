@@ -5,7 +5,7 @@ import org.osidocker.gw.service.entity.User;
 
 import com.alibaba.dubbo.config.annotation.Service;
 
-@Service(version="1.0.0")
+@Service
 public class HelloServiceImpl implements HelloService {
 
 	@Override

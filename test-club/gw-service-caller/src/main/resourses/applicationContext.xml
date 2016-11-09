@@ -6,9 +6,11 @@
 	<dubbo:protocol name="dubbo" host="${dubbo.protocol.dubbo.host}"
 		port="${dubbo.protocol.dubbo.port}" charset="UTF-8" threadpool="fixed"
 		threads="500" />
-	<dubbo:application name="${dubbo.application.name}"></dubbo:application>
-	<dubbo:registry address="${dubbo.registry.address}"	check="true"></dubbo:registry>
-	<dubbo:provider timeout="6000" />
+	<!-- 消费者应用名，不要与提供者一样 -->
+	<dubbo:application name="${dubbo.application.name}" />
+	<!-- 注册中心地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+	<!-- 用户服务接口,check=false表示服务不启动消费者照样能启动 -->
+	<dubbo:reference interface="org.osidocker.gw.service.api.HelloService" id="hsAPI" check="false" />
 	<dubbo:consumer timeout="6000" check="false" />
-	<dubbo:reference id="memberProvider" interface="org.osidocker.gw.service.api.HelloService" timeout="6000" check="false" />
 </beans>
