@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <name>osidocker-redis-support</name>
-  <url>http://maven.apache.org</url>
+  <url>https://github.com/caoyangjie/OSIDocker</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
