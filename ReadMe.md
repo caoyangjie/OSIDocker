@@ -7,3 +7,9 @@
 	shiro权限管理
 	docker整合
 	
+<dependencies>  
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+</dependencies>  
