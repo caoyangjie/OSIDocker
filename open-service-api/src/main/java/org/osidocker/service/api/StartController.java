@@ -1,10 +1,16 @@
 package org.osidocker.service.api;
 
+import java.util.Date;
+import java.util.List;
+
 import org.osidocker.mongo.service.api.MongoAPI;
+import org.osidocker.mongo.service.entity.Example;
 import org.osidocker.redis.service.api.RedisAPI;
 import org.osidocker.zbus.service.EnumZbusMqName;
 import org.osidocker.zbus.service.api.ZbusAPI;
 import org.osidocker.zbus.service.entity.TransformData;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +62,15 @@ public class StartController {
 			
 	@RequestMapping("/mongoApi")
 	public @ResponseBody String domongoApiController(String key,String value,int expire){
-		mongoApi.insert();
+		Example e1 = new Example("hello","这是hello的全部内容",new Date());
+		Example e2 = new Example("world","这是world的全部内容",new Date());
+		mongoApi.save(e1);
+		mongoApi.save(e2);
+		List<Example> l = mongoApi.findAll(Example.class);
+		
+		for (Example e : l) {
+			System.out.println(e);
+		}
 		return "1";
 	}
 	
