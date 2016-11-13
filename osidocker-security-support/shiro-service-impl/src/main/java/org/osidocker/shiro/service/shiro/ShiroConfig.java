@@ -4,10 +4,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -72,6 +75,10 @@ public class ShiroConfig {
 		DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
 		//设置realm.
 		securityManager.setRealm(myShiroRealm());
+		//注入缓存管理器;
+        securityManager.setCacheManager(ehCacheManager());//这个如果执行多次，也是同样的一个对象;
+        //注入记住我管理器;
+        securityManager.setRememberMeManager(rememberMeManager());
 		return securityManager;
 	}
 	
@@ -117,5 +124,46 @@ public class ShiroConfig {
 		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
 		return authorizationAttributeSourceAdvisor;
 	}
+	
+	/**
+     * cookie对象;
+     * @return
+     */
+    @Bean
+    public SimpleCookie rememberMeCookie(){
+       System.out.println("ShiroConfiguration.rememberMeCookie()");
+       //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
+       SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+       //<!-- 记住我cookie生效时间30天 ,单位秒;-->
+       simpleCookie.setMaxAge(259200);
+       return simpleCookie;
+    }
+   
+    /**
+     * cookie管理对象;
+     * @return
+     */
+    @Bean
+    public CookieRememberMeManager rememberMeManager(){
+       System.out.println("ShiroConfiguration.rememberMeManager()");
+       CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+       cookieRememberMeManager.setCookie(rememberMeCookie());
+       return cookieRememberMeManager;
+    }
+    
+    /**
+     * shiro缓存管理器;
+     * 需要注入对应的其它的实体类中：
+     * 1、安全管理器：securityManager
+     * 可见securityManager是整个shiro的核心；
+     * @return
+     */
+    @Bean
+    public EhCacheManager ehCacheManager(){
+       System.out.println("ShiroConfiguration.getEhCacheManager()");
+       EhCacheManager cacheManager = new EhCacheManager();
+       cacheManager.setCacheManagerConfigFile("classpath:config/ehcache-shiro.xml");
+       return cacheManager;
+    }
 	
 }
