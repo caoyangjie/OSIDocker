@@ -4,29 +4,19 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.osidocker</groupId>
-    <artifactId>osidocker-apollo-support</artifactId>
+    <artifactId>osidocker-security-support</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>org.osidocker</groupId>
-  <artifactId>mqtt-service-impl</artifactId>
+  <artifactId>security-service-impl</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>mqtt-service-impl</name>
-  <url>https://github.com/caoyangjie/OSIDocker</url>
+  <name>security-service-impl</name>
+  <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
     <dependency>
-	    <groupId>org.eclipse.paho</groupId>
-	    <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-	    <version>1.1.0</version>
-	</dependency>
-    <dependency>
-		<groupId>org.osidocker</groupId>
-		<artifactId>apollo-service-api</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</dependency>
-	<dependency>
         <groupId>com.alibaba</groupId>
         <artifactId>fastjson</artifactId>
         <version>1.1.43</version>
@@ -72,5 +62,31 @@
         <artifactId>zkclient</artifactId>
         <version>0.1</version>
     </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+		<groupId>org.springframework.security.oauth</groupId>
+		<artifactId>spring-security-oauth2</artifactId>
+	</dependency>
+	<dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-web</artifactId>
+         <exclusions>
+			  <exclusion> 
+			    <groupId>org.slf4j</groupId>
+			    <artifactId>slf4j-log4j12</artifactId>
+			  </exclusion>
+			  <exclusion> 
+			    <groupId>log4j</groupId>
+			    <artifactId>log4j</artifactId>
+			  </exclusion>
+		 </exclusions>
+     </dependency>
+     <dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-thymeleaf</artifactId>
+	</dependency>
   </dependencies>
 </project>

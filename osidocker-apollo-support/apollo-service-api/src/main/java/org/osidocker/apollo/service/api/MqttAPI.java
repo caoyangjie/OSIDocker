@@ -6,7 +6,11 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
 public interface MqttAPI {
 	
-	void publish(MqttMessage message) throws MqttPersistenceException, MqttException;
+	public void publish(MqttMessage message) throws MqttPersistenceException, MqttException;
 	
-	void publish()
+	public void publish(byte[] payload, int qos, boolean retained) throws MqttException, MqttPersistenceException;
+	
+	public <T> void publish(T t,int qos, boolean retained) throws MqttException, MqttPersistenceException;
+	
+	public <T> void publish(T t) throws MqttException, MqttPersistenceException;
 }

@@ -6,6 +6,7 @@
 	zbus
 	shiro权限管理
 	docker整合
+	spring security
 	
 <dependencies>  
         <dependency>

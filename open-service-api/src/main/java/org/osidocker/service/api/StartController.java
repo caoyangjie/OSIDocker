@@ -3,14 +3,15 @@ package org.osidocker.service.api;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
+import org.osidocker.apollo.service.api.MqttAPI;
 import org.osidocker.mongo.service.api.MongoAPI;
 import org.osidocker.mongo.service.entity.Example;
 import org.osidocker.redis.service.api.RedisAPI;
 import org.osidocker.zbus.service.EnumZbusMqName;
 import org.osidocker.zbus.service.api.ZbusAPI;
 import org.osidocker.zbus.service.entity.TransformData;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,9 @@ public class StartController {
 	
 	@Autowired
 	protected MongoAPI mongoApi;
+	
+	@Autowired
+	protected MqttAPI mqttApi;
 	
 	@RequestMapping("/zbusApi")
 	public @ResponseBody String dozbusApiController(@RequestParam(name="mqName",required=true)String mqName){
@@ -71,6 +75,12 @@ public class StartController {
 		for (Example e : l) {
 			System.out.println(e);
 		}
+		return "1";
+	}
+	
+	@RequestMapping("/mqttApi")
+	public @ResponseBody String domqttApiController(String value) throws MqttPersistenceException, MqttException{
+		mqttApi.publish(value);
 		return "1";
 	}
 	
