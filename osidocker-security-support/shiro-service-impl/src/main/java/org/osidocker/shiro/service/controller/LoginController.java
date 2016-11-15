@@ -6,19 +6,29 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by cdyoue on 2016/10/21.
  * 登陆控制器
  */
-@RestController
+@Controller
 public class LoginController
 {
     private Logger logger =  LoggerFactory.getLogger(this.getClass());
+    
+	@RequestMapping({"/","/index"})
+	public String index(){
+		return "/index";
+	}
+	
+	@RequestMapping(value="/login",method=RequestMethod.GET)
+	public String login(){
+		return "login";
+	}
 
     @RequestMapping(value = "/login",method= RequestMethod.POST)
     public String login(
