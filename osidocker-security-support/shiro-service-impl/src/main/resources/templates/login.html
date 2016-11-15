@@ -18,7 +18,7 @@
                     success: function (data) {
 //                        alert(data.state);
                         if ("success"===data.state) {
-                            window.location.href = "/user/userInfo";
+                            window.location.href = "/userInfo/userList";
                         }else {
                             alert(data.Msg);
                         }
@@ -33,6 +33,7 @@
     </script>
 </head>
 <body>
+<h1 th:text="@{message}">登录页面</h1>
 <form id="loginForm">
     用户名：<input type="text" name="username" id="username" required="true"/>
     密码：<input type="text" name="password" id="password" required="true"/>
