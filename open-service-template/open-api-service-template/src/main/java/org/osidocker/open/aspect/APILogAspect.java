@@ -1,4 +1,4 @@
-package org.osidocker.open.web.aspect;
+package org.osidocker.open.aspect;
 
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -34,7 +34,7 @@ public class APILogAspect {
      * ~ 第五个 * 任意方法
      * ~ .. 匹配任意数量的参数.
      */
-    @Pointcut("execution(public * org.osidocker.open.*.controller..*.*(..))")
+    @Pointcut("execution(public * org.osidocker.open.service..*.*(..))")
     public void webLog(){}
      
     @Before("webLog()")
