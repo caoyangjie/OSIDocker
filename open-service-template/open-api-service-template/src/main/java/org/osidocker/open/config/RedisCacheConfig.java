@@ -26,8 +26,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @author Angel(QQ:412887952)
  * @version v.0.1
  */
-@Configuration
-@EnableCaching //启用缓存，这个注解很重要；
+//@Configuration
+//@EnableCaching //启用缓存，这个注解很重要；
 public class RedisCacheConfig extends CachingConfigurerSupport {
 	
 	/**
