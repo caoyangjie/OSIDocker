@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+	    <groupId>org.osidocker</groupId>
+	    <artifactId>osidocker-security-support</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+    </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.osidocker</groupId>
+	<artifactId>shiro-server-impl</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>shiro-service-impl</name>
+	<url>https://github.com/caoyangjie/OSIDocker</url>
+	
+	<dependencies>
+		<!-- thymeleaf 模板支撑shiro标签 -->
+	  	<dependency>
+			<groupId>com.github.theborakompanioni</groupId>
+			<artifactId>thymeleaf-extras-shiro</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+	    <!-- springboot web项目支持 -->
+	    <dependency>
+	         <groupId>org.springframework.boot</groupId>
+	         <artifactId>spring-boot-starter-web</artifactId>
+	         <exclusions>
+				  <exclusion> 
+				    <groupId>org.slf4j</groupId>
+				    <artifactId>slf4j-log4j12</artifactId>
+				  </exclusion>
+				  <exclusion> 
+				    <groupId>log4j</groupId>
+				    <artifactId>log4j</artifactId>
+				  </exclusion>
+			 </exclusions>
+	     </dependency>
+	     <!-- spring boot web支持：mvc,aop... -->
+		 <dependency>
+			 <groupId>org.springframework.boot</groupId>
+			 <artifactId>spring-boot-starter-web</artifactId>
+		 </dependency>
+		<!-- 
+			包含支持UI模版（Velocity，FreeMarker，JasperReports），
+			邮件服务，
+			脚本服务(JRuby)，
+			缓存Cache（EHCache），
+			任务计划Scheduling（uartz）。
+		 -->
+		<dependency>
+	      <groupId>org.springframework</groupId>
+	      <artifactId>spring-context-support</artifactId>
+	    </dependency>
+	
+		<!-- 添加redis支持-->
+		<dependency>
+	           <groupId>org.springframework.boot</groupId>
+	           <artifactId>spring-boot-starter-redis</artifactId>
+	       </dependency>
+		
+		<!-- JPA操作数据库. -->
+		<dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-data-jpa</artifactId>
+	    </dependency>
+		
+		<!-- mysql 数据库驱动. -->
+		<dependency>
+	      <groupId>mysql</groupId>
+	      <artifactId>mysql-connector-java</artifactId>
+	    </dependency>
+  </dependencies>
+  <build>
+      <finalName>open-web-controller-template</finalName>
+      <plugins>
+          <plugin>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-maven-plugin</artifactId>
+          </plugin>
+      </plugins>
+  </build>
+</project>

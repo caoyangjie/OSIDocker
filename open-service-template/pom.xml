@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.osidocker</groupId>
+  <artifactId>open-service-template</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>open-service-template</name>
+  <url>https://github.com/caoyangjie/OSIDocker</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+  </properties>
+  
+  <dependencyManagement>
+     <dependencies>
+        <dependency>
+            <!-- Import dependency management from Spring Boot -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>1.3.0.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+	<!-- springboot启动支持 -->
+	<dependency>
+	  	<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter</artifactId>
+		<version>1.3.0.RELEASE</version>
+    </dependency>
+	<!-- thmleaf模板依赖. -->
+	<dependency>
+	  <groupId>org.springframework.boot</groupId>
+	  <artifactId>spring-boot-starter-thymeleaf</artifactId>
+	</dependency>
+	<!-- shiro spring. -->
+	<dependency>
+		<groupId>org.apache.shiro</groupId>
+		<artifactId>shiro-spring</artifactId>
+		<version>1.2.5</version>
+	</dependency>
+	<!-- 切面支持 -->
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-aop</artifactId>
+	</dependency>
+	<!-- 单元测试. -->
+	<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <!-- 
+		包含支持UI模版（Velocity，FreeMarker，JasperReports），
+		邮件服务，
+		脚本服务(JRuby)，
+		缓存Cache（EHCache），
+		任务计划Scheduling（uartz）。
+	 -->
+	<dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+    </dependency>
+
+	<!-- 添加redis支持-->
+	<dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-redis</artifactId>
+       </dependency>
+	
+	<!-- JPA操作数据库. -->
+	<dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    
+    <!-- shiro ehcache 支持 -->
+    <dependency>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-ehcache</artifactId>
+        <version>1.2.2</version>
+    </dependency>
+    
+    <!-- 实现热部署项目 -->
+<!--     <dependency> -->
+<!--         <groupId>org.springframework.boot</groupId> -->
+<!--         <artifactId>spring-boot-devtools</artifactId> -->
+<!--         <optional>true</optional> -->
+<!--     </dependency> -->
+    
+	<!-- mysql 数据库驱动. -->
+	<dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+  </dependencies>
+  <modules>
+  	
+  	<module>open-api-template</module>
+  	<module>open-api-service-template</module>
+  	<module>open-web-controller-template</module>
+  </modules>
+</project>
