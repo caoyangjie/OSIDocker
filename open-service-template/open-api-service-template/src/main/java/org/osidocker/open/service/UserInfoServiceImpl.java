@@ -1,7 +1,5 @@
 package org.osidocker.open.service;
 
-import javassist.NotFoundException;
-
 import org.osidocker.open.api.UserInfoService;
 import org.osidocker.open.entity.UserInfo;
 import org.osidocker.open.repository.UserInfoRepository;
@@ -9,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
 
-@Service(value="userinfoservice-0.0.1")
+import com.alibaba.dubbo.config.annotation.Service;
+
+import javassist.NotFoundException;
+
+@Service
 public class UserInfoServiceImpl implements UserInfoService{
 	
 	private static final String CACHE_KEY = "userInfo";
