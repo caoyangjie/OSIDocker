@@ -11,6 +11,6 @@
 	<!-- 注册中心地址 -->
 	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
 	<!-- 用户服务接口,check=false表示服务不启动消费者照样能启动 -->
-	<dubbo:reference interface="org.osidocker.open.api.UserInfoService" id="userInfoService" check="false" />
+	<dubbo:reference interface="org.osidocker.open.api.UserInfoService" id="userInfoService" check="false" version="0.0.1"/>
 	<dubbo:consumer timeout="6000" check="false" />
 </beans>
