@@ -10,7 +10,6 @@
   <groupId>org.osidocker</groupId>
   <artifactId>open-web-controller-template</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
   <name>web-controller-template Maven Webapp</name>
   <url>https://github.com/caoyangjie/OSIDocker</url>
   <dependencies>
