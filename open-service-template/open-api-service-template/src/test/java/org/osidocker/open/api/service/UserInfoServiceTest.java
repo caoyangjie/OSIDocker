@@ -1,7 +1,5 @@
 package org.osidocker.open.api.service;
 
-import javassist.NotFoundException;
-
 import javax.annotation.Resource;
 
 import org.junit.Test;
@@ -10,9 +8,9 @@ import org.osidocker.open.StartDubboServicePublish;
 import org.osidocker.open.api.UserInfoService;
 import org.osidocker.open.entity.UserInfo;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
+
+import javassist.NotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 ////指定我们SpringBoot工程的Application启动类

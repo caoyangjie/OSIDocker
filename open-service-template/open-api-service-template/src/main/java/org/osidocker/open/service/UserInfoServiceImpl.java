@@ -44,9 +44,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 		ui.setName(updated.getName());
 		ui.setState(updated.getState());
 		userInfoRepository.save(ui);
-		if(true){
-			throw new NotFoundException("故意外抛异常测试事务");
-		}
+//		if(true){
+//			throw new NotFoundException("故意外抛异常测试事务");
+//		}
 		return ui;
 	}
 

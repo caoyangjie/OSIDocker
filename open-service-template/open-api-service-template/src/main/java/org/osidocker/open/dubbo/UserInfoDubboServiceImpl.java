@@ -1,17 +1,18 @@
-package org.osidocker.open.service;
+package org.osidocker.open.dubbo;
 
-import javassist.NotFoundException;
+import javax.annotation.Resource;
 
 import org.osidocker.open.api.UserInfoService;
 import org.osidocker.open.entity.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
+
+import javassist.NotFoundException;
 
 @Service(version="0.0.1")
 public class UserInfoDubboServiceImpl implements UserInfoService {
 	
-	@Autowired
+	@Resource(name="userinfoservice-0.0.1")
 	protected UserInfoService uis;
 
 	@Override
