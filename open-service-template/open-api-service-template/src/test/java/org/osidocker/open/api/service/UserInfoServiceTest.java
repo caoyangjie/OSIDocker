@@ -1,5 +1,8 @@
 package org.osidocker.open.api.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.junit.Test;
@@ -7,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.osidocker.open.StartDubboServicePublish;
 import org.osidocker.open.api.UserInfoService;
 import org.osidocker.open.entity.UserInfo;
+import org.osidocker.open.service.TestEhcacheService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -22,7 +27,10 @@ public class UserInfoServiceTest {
 	@Resource(name="userinfoservice-0.0.1")
 	protected UserInfoService uis;
 	
-	@Test
+	@Autowired
+	protected TestEhcacheService tes;
+	
+//	@Test
 //	@Transactional
     public void testCache() throws NotFoundException{
     	//存入两条数据.
@@ -41,4 +49,20 @@ public class UserInfoServiceTest {
     	userinfo = uis.findById(userinfo.getUid());
     	System.out.println(userinfo.getName());
     }
+	
+	@Test
+	public void testEhcacheService(){
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("abc", "aaaaaaaaaaaaa");
+		params.put("def", "bbbbbbbbbbbbb");
+		params.put("ghi", "ccccccccccccc");
+		
+		System.out.println(tes.list(params));
+		System.out.println(tes.list(params));
+		params.put("abc", "bbbbbbbbbbbbb");
+		params.put("def", "ddddddddddddd");
+		params.put("ghi", "iiiiiiiiiiiii");
+		System.out.println(tes.list(params));
+		System.out.println(tes.list(params));
+	}
 }
