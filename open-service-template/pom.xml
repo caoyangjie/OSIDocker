@@ -111,6 +111,5 @@
   	<module>open-api-template</module>
   	<module>open-api-service-template</module>
   	<module>open-web-controller-template</module>
-  	<module>open-utils-template</module>
   </modules>
 </project>

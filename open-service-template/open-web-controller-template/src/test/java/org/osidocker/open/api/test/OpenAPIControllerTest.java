@@ -3,17 +3,17 @@ package org.osidocker.open.api.test;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.osidocker.open.web.controller.OpenAPIController;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.mock.web.MockServletContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes=MockServletContext.class)//MockServletContext.class
 @WebAppConfiguration
-//@ActiveProfiles("prod")//用于测试的时候激活不同的配置
 public class OpenAPIControllerTest {
 
 	 private MockMvc mvc;
@@ -23,7 +23,7 @@ public class OpenAPIControllerTest {
        /*
         * MockMvcBuilders使用构建MockMvc对象.
         */
-//       mvc = MockMvcBuilders.standaloneSetup(new OpenAPIController()).build();
+       mvc = MockMvcBuilders.standaloneSetup(new OpenAPIController()).build();
     }
    
     @Test
