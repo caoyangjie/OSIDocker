@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service(value="userinfoservice-0.0.1")
 public class UserInfoServiceImpl implements UserInfoService{
@@ -33,6 +34,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 
 	@Override
 	@CachePut(value = DEMO_CACHE_NAME,key = "'userInfo_'+#updated.getUid()")
+	@Transactional(rollbackFor=Exception.class)
 	public UserInfo update(UserInfo updated) throws NotFoundException {
 		// TODO Auto-generated method stub
 		UserInfo ui = userInfoRepository.findOne(updated.getUid());
@@ -42,6 +44,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 		ui.setName(updated.getName());
 		ui.setState(updated.getState());
 		userInfoRepository.save(ui);
+		if(true){
+			throw new NotFoundException("故意外抛异常测试事务");
+		}
 		return ui;
 	}
 

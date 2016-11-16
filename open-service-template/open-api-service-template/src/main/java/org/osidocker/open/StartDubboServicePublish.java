@@ -2,14 +2,14 @@ package org.osidocker.open;
 
 import java.util.concurrent.CountDownLatch;
 
-import org.osidocker.open.entity.UserInfo;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
+@EnableTransactionManagement
 //@ComponentScan(basePackages="org.osidocker.open",basePackageClasses=UserInfo.class)
 public class StartDubboServicePublish {
 

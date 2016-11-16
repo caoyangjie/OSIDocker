@@ -10,7 +10,9 @@ import org.osidocker.open.StartDubboServicePublish;
 import org.osidocker.open.api.UserInfoService;
 import org.osidocker.open.entity.UserInfo;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 ////指定我们SpringBoot工程的Application启动类
@@ -23,6 +25,7 @@ public class UserInfoServiceTest {
 	protected UserInfoService uis;
 	
 	@Test
+//	@Transactional
     public void testCache() throws NotFoundException{
     	//存入两条数据.
     	UserInfo userinfo = uis.findByUsername("admin");
