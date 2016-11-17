@@ -14,7 +14,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 
-public class Map2BeanUtils {
+public class BeanMapUtils {
     // Map --> Bean 2: 利用org.apache.commons.beanutils 工具类实现 Map --> Bean  
     public static <T> T transMap2Bean(Map<String, Object> map, Class<T> t) {
         if (map == null || t == null) {

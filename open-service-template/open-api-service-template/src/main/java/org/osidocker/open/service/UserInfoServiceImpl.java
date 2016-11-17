@@ -9,7 +9,7 @@ import org.osidocker.open.api.UserInfoService;
 import org.osidocker.open.entity.UserInfo;
 import org.osidocker.open.mapper.UserInfoMapper;
 import org.osidocker.open.repository.UserInfoRepository;
-import org.osidocker.open.utils.Map2BeanUtils;
+import org.osidocker.open.utils.BeanMapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -38,7 +38,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public UserInfo findByUsername(String username) {
 //		System.out.println("UserInfoServiceImpl.findByUsername()");
 //		return userInfoRepository.findByUsername(username);
-		return Map2BeanUtils.transMap2Bean(userInfoMapper.findByUsername(username), UserInfo.class);
+		return BeanMapUtils.transMap2Bean(userInfoMapper.findByUsername(username), UserInfo.class);
 	}
 	
 	@Override
@@ -82,7 +82,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Override
 	public PageInfo<UserInfo> searchName(String username) {
 		PageHelper.startPage(10, 1);
-		return Map2BeanUtils.transListMap2Bean(userInfoMapper.pageList(username), UserInfo.class);
+		return BeanMapUtils.transListMap2Bean(userInfoMapper.pageList(username), UserInfo.class);
 	}
 	
 }
