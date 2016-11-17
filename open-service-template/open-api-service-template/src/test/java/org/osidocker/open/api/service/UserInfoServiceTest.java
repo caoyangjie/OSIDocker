@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.github.pagehelper.PageInfo;
+
 import javassist.NotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,9 +32,11 @@ public class UserInfoServiceTest {
 	@Autowired
 	protected TestEhcacheService tes;
 	
-//	@Test
+	@Test
 //	@Transactional
     public void testCache() throws NotFoundException{
+		PageInfo<UserInfo> pi = uis.searchName("admin");
+		System.out.println(pi.getSize());
     	//存入两条数据.
     	UserInfo userinfo = uis.findByUsername("admin");
     	userinfo = uis.findByUsername("admin");

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestEhcacheService {
 	
-	@Cacheable(value="demo",key="'list_'+#params['abc']+#params['def']+#params['ghi']")
+	@Cacheable(value="demo")
 	public String list(Map<String, Object> params){
 //		return "fasfa"+Jsonu;
 		System.out.println("没有进入缓存获取数据");

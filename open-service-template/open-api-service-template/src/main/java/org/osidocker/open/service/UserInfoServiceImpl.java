@@ -1,16 +1,27 @@
 package org.osidocker.open.service;
 
-import javassist.NotFoundException;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.plaf.ListUI;
 
 import org.osidocker.open.api.UserInfoService;
 import org.osidocker.open.entity.UserInfo;
+import org.osidocker.open.mapper.UserInfoMapper;
 import org.osidocker.open.repository.UserInfoRepository;
+import org.osidocker.open.utils.Map2BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import javassist.NotFoundException;
 
 @Service(value="userinfoservice-0.0.1")
 public class UserInfoServiceImpl implements UserInfoService{
@@ -20,12 +31,16 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Autowired
 	private UserInfoRepository userInfoRepository;
 	
+	@Autowired
+	private UserInfoMapper userInfoMapper;
+	
 	@Cacheable(value=DEMO_CACHE_NAME,key="'userInfo_'+#username")
 	public UserInfo findByUsername(String username) {
-		System.out.println("UserInfoServiceImpl.findByUsername()");
-		return userInfoRepository.findByUsername(username);
+//		System.out.println("UserInfoServiceImpl.findByUsername()");
+//		return userInfoRepository.findByUsername(username);
+		return Map2BeanUtils.transMap2Bean(userInfoMapper.findByUsername(username), UserInfo.class);
 	}
-
+	
 	@Override
 	@CacheEvict(value = DEMO_CACHE_NAME,key = "'demoInfo_'+#id")
 	public void delete(Long id) {
@@ -62,6 +77,12 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public UserInfo save(UserInfo userInfo) {
 		// TODO Auto-generated method stub
 		return userInfoRepository.save(userInfo);
+	}
+
+	@Override
+	public PageInfo<UserInfo> searchName(String username) {
+		PageHelper.startPage(10, 1);
+		return Map2BeanUtils.transListMap2Bean(userInfoMapper.pageList(username), UserInfo.class);
 	}
 	
 }

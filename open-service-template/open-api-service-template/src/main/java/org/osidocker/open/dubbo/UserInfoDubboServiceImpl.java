@@ -6,6 +6,7 @@ import org.osidocker.open.api.UserInfoService;
 import org.osidocker.open.entity.UserInfo;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.PageInfo;
 
 import javassist.NotFoundException;
 
@@ -42,6 +43,12 @@ public class UserInfoDubboServiceImpl implements UserInfoService {
 	public UserInfo save(UserInfo demoInfo) {
 		// TODO Auto-generated method stub
 		return uis.save(demoInfo);
+	}
+
+	@Override
+	public PageInfo<UserInfo> searchName(String username) {
+		// TODO Auto-generated method stub
+		return uis.searchName(username);
 	}
 
 }

@@ -2,6 +2,8 @@ package org.osidocker.open.api;
 
 import org.osidocker.open.entity.UserInfo;
 
+import com.github.pagehelper.PageInfo;
+
 import javassist.NotFoundException;
 
 public interface UserInfoService {
@@ -16,4 +18,6 @@ public interface UserInfoService {
 	UserInfo findById(Long id);
  
 	UserInfo save(UserInfo demoInfo);
+	
+	public PageInfo<UserInfo> searchName(String username);
 }

@@ -96,6 +96,11 @@
        <artifactId>spring-boot-configuration-processor</artifactId>
        <optional>true</optional>
     </dependency>
+    <dependency>  
+      	<groupId>com.github.pagehelper</groupId>  
+      	<artifactId>pagehelper</artifactId>  
+      	<version>3.6.3</version>  
+     </dependency> 
   </dependencies>
   <modules>
   	
