@@ -71,9 +71,9 @@
 
 	<!-- 添加redis支持-->
 	<dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-redis</artifactId>
-       </dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-redis</artifactId>
+    </dependency>
 	
 	<!-- JPA操作数据库. -->
 	<dependency>
