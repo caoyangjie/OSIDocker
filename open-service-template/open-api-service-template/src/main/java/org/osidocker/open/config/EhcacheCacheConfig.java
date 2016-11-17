@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-@Configuration
-@EnableCaching//标注启动缓存.
+//@Configuration
+//@EnableCaching//标注启动缓存.
 public class EhcacheCacheConfig {
 	 /**
      *  ehcache 主要的管理器
