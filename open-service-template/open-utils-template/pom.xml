@@ -37,5 +37,12 @@
 		<artifactId>javapns-jdk16</artifactId>
 		<version>2.3.1</version>
 	</dependency>
+	<dependency> 
+		<groupId>ccp-rest-sms-sdk</groupId> 
+		<artifactId>sms-java</artifactId> 
+		<version>2.6.3</version> 
+		<scope>system</scope>
+		<systemPath>${project.basedir}/libs/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar</systemPath> 
+	</dependency>
   </dependencies>
 </project>

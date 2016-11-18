@@ -22,7 +22,9 @@ import javapns.notification.PushedNotification;
  *
  */
 public class ApplePushUtils {
+	private static final String PUSH_JAVA_P12 = "PushJava.p12";
 	private static Logger logger = LoggerFactory.getLogger(ApplePushUtils.class);
+	private static String password = "123456";
 	
 	public static void pushMessage(String tokens,String message,int numOnIcon,String sound,Map<String,Object> pushArgs,AppleNotificationBackHandler handler) throws JSONException{
 		List<String> tokenList = new ArrayList<String>();
@@ -32,8 +34,7 @@ public class ApplePushUtils {
 	
 	public static void pushMessage(List<String> tokens, String message,int numOnIcon, String sound,Map<String,Object> pushArgs,AppleNotificationBackHandler handler) throws JSONException {
     	String webPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String path = webPath + "PushJava.p12";
-        String password = "123456";
+        String path = webPath + PUSH_JAVA_P12;
         pushMessage(tokens, getPayLoad(message, sound, numOnIcon, pushArgs),handler,path, password);
     }
 	
