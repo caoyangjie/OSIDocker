@@ -15,6 +15,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 @SpringBootApplication
 @EnableTransactionManagement
@@ -53,4 +54,11 @@ public class StartDubboServicePublish {
     public PlatformTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
+	
+	@Bean
+	public FreeMarkerConfigurer freeMarkerConfigurer() {
+	    FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+	    configurer.setTemplateLoaderPath("classpath:templates");
+	    return configurer;
+	}
 }

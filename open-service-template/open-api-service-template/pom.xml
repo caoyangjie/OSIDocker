@@ -98,5 +98,15 @@
          <artifactId>mybatis</artifactId>
          <version>3.2.8</version>
      </dependency>
+     <!-- 发送邮件. -->
+	 <dependency>  
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-mail</artifactId>
+	 </dependency> 
+	 <!-- 引入模板引擎. -->
+	 <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-freemarker</artifactId>
+	 </dependency>
   </dependencies>
 </project>
