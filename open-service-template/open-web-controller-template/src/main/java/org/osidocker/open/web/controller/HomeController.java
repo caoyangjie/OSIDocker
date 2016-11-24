@@ -41,6 +41,8 @@ public class HomeController {
 	
 	@RequestMapping({"/","/index"})
 	public String index(){
+		logger.debug("debug========================================================");
+		logger.info("info========================================================");
 		return "/index";
 	}
 	
@@ -73,6 +75,9 @@ public class HomeController {
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
     public @ResponseBody String login(@Valid UserInfo user,boolean rememberMe,BindingResult bindingResult,RedirectAttributes redirectAttributes){
+		
+		logger.debug("debug========================================================");
+		logger.info("info========================================================");
         if(bindingResult.hasErrors()){
             return "login";
         }
