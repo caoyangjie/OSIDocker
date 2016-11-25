@@ -16,12 +16,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
 	<dependency>
 	    <groupId>com.alibaba</groupId>
 	    <artifactId>fastjson</artifactId>
@@ -54,6 +48,15 @@
 		<artifactId>poi-ooxml</artifactId>
 		<version>3.9</version>
 	</dependency>
+	<!-- 容连云短信发送 -->
+	<dependency> 
+		<groupId>alipay-sdk</groupId> 
+		<artifactId>java</artifactId> 
+		<version>2.6.3</version> 
+		<scope>system</scope>
+		<systemPath>${project.basedir}/libs/alipay-sdk-java20161121110022.jar</systemPath> 
+	</dependency>
+	<!-- 容连云短信发送 -->
 	<dependency> 
 		<groupId>ccp-rest-sms-sdk</groupId> 
 		<artifactId>sms-java</artifactId> 
