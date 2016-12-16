@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>主页</title>
+</head>
+<script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#login').click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/convert",
+                data: "abc-hello-caoyangjie",
+                dataType: "json",
+                contentType: "application/x-wisely",
+                success: function (data) {
+					$("#rsp").html(data)
+                },
+                error:function (e) {
+                    console.log(e);
+                }
+            });
+        });
+    });
+</script>
+<body>
+<a href="/userInfo/userList">login</a>
+<div id="rsp"></div>
+</body>
+</html>

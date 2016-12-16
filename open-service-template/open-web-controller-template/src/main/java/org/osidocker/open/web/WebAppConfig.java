@@ -1,12 +1,15 @@
 package org.osidocker.open.web;
 
+import java.util.List;
 import java.util.Locale;
 
+import org.osidocker.open.web.converter.DemoMessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -32,7 +35,18 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 //    	registry.addInterceptor(localeChangeInterceptor());
     }
     
-    /**
+    @Override
+	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+		super.extendMessageConverters(converters);
+		converters.add(demoMessageConverter());
+	}
+    
+    @Bean
+    public DemoMessageConverter demoMessageConverter(){
+    	return new DemoMessageConverter();
+    }
+
+	/**
      * cookie区域解析器;
      * @return
      */
