@@ -37,8 +37,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
     
     @Override
 	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+    	converters.add(demoMessageConverter());
 		super.extendMessageConverters(converters);
-		converters.add(demoMessageConverter());
 	}
     
     @Bean

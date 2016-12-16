@@ -10,7 +10,7 @@
         $('#login').click(function () {
             $.ajax({
                 type: "POST",
-                url: "/convert",
+                url: "/openAPI/converter",
                 data: "abc-hello-caoyangjie",
                 dataType: "json",
                 contentType: "application/x-wisely",
@@ -25,7 +25,8 @@
     });
 </script>
 <body>
-<a href="/userInfo/userList">login</a>
+<!-- <a href="/userInfo/userList">login</a> -->
+<button id="login"/>
 <div id="rsp"></div>
 </body>
 </html>

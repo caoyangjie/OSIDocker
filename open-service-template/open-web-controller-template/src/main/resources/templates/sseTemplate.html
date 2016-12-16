@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>主页</title>
+</head>
+<script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script type="text/javascript">
+	if(!!window.EventSource){
+		var source = new EventSource('/openAPI/push');
+		var s = '';
+		source.addEventListener('message',function(e){
+			s+=e.data+"<br/>";
+			$("#msgFromPush").html(s);
+		});
+		
+		source.addEventListener('error',function(e){
+			if(e.readyState==EventSource.CLOSED){
+				console.log("连接关闭");
+			}else{
+				console.log(e.readyState);
+			}
+		},false);
+	}else{
+		alert("您的浏览器不支持sse!");
+		console.log("您的浏览器不支持sse!");
+	}
+</script>
+<body>
+<a href="/userInfo/userList">login</a>
+<div id="msgFromPush"></div>
+</body>
+</html>
