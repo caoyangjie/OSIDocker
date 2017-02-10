@@ -40,9 +40,10 @@ public class HomeController {
 	protected LocaleMessageSourceService message;
 	
 	@RequestMapping({"/","/index"})
-	public String index(){
+	public String index(HttpServletRequest request){
 		logger.debug("debug========================================================");
 		logger.info("info========================================================");
+		logger.info("session="+request.getSession().getId());
 		return "/index";
 	}
 	
