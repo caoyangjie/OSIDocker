@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ActiveMqConfig {
 	@Bean  
-    public Queue logQueue() {  
-        return new ActiveMQQueue(QueueName.LOG_QUEUE);
+    public Queue msgQueue() {  
+        return new ActiveMQQueue(QueueName.MSG_QUEUE);
     }
 }

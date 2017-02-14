@@ -11,8 +11,8 @@ public class ActiveMQConsumer {
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());  
 	  
-    @JmsListener(destination = QueueName.LOG_QUEUE)  
+    @JmsListener(destination = QueueName.MSG_QUEUE)  
     public void receivedQueue(String msg) {  
-        LOGGER.info("Has received from " + QueueName.LOG_QUEUE + ", msg: " + msg);  
+        LOGGER.info("Has received from " + QueueName.MSG_QUEUE + ", msg: " + msg);  
     }
 }
