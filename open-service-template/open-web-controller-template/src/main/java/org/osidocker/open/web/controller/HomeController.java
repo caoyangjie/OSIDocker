@@ -2,6 +2,7 @@ package org.osidocker.open.web.controller;
 
 import java.util.Locale;
 
+import javax.jms.Queue;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ import org.osidocker.open.utils.LocaleMessageSourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,11 +41,19 @@ public class HomeController {
 	@Autowired
 	protected LocaleMessageSourceService message;
 	
+	@Autowired  
+    private JmsMessagingTemplate jmsMessagingTemplate;
+  
+    @Autowired  
+    private Queue logQueue;
+	
 	@RequestMapping({"/","/index"})
 	public String index(HttpServletRequest request){
 		logger.debug("debug========================================================");
 		logger.info("info========================================================");
-		logger.info("session="+request.getSession().getId());
+		String msg = "session="+request.getSession().getId();
+		logger.info(msg);
+		this.jmsMessagingTemplate.convertAndSend(this.logQueue, msg); 
 		return "/index";
 	}
 	

@@ -13,6 +13,7 @@ import org.osidocker.open.mapper.TransactionMessageMapper;
 import org.osidocker.open.utils.PublicConfigUtil;
 import org.osidocker.open.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.Page;
@@ -24,8 +25,8 @@ public class NoticeMsgServiceImpl extends OsiDockerBaseService implements Notice
 	@Autowired
 	protected TransactionMessageMapper tmMapper;
 	
-//	@Autowired
-//	private JmsTemplate notifyJmsTemplate;
+	@Autowired
+	private JmsTemplate notifyJmsTemplate;
 
 	@Override
 	public int saveMessageWaitingConfirm(RpTransactionMessage message) throws MessageException {

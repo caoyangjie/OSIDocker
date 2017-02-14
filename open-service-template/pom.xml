@@ -76,6 +76,10 @@
     <dependency>  
         <groupId>org.springframework.session</groupId>  
         <artifactId>spring-session-data-redis</artifactId>  
+	</dependency>
+	<dependency>  
+	    <groupId>org.springframework.session</groupId>  
+	    <artifactId>spring-session</artifactId>  
 	</dependency>  
 	
 	<!-- JPA操作数据库. -->
@@ -101,10 +105,22 @@
        <optional>true</optional>
     </dependency>
     <dependency>  
-      	<groupId>com.github.pagehelper</groupId>  
-      	<artifactId>pagehelper</artifactId>  
-      	<version>3.6.3</version>  
-     </dependency> 
+     	<groupId>com.github.pagehelper</groupId>  
+     	<artifactId>pagehelper</artifactId>  
+     	<version>3.6.3</version>  
+    </dependency> 
+<!--     <dependency>   -->
+<!--         <groupId>org.springframework.boot</groupId>   -->
+<!--         <artifactId>spring-boot-starter-activemq</artifactId>   -->
+<!--     </dependency>   -->
+    <dependency>  
+        <groupId>org.springframework</groupId>  
+        <artifactId>spring-jms</artifactId>  
+    </dependency>  
+    <dependency>  
+        <groupId>org.apache.activemq</groupId>  
+        <artifactId>activemq-client</artifactId>  
+    </dependency>  
   </dependencies>
   <modules>
   	
