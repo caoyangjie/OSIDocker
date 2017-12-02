@@ -1,0 +1,24 @@
+#监听80端口
+server:
+  port: 80
+
+#数据库连接配置
+spring:
+  datasource:
+    name: micro_db
+    url: jdbc:mysql://192.168.31.181:3306/micro_db
+    username: root
+    password: caoyangjie
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat,wall,log4j
+    maxActive: 20
+    minIdle: 1
+    initialSize: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'X'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
