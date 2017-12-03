@@ -39,4 +39,9 @@ public class ProductInventoryUpdateRequest implements IRequest {
     public String getHashKey() {
         return String.valueOf(productInventory.getProductId());
     }
+
+    @Override
+    public boolean isForceRefresh() {
+        return false;
+    }
 }

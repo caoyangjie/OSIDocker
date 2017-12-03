@@ -8,7 +8,9 @@ package com.osidocker.open.micro.request;
  */
 public interface IRequest {
 
-    public void handler();
+    void handler();
 
-    public String getHashKey();
+    String getHashKey();
+
+    boolean isForceRefresh();
 }

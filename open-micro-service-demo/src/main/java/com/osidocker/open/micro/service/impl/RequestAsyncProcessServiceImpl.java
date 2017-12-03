@@ -4,7 +4,6 @@ import com.osidocker.open.micro.request.IRequest;
 import com.osidocker.open.micro.request.RequestQueues;
 import com.osidocker.open.micro.service.IRequestAsyncProcessService;
 import org.springframework.stereotype.Service;
-
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -17,10 +16,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class RequestAsyncProcessServiceImpl implements IRequestAsyncProcessService{
     @Override
     public void process(IRequest request) {
-        //做请求的路由,根据每个请求的商品Id,路由到对应的内存队列中
-        ArrayBlockingQueue<IRequest> queue = getRoutingQueue(request.getHashKey());
-        //将请求放入对应的内存队列中,完成路由操作
         try {
+            //做请求的路由,根据每个请求的商品Id,路由到对应的内存队列中
+            ArrayBlockingQueue<IRequest> queue = getRoutingQueue(request.getHashKey());
+            //将请求放入对应的内存队列中,完成路由操作
             queue.put(request);
         } catch (InterruptedException e) {
             e.printStackTrace();

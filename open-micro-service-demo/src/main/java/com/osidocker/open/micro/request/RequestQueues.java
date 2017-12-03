@@ -3,6 +3,7 @@ package com.osidocker.open.micro.request;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 请求内存队列
@@ -15,6 +16,8 @@ public class RequestQueues {
      * 内存队列
      */
     private List<ArrayBlockingQueue<IRequest>> queues = new ArrayList<ArrayBlockingQueue<IRequest>>();
+
+    private ConcurrentHashMap<String,Boolean> currentExecMap = new ConcurrentHashMap<>();
 
     private static class Singleton{
         private static RequestQueues instance;
@@ -42,5 +45,9 @@ public class RequestQueues {
 
     public ArrayBlockingQueue<IRequest> getQueue(int index){
         return queues.get(index);
+    }
+
+    public ConcurrentHashMap<String, Boolean> getCurrentExecMap(){
+        return this.currentExecMap;
     }
 }

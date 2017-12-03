@@ -2,7 +2,7 @@ package com.osidocker.open.micro.controllers;
 
 import com.osidocker.open.micro.entity.ProductInventory;
 import com.osidocker.open.micro.request.IRequest;
-import com.osidocker.open.micro.request.productInventory.ProdcutInventoryCacheReloadRequest;
+import com.osidocker.open.micro.request.productInventory.ProductInventoryCacheReloadRequest;
 import com.osidocker.open.micro.request.productInventory.ProductInventoryUpdateRequest;
 import com.osidocker.open.micro.service.IProductInventoryService;
 import com.osidocker.open.micro.service.IRequestAsyncProcessService;
@@ -10,7 +10,6 @@ import com.osidocker.open.micro.vo.Response;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -25,7 +24,7 @@ public class ProductInventoryController {
     public ProductInventory getProductInventory(@PathVariable("productId") Long productId){
         ProductInventory productInventory = null;
         try{
-            IRequest request = new ProdcutInventoryCacheReloadRequest(productId,productInventoryService);
+            IRequest request = new ProductInventoryCacheReloadRequest(productId,productInventoryService,false);
             requestAsyncProcessService.process(request);
 
             //将请求扔给异步队列去处理后,需要等待数据获取
@@ -49,6 +48,7 @@ public class ProductInventoryController {
             //等待200毫秒后,没有数据,则尝试数据库中加载数据
             productInventory = productInventoryService.findInventory(productId);
             if(productInventory!=null){
+                requestAsyncProcessService.process(new ProductInventoryCacheReloadRequest(productId,productInventoryService,true));
                 return productInventory;
             }
         }catch(Exception e){
