@@ -19,8 +19,6 @@ import javax.annotation.Resource;
 @EnableCaching
 public class App
 {
-    @Resource
-    private RedisTemplate redisTemplate;
 
     public static void main( String[] args )
     {

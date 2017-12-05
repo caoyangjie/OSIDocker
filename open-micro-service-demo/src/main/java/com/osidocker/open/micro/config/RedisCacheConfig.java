@@ -1,6 +1,8 @@
 package com.osidocker.open.micro.config;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -8,11 +10,14 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
 
 /**
  * redis 缓存配置;
@@ -37,7 +42,8 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
 	 */
 	@Bean
 	public CacheManager cacheManager(RedisTemplate<?,?> redisTemplate) {
-		CacheManager cacheManager = new RedisCacheManager(redisTemplate);
+		RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
+		cacheManager.setDefaultExpiration(1000L);
 		return cacheManager;
 	}
 
@@ -91,5 +97,15 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
 			}
 		};
 	}
+
+    @Bean
+    public JedisCluster JedisClusterFactory() {
+        Set<HostAndPort> jedisClusterNodes = new HashSet<HostAndPort>();
+        jedisClusterNodes.add(new HostAndPort("192.168.31.19", 7003));
+        jedisClusterNodes.add(new HostAndPort("192.168.31.19", 7004));
+        jedisClusterNodes.add(new HostAndPort("192.168.31.227", 7006));
+        JedisCluster jedisCluster = new JedisCluster(jedisClusterNodes);
+        return jedisCluster;
+    }
 
 }
