@@ -103,7 +103,7 @@ public class ZooKeeperSession {
 	 *
 	 */
 	private class ZooKeeperWatcher implements Watcher {
-
+		@Override
 		public void process(WatchedEvent event) {
 			System.out.println("Receive watched event: " + event.getState());
 			if(KeeperState.SyncConnected == event.getState()) {
