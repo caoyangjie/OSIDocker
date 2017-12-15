@@ -8,7 +8,7 @@
  */
 package com.osidocker.open.micro.pay.api;
 
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 
 import java.util.Map;
 
@@ -28,10 +28,10 @@ public interface ApiOrderService {
      * @param orderId 订单Id
      * @return 返回订单信息
      */
-    APIResponse getOrderInfo(String orderId);
+    ApiResponse getOrderInfo(String orderId);
 
     /**
-     * 跟进订单id和订单状态获取订单信息
+     * 根据订单id和订单状态获取订单信息
      * @param orderId   订单id
      * @param status    订单状态
      * @return 订单对象

@@ -24,8 +24,9 @@ import com.osidocker.open.micro.config.PropertiesConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayGateway;
 import com.osidocker.open.micro.pay.config.YuancreditAlipayConfig;
-import com.osidocker.open.micro.pay.entity.YuancreditOrder;
+import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.PayTypeEnums;
+import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,11 +70,11 @@ public class AlipayGatewayImpl extends YuancreditPayGateway {
 
     @Override
     public String getPayName() {
-        return "aliPay";
+        return PayWayEnums.ali_pay.getDbValue();
     }
 
     @Override
-    public Map<String, Object> createOrder(YuancreditOrder order) throws PayException {
+    public Map<String, Object> createOrder(PayOrder order) throws PayException {
         Map<String,Object> result = null;
         if(order.getPayType().equals(PayTypeEnums.getEnum(1).getDbValue())){
             result = alipayTradePrecreate(order);
@@ -88,7 +89,7 @@ public class AlipayGatewayImpl extends YuancreditPayGateway {
      * @param order
      * @return
      */
-    public Map<String,Object>  alipayTradePrecreate(YuancreditOrder order){
+    public Map<String,Object>  alipayTradePrecreate(PayOrder order){
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
         AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
         String orderNo = order.getOrderNo();
@@ -120,7 +121,7 @@ public class AlipayGatewayImpl extends YuancreditPayGateway {
      * @param order
      * @return
      */
-    public Map<String,Object>  alipayTradeWapPayRequest(YuancreditOrder order){
+    public Map<String,Object>  alipayTradeWapPayRequest(PayOrder order){
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest ();
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         String orderNo = order.getOrderNo();
@@ -150,7 +151,7 @@ public class AlipayGatewayImpl extends YuancreditPayGateway {
 
 
     @Override
-    protected Map<String,String> queryOrderStatus(YuancreditOrder order) {
+    protected Map<String,String> queryOrderStatus(PayOrder order) {
         AlipayTradeQueryRequest queryRequest = new AlipayTradeQueryRequest();
         AlipayTradeQueryModel model = new AlipayTradeQueryModel();
         model.setOutTradeNo(order.getOrderNo());

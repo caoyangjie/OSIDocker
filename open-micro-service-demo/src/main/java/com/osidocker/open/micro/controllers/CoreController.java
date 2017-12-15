@@ -8,9 +8,7 @@
  */
 package com.osidocker.open.micro.controllers;
 
-import com.osidocker.open.micro.pay.exceptions.PayException;
-import com.osidocker.open.micro.pay.vos.APIResponse;
-import com.osidocker.open.micro.pay.vos.TransDataBaseVo;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.spring.SpringContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +31,13 @@ public class CoreController {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public APIResponse getTryCatchExceptions(Exception exp) {
-        return APIResponse.generator("999999",exp.getMessage());
+    public ApiResponse getTryCatchExceptions(Exception exp) {
+        return ApiResponse.generator("999999",exp.getMessage());
     }
 
-    public APIResponse getDefaultApiRosponse()
+    public ApiResponse getDefaultApiRosponse()
     {
-        return APIResponse.generator("000000","操作成功!");
+        return ApiResponse.generator("000000","操作成功!");
     }
 
     /**

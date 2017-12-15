@@ -30,6 +30,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * @param productInfo
 	 * @return
 	 */
+	@Override
 	@CachePut(value = CACHE_NAME, key = "'key_'+#productInfo.getId()")
 	public ProductInfo saveLocalCache(ProductInfo productInfo) {
 		return productInfo;
@@ -40,6 +41,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * @param id 
 	 * @return
 	 */
+	@Override
 	@Cacheable(value = CACHE_NAME, key = "'key_'+#id")
 	public ProductInfo getLocalCache(Long id) {
 		return null;
@@ -49,6 +51,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * 将商品信息保存到本地的ehcache缓存中
 	 * @param productInfo
 	 */
+	@Override
 	@CachePut(value = CACHE_NAME, key = "'product_info_'+#productInfo.getId()")
 	public ProductInfo saveProductInfo2LocalCache(ProductInfo productInfo) {
 		return productInfo;
@@ -59,6 +62,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * @param productId
 	 * @return
 	 */
+	@Override
 	@Cacheable(value = CACHE_NAME, key = "'product_info_'+#productId")
 	public ProductInfo getProductInfoFromLocalCache(Long productId) {
 		return null;
@@ -68,6 +72,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * 将店铺信息保存到本地的ehcache缓存中
 	 * @param shopInfo
 	 */
+	@Override
 	@CachePut(value = CACHE_NAME, key = "'shop_info_'+#shopInfo.getId()")
 	public ShopInfo saveShopInfo2LocalCache(ShopInfo shopInfo) {
 		return shopInfo;
@@ -78,6 +83,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * @param shopId
 	 * @return
 	 */
+	@Override
 	@Cacheable(value = CACHE_NAME, key = "'shop_info_'+#shopId")
 	public ShopInfo getShopInfoFromLocalCache(Long shopId) {
 		return null;
@@ -87,6 +93,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * 将商品信息保存到redis中
 	 * @param productInfo 
 	 */
+	@Override
 	public void saveProductInfo2ReidsCache(ProductInfo productInfo) {
 		String key = "product_info_" + productInfo.getId();
 		jedisCluster.set(key, JSONObject.toJSONString(productInfo));  
@@ -96,6 +103,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * 将店铺信息保存到redis中
 	 * @param shopInfo
 	 */
+	@Override
 	public void saveShopInfo2ReidsCache(ShopInfo shopInfo) {
 		String key = "shop_info_" + shopInfo.getId();
 		jedisCluster.set(key, JSONObject.toJSONString(shopInfo));  
@@ -105,6 +113,7 @@ public class CacheServiceImpl implements ICacheService {
 	 * 从redis中获取商品信息
 	 * @param productId
 	 */
+	@Override
 	public ProductInfo getProductInfoFromReidsCache(Long productId) {
 		String key = "product_info_" + productId;
 		String json = jedisCluster.get(key);
@@ -118,7 +127,8 @@ public class CacheServiceImpl implements ICacheService {
 	 * 从redis中获取店铺信息
 	 * @param shopId
 	 */
-	public ShopInfo getShopInfoFromReidsCache(Long shopId) {
+	@Override
+	public ShopInfo getShopInfoFromRedisCache(Long shopId) {
 		String key = "shop_info_" + shopId;
 		String json = jedisCluster.get(key);
 		if(json != null) {

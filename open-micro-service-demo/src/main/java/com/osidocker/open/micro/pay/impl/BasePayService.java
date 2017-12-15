@@ -8,7 +8,7 @@
  */
 package com.osidocker.open.micro.pay.impl;
 
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 
 import java.util.Map;
 
@@ -26,19 +26,19 @@ public class BasePayService{
 
     private Map<String, Object> rspData;
 
-    public final APIResponse buildSuccMap(Map<String,Object> map)
+    public final ApiResponse buildSuccMap(Map<String,Object> map)
     {
         return buildSuccess().initData(map);
     }
 
-    public final APIResponse buildSuccess()
+    public final ApiResponse buildSuccess()
     {
-        return APIResponse.generator("000000","SUCCESS");
+        return ApiResponse.generator("000000","SUCCESS");
     }
 
-    public final APIResponse buildFail(String apiMessage)
+    public final ApiResponse buildFail(String apiMessage)
     {
-        return APIResponse.generator("999999",apiMessage);
+        return ApiResponse.generator("999999",apiMessage);
     }
 
 

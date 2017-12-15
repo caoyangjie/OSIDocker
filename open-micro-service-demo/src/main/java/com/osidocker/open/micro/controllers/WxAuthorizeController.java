@@ -11,8 +11,8 @@ package com.osidocker.open.micro.controllers;
 import com.osidocker.open.micro.config.PropertiesConfig;
 import com.osidocker.open.micro.pay.api.ApiWexinService;
 import com.osidocker.open.micro.pay.entity.AccessToken;
-import com.osidocker.open.micro.pay.entity.UserInfo;
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.entity.WeXinUserInfo;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.utils.DataUtils;
 import com.osidocker.open.micro.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +36,14 @@ import java.io.IOException;
  * @版本号： V1.0.0
  */
 @RestController
-@RequestMapping("/wx")
+@RequestMapping("/wexin")
 public class WxAuthorizeController extends CoreController {
 
-    private static final String APP_REDIRECT_URI = "您的网站地址";
+    private static final String APP_REDIRECT_URI = "您的网站地址跳转地址";
     public static final String HTTPS_WX_USERBASE = "https://app.moledata.cn/creditmole/wx/userbase";
+    public static final String CODE = "code";
+    public static final String STATE = "state";
+    public static final String OPEN_ID = "openId";
 
     @Autowired
     PropertiesConfig config;
@@ -61,37 +64,34 @@ public class WxAuthorizeController extends CoreController {
 
     @RequestMapping(value = "/userinfo",method = {RequestMethod.POST,RequestMethod.GET})
     public void doGetUserInfo(HttpServletRequest request, HttpServletResponse response){
-        String code = request.getParameter("code");
-        String state = request.getParameter("state");
+        String code = request.getParameter(CODE);
         // 获取网页授权access_token
         AccessToken weixinOauthToken =  getWexinService(version()).getAccessToken(config.getWxAppid(), config.getWxSecret(), code);
-        getWexinService(version()).addWeXinUser(weixinOauthToken.getOpenId(),state);
         // 获取用户信息
-        UserInfo userInfo =  getWexinService(version()).getUserInfo(weixinOauthToken.getAccessToken(), weixinOauthToken.getOpenId());
+        WeXinUserInfo userInfo =  getWexinService(version()).getUserInfo(weixinOauthToken.getAccessToken(), weixinOauthToken.getOpenId());
+        //存储微信用户信息
+        wexinService.saveWeXinUserInfo(userInfo);
     }
 
     @RequestMapping(value = "/userbase",method = {RequestMethod.POST,RequestMethod.GET})
     public void doGetUserBase(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String code = request.getParameter("code");
-        String state = request.getParameter("state");
-        logger.info("获取state："+state);
+        String code = request.getParameter(CODE);
+        String dispatchPageURL = request.getParameter(STATE);
+        logger.info("获取跳转页面路径："+dispatchPageURL);
         logger.info("获取code："+code);
          //获取网页授权access_token
         AccessToken accessToken =  getWexinService(version()).getAccessToken(config.getWxAppid(), config.getWxSecret(), code);
         logger.info("获取openId："+ accessToken.getOpenId());
-        request.getSession().setAttribute("openId",accessToken.getOpenId());
-        response.sendRedirect(APP_REDIRECT_URI+state+"?t="+ DataUtils.getTimeStamp());
+        request.getSession().setAttribute(OPEN_ID,accessToken.getOpenId());
+        response.sendRedirect(APP_REDIRECT_URI+dispatchPageURL+"?t="+ DataUtils.getTimeStamp());
     }
 
     @RequestMapping(value = "/openId",method = {RequestMethod.POST,RequestMethod.GET})
-    public APIResponse doGetOpenId(@RequestParam String state, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String openId =(String) request.getSession().getAttribute("openId");
-        String status = "0";
-        if(!StringUtil.isEmpty(openId)){
-            status = "1";
-            request.getSession().setAttribute("openId",openId);
-        }
-        // 授权
-        return getWexinService(version()).getOauthPageUrl(config.getWxAppid(),HTTPS_WX_USERBASE,1, state,status);
+    public ApiResponse doGetOpenId(@RequestParam String dispatchPageURL, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String openId =(String) request.getSession().getAttribute(OPEN_ID);
+        //是否需要发起授权请求,0代表需要,1代表不需要
+        String getOpenIdFlag = StringUtil.isEmpty(openId)?"0":"1";
+        // 后端拼装前端发起授权请求的请求参数
+        return getWexinService(version()).getOauthPageUrl(config.getWxAppid(),HTTPS_WX_USERBASE,1, dispatchPageURL,getOpenIdFlag);
     }
 }

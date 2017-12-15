@@ -9,8 +9,8 @@
 package com.osidocker.open.micro.pay.api;
 
 import com.osidocker.open.micro.pay.entity.AccessToken;
-import com.osidocker.open.micro.pay.entity.UserInfo;
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.entity.WeXinUserInfo;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 
 /**
  * @公司名称： 深圳原形信息技术有限公司
@@ -39,18 +39,18 @@ public interface ApiWexinService {
      * @param openId
      * @return
      */
-    UserInfo getUserInfo(String accessToken, String openId);
+    WeXinUserInfo getUserInfo(String accessToken, String openId);
 
     /**
      * 公众号授权获取code
      * @param appid 应用Id
      * @param redirectUrl 跳转URL
-     * @param scope
-     * @param state
-     * @param status
+     * @param scope   微信需要值
+     * @param dispatchPageURL 跳转页面
+     * @param getOpenIdFlag 是否需要重新进行授权判断 0 需要 1不需要
      * @return
      */
-    APIResponse getOauthPageUrl(String appid, String redirectUrl, int scope, String state, String status);
+    ApiResponse getOauthPageUrl(String appid, String redirectUrl, int scope, String dispatchPageURL, String getOpenIdFlag);
 
     // 获取openId
 
@@ -59,7 +59,7 @@ public interface ApiWexinService {
      * @param userId
      * @return
      */
-    APIResponse getOpenId(long userId);
+    ApiResponse getOpenId(long userId);
 
     /**
      * 添加微信用户
@@ -68,4 +68,11 @@ public interface ApiWexinService {
      * @return
      */
     int addWeXinUser(String openId, String userId);
+
+    /**
+     * 添加微信用户详细信息
+     * @param userInfo 添加用户详细信息
+     * @return
+     */
+    int saveWeXinUserInfo(WeXinUserInfo userInfo);
 }

@@ -57,6 +57,7 @@ public class WordCountTopology {
          *
          */
         @SuppressWarnings("rawtypes")
+        @Override
         public void open(Map conf, TopologyContext context,
                          SpoutOutputCollector collector) {
             // 在open方法初始化的时候，会传入进来一个东西，叫做SpoutOutputCollector
@@ -74,6 +75,7 @@ public class WordCountTopology {
          * 只要的话呢，无限循环调用，可以不断发射最新的数据出去，形成一个数据流
          *
          */
+        @Override
         public void nextTuple() {
             Utils.sleep(100);
             String[] sentences = new String[]{"the cow jumped over the moon", "an apple a day keeps the doctor away",
@@ -91,6 +93,7 @@ public class WordCountTopology {
          * 很重要，这个方法是定义一个你发射出去的每个tuple中的每个field的名称是什么
          *
          */
+        @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
             declarer.declare(new Fields("sentence"));
         }
@@ -118,6 +121,7 @@ public class WordCountTopology {
          *
          */
         @SuppressWarnings("rawtypes")
+        @Override
         public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
             this.collector = collector;
         }
@@ -128,6 +132,7 @@ public class WordCountTopology {
          * 就是说，每次接收到一条数据后，就会交给这个executor方法来执行
          *
          */
+        @Override
         public void execute(Tuple tuple) {
             String sentence = tuple.getStringByField("sentence");
             String[] words = sentence.split(" ");
@@ -139,6 +144,7 @@ public class WordCountTopology {
         /**
          * 定义发射出去的tuple，每个field的名称
          */
+        @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
             declarer.declare(new Fields("word"));
         }
@@ -155,10 +161,12 @@ public class WordCountTopology {
         private Map<String, Long> wordCounts = new HashMap<String, Long>();
 
         @SuppressWarnings("rawtypes")
+        @Override
         public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
             this.collector = collector;
         }
 
+        @Override
         public void execute(Tuple tuple) {
             String word = tuple.getStringByField("word");
 
@@ -175,6 +183,7 @@ public class WordCountTopology {
             collector.emit(new Values(word, count));
         }
 
+        @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
             declarer.declare(new Fields("word", "count"));
         }

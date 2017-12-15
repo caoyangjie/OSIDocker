@@ -16,41 +16,33 @@ import java.math.BigDecimal;
  * @公司名称： 深圳原形信息技术有限公司
  * @类功能说明：
  * @类修改者： 杨浩
+ * @author  caoyangjie
  * @创建日期： 创建于 2017/7/17 16:28
  * @修改说明：
  * @修改日期： 修改于 2017/7/17 16:28
  * @版本号： V1.0.0
  */
-public class Order extends CoreEntity {
-    private String orderId;
-    private long userId;
-    private long companyId;
+public class SystemOrder extends CoreEntity {
+    private Long orderId;
+    private String applyId;
     private BigDecimal totalPrice;
     private String orderStatus;
     private String payStatus;
 
-    public String getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 
-    public long getUserId() {
-        return userId;
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(long companyId) {
-        this.companyId = companyId;
+    public String getApplyId() {
+        return applyId;
     }
 
     public BigDecimal getTotalPrice() {

@@ -8,7 +8,7 @@
  */
 package com.osidocker.open.micro.pay.mapper;
 
-import com.osidocker.open.micro.pay.entity.YuancreditOrder;
+import com.osidocker.open.micro.pay.entity.PayOrder;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public interface PayOrderMapper {
      * @param yuancreditOrder 订单信息
      * @return
      */
-    int createPayOrder(YuancreditOrder yuancreditOrder);
+    int createPayOrder(PayOrder yuancreditOrder);
 
     /**
      * 更新支付地址
@@ -50,7 +50,7 @@ public interface PayOrderMapper {
      * @param orderNo
      * @return
      */
-    YuancreditOrder queryOrder(@Param("orderNo") String orderNo);
+    PayOrder queryOrder(@Param("orderNo") String orderNo);
 
     /**
      * 更新订单外部流水号

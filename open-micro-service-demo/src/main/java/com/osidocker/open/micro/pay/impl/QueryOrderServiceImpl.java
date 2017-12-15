@@ -14,7 +14,7 @@ import com.osidocker.open.micro.pay.api.ApiQueryOrderService;
 import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
 import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.mapper.PayOrderMapper;
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.pay.vos.QueryOrder;
 import com.osidocker.open.micro.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class QueryOrderServiceImpl extends BasePayService implements ApiQueryOrd
 
     @Override
     @Transactional
-    public APIResponse getQueryOrder(QueryOrder queryOrder) {
+    public ApiResponse getQueryOrder(QueryOrder queryOrder) {
         List<Map<String,Object>> list = payOrderMapper.getPayOrderById(queryOrder.getOrderId());
         int index = 0;
         if(!StringUtil.isEmpty(list)) {

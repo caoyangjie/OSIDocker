@@ -15,8 +15,9 @@ import com.osidocker.open.micro.config.PropertiesConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayGateway;
 import com.osidocker.open.micro.pay.config.YuancreditWxPayConfig;
-import com.osidocker.open.micro.pay.entity.YuancreditOrder;
+import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.PayTypeEnums;
+import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.utils.DataUtils;
 import com.osidocker.open.micro.utils.StringUtil;
@@ -64,6 +65,9 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
     public static final String SIGN_TYPE = "signType";
     public static final String MD_5 = "MD5";
     public static final String PAY_SIGN = "paySign";
+    public static final String CODE_URL = "code_url";
+    public static final String MWEB_URL = "mweb_url";
+    public static final String REDIRECT_URL = "redirect_url";
     @Autowired
     private PropertiesConfig config;
 
@@ -71,11 +75,11 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
 
     @Override
     public String getPayName() {
-        return "WxPay";
+        return PayWayEnums.weixin_pay.getDbValue();
     }
 
     @Override
-    public Map<String, Object> createOrder(YuancreditOrder order) {
+    public Map<String, Object> createOrder(PayOrder order) {
         Map<String,String> data = new HashMap<>();
         Map<String,Object> resultData = new HashMap<>();
         String orderNo = order.getOrderNo();
@@ -109,13 +113,13 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
               if(result.get(RESULT_CODE).equals(SUCCESS)){
                   // PC端支付
                   if(order.getPayType().equals(PayTypeEnums.getEnum(1).getDbValue())){
-                      result.put("payUrl",buildPayUrl(result.get("code_url"),orderNo));
+                      result.put(PAY_URL,buildPayUrl(result.get(CODE_URL),orderNo));
                   }
                   // H5支付
                   else if(order.getPayType().equals(PayTypeEnums.getEnum(2).getDbValue())){
                       // 同步通知页面
                       String returnUrl = URLEncoder.encode(config.getReturnUrl(),"UTF-8");
-                      result.put("payUrl", result.get("mweb_url")+"&redirect_url="+returnUrl+"?t="+ DataUtils.getTimeStamp());
+                      result.put(PAY_URL, result.get(MWEB_URL)+ "&" + REDIRECT_URL + "=" +returnUrl+"?t="+ DataUtils.getTimeStamp());
                   }
                   // 公众号支付
                   else if(order.getPayType().equals(PayTypeEnums.getEnum(3).getDbValue())){
@@ -153,7 +157,7 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
 
 
     @Override
-    protected Map<String,String> queryOrderStatus(YuancreditOrder order) {
+    protected Map<String,String> queryOrderStatus(PayOrder order) {
         Map<String,String> data = new HashMap<>();
         if(!StringUtil.isEmpty(order.getOutTradeNo())){
             data.put(TRANSACTION_ID, order.getOutTradeNo());

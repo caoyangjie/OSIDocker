@@ -12,13 +12,12 @@ import com.osidocker.open.micro.pay.api.ApiPayGateway;
 import com.osidocker.open.micro.pay.api.ApiQueryOrderService;
 import com.osidocker.open.micro.pay.enums.PayTypeEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.pay.vos.QueryOrder;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,46 +34,43 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/createOrder")
 public class PayOrderController extends CoreController {
-
-    public static final String WXPAY = "wxpay";
-    public static final String ALIPAY = "alipay";
+    public static final String X_FORWARDED_FOR = "x-forwarded-for";
+    public static final String UNKNOWN = "unknown";
+    public static final String PROXY_CLIENT_IP = "Proxy-Client-IP";
+    public static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
+    public static final String HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
+    public static final String HTTP_X_FORWARDED_FOR = "HTTP_X_FORWARDED_FOR";
+    public static final String X_REAL_IP = "X-Real-IP";
+    public static final String GATEWAY = "Gateway";
     private Logger logger = LoggerFactory.getLogger(PayOrderController.class);
-
-    @Autowired
-    @Qualifier("alipayGateway")
-    protected ApiPayGateway alipayGateway;
-
-    @Autowired
-    @Qualifier("wxPayGateway")
-    protected ApiPayGateway wxPayGateway;
 
     @Autowired
     private ApiQueryOrderService queryOrderService;
 
     @RequestMapping(value = "/{payWay}",method = RequestMethod.POST)
-    public APIResponse unifiedPayOrder(@RequestBody TransOrderBase order, @PathVariable String payWay, HttpServletRequest request){
-        order.setOrderIp(getIpAddr(request));
-        if(payWay.equalsIgnoreCase(WXPAY)){
-            // 公众号支付时获取openId
-            if(order.getPayType().equals(PayTypeEnums.JSAPI.getDbValue())){
-                String openId =(String)request.getSession().getAttribute("openId");
-                logger.info("公众号openId:"+openId);
-                if(null != openId){
-                     order.setOpenId(openId);
-                }else {
-                    throw new PayException("无法获取微信公众号OpenId值!");
-                }
+    public ApiResponse unifiedPayOrder(@RequestBody TransOrderBase order, @PathVariable String payWay, HttpServletRequest request){
+        // 公众号支付时获取openId
+        if(order.getPayType().equals(PayTypeEnums.JSAPI.getDbValue())){
+            String openId =(String)request.getSession().getAttribute("openId");
+            logger.info("公众号openId:"+openId);
+            if(null != openId){
+                order.setOpenId(openId);
+            }else {
+                throw new PayException("无法获取微信公众号OpenId值!");
             }
-            return wxPayGateway.execute(order);
-        }else if(payWay.equalsIgnoreCase(ALIPAY)){
-            return alipayGateway.execute(order);
-        }else{
-            return getTryCatchExceptions(new Exception("系统不支持的第三方支付方式!"));
+        }
+        order.setOrderIp(getIpAddr(request));
+        try{
+            ApiPayGateway gateway = getServiceBy(payWay+ GATEWAY,ApiPayGateway.class,version());
+            return gateway.execute(order);
+        }catch(Exception e){
+            logger.error(e.getMessage());
+            return getTryCatchExceptions(e);
         }
     }
 
     @RequestMapping(value = "/query/order",method = RequestMethod.POST)
-    public APIResponse getQueryOrder(@RequestBody QueryOrder queryOrder) {
+    public ApiResponse getQueryOrder(@RequestBody QueryOrder queryOrder) {
         return queryOrderService.getQueryOrder(queryOrder);
     }
 
@@ -84,29 +80,29 @@ public class PayOrderController extends CoreController {
      * @return
      */
     public String getIpAddr(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+        String ip = request.getHeader(X_FORWARDED_FOR);
+        if (ip != null && ip.length() != 0 && !UNKNOWN.equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
             if( ip.indexOf(",")!=-1 ){
                 ip = ip.split(",")[0];
             }
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(PROXY_CLIENT_IP);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(WL_PROXY_CLIENT_IP);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(HTTP_CLIENT_IP);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(HTTP_X_FORWARDED_FOR);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Real-IP");
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(X_REAL_IP);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;

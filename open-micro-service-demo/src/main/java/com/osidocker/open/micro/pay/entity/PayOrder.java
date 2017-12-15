@@ -15,33 +15,97 @@ import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
  * @公司名称： 深圳原形信息技术有限公司
  * @类功能说明：
  * @类修改者： 曹杨杰
+ * @author caoyangjie
  * @创建日期： 创建于10:47 2017/7/7
  * @修改说明：
  * @修改日期： 修改于10:47 2017/7/7
  * @版本号： V1.0.0
  */
-public class YuancreditOrder extends CoreEntity {
-    private String orderId;     //订单ID
-    private String companyId;   //商户Id
-    private String productName; //商品名称
-    private String outTradeNo;  //第三方订单号
-    private String orderNo;     //订单编号
-    private String orderPrice;  //订单金额
-    private String payWayCode;  //支付模式
-    private String payType;     //支付类型
-    private String orderIp;     //下单IP
-    private String orderDate;   //下单日期
-    private String orderTime;   //下单时间
-    private Long orderPeriod;   //订单有效期
-    private String returnUrl;   //页面通知回调
-    private String notifyUrl;   //后台消息通知
-    private String remark;      //支付备注
-    private String openId;      //opendId
-    private String field1;      //备用字段1
-    private String field2;      //备用字段2
-    private String field3;      //备用字段3
-    private String field4;      //备用字段4
-    private String field5;      //备用字段5
+public class PayOrder extends CoreEntity {
+    /**
+     * 订单Id
+     */
+    private String orderId;
+    /**
+     * 商品id
+     */
+    private String companyId;
+    /**
+     * 商品名称
+     */
+    private String productName;
+    /**
+     * 第三方订单号
+     */
+    private String outTradeNo;
+    /**
+     * 订单编号
+     */
+    private String orderNo;
+    /**
+     * 订单金额
+     */
+    private String orderPrice;
+    /**
+     * 支付模式(支付宝、微信、国美支付)
+     */
+    private String payWayCode;
+    /**
+     * 支付类型(网站、手机、app)
+     */
+    private String payType;
+    /**
+     * 下单IP
+     */
+    private String orderIp;
+    /**
+     * 订单日期
+     */
+    private String orderDate;
+    /**
+     * 订单时间
+     */
+    private String orderTime;
+    /**
+     * 订单有效期
+     */
+    private Long orderPeriod;
+    /**
+     * 页面通知回调
+     */
+    private String returnUrl;
+    /**
+     * 后台消息通知
+     */
+    private String notifyUrl;
+    /**
+     * 支付备注
+     */
+    private String remark;
+    /**
+     * openId
+     */
+    private String openId;
+    /**
+     * 备用字段
+     */
+    private String field1;
+    /**
+     * 备用字段
+     */
+    private String field2;
+    /**
+     * 备用字段
+     */
+    private String field3;
+    /**
+     * 备用字段
+     */
+    private String field4;
+    /**
+     * 备用字段
+     */
+    private String field5;
 
     public String getOrderId() {
         return orderId;

@@ -23,13 +23,34 @@ import java.io.Serializable;
  * @版本号： V1.0.0
  */
 public class TransOrderBase implements Serializable {
-    private String productName; //商品名称
-    private String orderId;     //订单编号
-    private int payWayCode;  //支付模式
-    private String orderIp;     //下单IP
-    private String remark; // 备注
-    private String payType; // 支付类型
-    private String openId;  // 公众号支付需要传入openId
+    /**
+     * 商品名称
+     */
+    private String productName;
+    /**
+     * 订单编号
+     */
+    private String orderId;
+    /**
+     * 支付模式
+     */
+    private int payWayCode;
+    /**
+     * 下单IP
+     */
+    private String orderIp;
+    /**
+     * 备注
+     */
+    private String remark;
+    /**
+     * 支付类型
+     */
+    private String payType;
+    /**
+     * 公众号支付需要传入openId
+     */
+    private String openId;
 
     public String getOrderId() {
         return orderId;

@@ -10,9 +10,7 @@ package com.osidocker.open.micro.controllers;
 
 import com.osidocker.open.micro.pay.api.ApiPayGateway;
 import com.osidocker.open.micro.pay.exceptions.PayException;
-import com.osidocker.open.micro.pay.vos.APIResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,37 +31,21 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/payNotice")
-public class PayNoticeController {
-    /**
-     * 微信支付
-     */
-    public static final String WXPAY = "wxpay";
-    /**
-     * 支付宝支付
-     */
-    public static final String ALIPAY = "alipay";
+public class PayNoticeController extends CoreController {
 
-    @Autowired
-    @Qualifier("alipayGateway")
-    protected ApiPayGateway alipayGateway;
-
-    @Autowired
-    @Qualifier("wxPayGateway")
-    protected ApiPayGateway wxPayGateway;
-
+    private static final String GATEWAY = "Gateway";
 
     @RequestMapping(value = "/{payWay}",method = RequestMethod.POST)
-    public APIResponse NoticePayOrder(@PathVariable String payWay, HttpServletRequest request) {
-        Map<String,String> payResult = null;
-        if(payWay.equalsIgnoreCase(WXPAY)){
-              payResult = Optional.ofNullable(wxPayGateway.payResultNotice(request)).orElseThrow(()->new PayException("微信支付结果回调操作异常!"));
-              wxPayGateway.noticeOrder(payResult);
-        }else if(payWay.equalsIgnoreCase(ALIPAY)){
-              payResult = Optional.ofNullable(alipayGateway.payResultNotice(request)).orElseThrow(()->new PayException("支付宝结果回调操作异常!"));
-              alipayGateway.noticeOrder(payResult);
-        }else{
-            return null;
+    public ApiResponse NoticePayOrder(@PathVariable String payWay, HttpServletRequest request) {
+        try{
+            Map<String,String> payResult;
+            ApiPayGateway gateway = getServiceBy(payWay+ GATEWAY,ApiPayGateway.class,version());
+            payResult = Optional.ofNullable(gateway.payResultNotice(request)).orElseThrow(()->new PayException("支付结果回调操作异常!"));
+            gateway.noticeOrder(payResult);
+            return getDefaultApiRosponse();
+        }catch(Exception e){
+            logger.error(e.getMessage());
+            return getTryCatchExceptions(e);
         }
-        return null;
     }
 }

@@ -19,23 +19,28 @@ import java.util.Map;
  * @修改日期： 修改于11:01 2017/3/17
  * @版本号： V1.0.0
  */
-public class APIResponse<T> implements Serializable{
+public class ApiResponse<T> implements Serializable{
     private String apiCode;
     private String apiMessage;
     private Map<String,Object> rspData;
     private T rspVo;
 
-    public static APIResponse generator(String apiCode,String apiMessage)
+    public static ApiResponse generator(String apiCode, String apiMessage)
     {
-        APIResponse rsp = new APIResponse();
+        ApiResponse rsp = new ApiResponse();
         rsp.apiCode = apiCode;
         rsp.apiMessage = apiMessage;
         return rsp;
     }
 
-    public APIResponse initData(Map<String,Object> rspData)
+    public ApiResponse initData(Map<String,Object> rspData)
     {
         this.rspData = rspData;
+        return this;
+    }
+
+    public ApiResponse initData(T rspData) {
+        this.rspVo = rspData;
         return this;
     }
 

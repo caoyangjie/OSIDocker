@@ -12,7 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.osidocker.open.micro.config.PropertiesConfig;
 import com.osidocker.open.micro.pay.api.ApiOrderService;
 import com.osidocker.open.micro.pay.api.ApiPayOrderService;
-import com.osidocker.open.micro.pay.entity.YuancreditOrder;
+import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
 import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
@@ -56,35 +56,35 @@ public class PayOrderServiceImpl implements ApiPayOrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public YuancreditOrder createOrder(TransOrderBase context) {
+    public PayOrder createOrder(TransOrderBase context) {
         Map<String,Object> order =  orderService.getOrderInfo(context.getOrderId(),null);
         Optional.ofNullable(order).orElseThrow(()->new PayException("获取支付订单信息失败!"));
-        YuancreditOrder yuancreditOrder = new YuancreditOrder();
+        PayOrder payOrder = new PayOrder();
         String  payWay = PayWayEnums.getEnum(context.getPayWayCode()).getDbValue();
-        yuancreditOrder.setOrderNo(DataUtils.getOrderNo());
-        yuancreditOrder.setCompanyId(String.valueOf(order.get(COMPANY_ID)));
-        yuancreditOrder.setProductName(context.getProductName());
-        yuancreditOrder.setOrderPrice(String.valueOf(order.get(DISCOUNT_PRICE)));
-        yuancreditOrder.setPayWayCode(payWay);
-        yuancreditOrder.setPayType(context.getPayType());
-        yuancreditOrder.setOrderIp(context.getOrderIp());
-        yuancreditOrder.setOrderPeriod(30L);
-        yuancreditOrder.setNotifyUrl(config.getNotifyUrl()+payWay);
-        yuancreditOrder.setReturnUrl(config.getReturnUrl()+"?t="+DataUtils.getTimeStamp());
-        yuancreditOrder.setOrderId(context.getOrderId());
-        yuancreditOrder.setOpenId(context.getOpenId());
-        yuancreditOrder.setRemark(context.getRemark());
-        int row = payOrderMapper.createPayOrder(yuancreditOrder);
+        payOrder.setOrderNo(DataUtils.getOrderNo());
+        payOrder.setCompanyId(String.valueOf(order.get(COMPANY_ID)));
+        payOrder.setProductName(context.getProductName());
+        payOrder.setOrderPrice(String.valueOf(order.get(DISCOUNT_PRICE)));
+        payOrder.setPayWayCode(payWay);
+        payOrder.setPayType(context.getPayType());
+        payOrder.setOrderIp(context.getOrderIp());
+        payOrder.setOrderPeriod(30L);
+        payOrder.setNotifyUrl(config.getNotifyUrl()+payWay);
+        payOrder.setReturnUrl(config.getReturnUrl()+"?t="+DataUtils.getTimeStamp());
+        payOrder.setOrderId(context.getOrderId());
+        payOrder.setOpenId(context.getOpenId());
+        payOrder.setRemark(context.getRemark());
+        int row = payOrderMapper.createPayOrder(payOrder);
         if(row > 0){
             orderService.updOrderStatus(context.getOrderId(), OrderStatusEnums.NEEDPAY.getStatus());
-            return yuancreditOrder;
+            return payOrder;
         }
         return null;
     }
 
     @Override
-    public YuancreditOrder queryOrder(String orderNo) {
-        YuancreditOrder yuancreditOrder = payOrderMapper.queryOrder(orderNo);
+    public PayOrder queryOrder(String orderNo) {
+        PayOrder yuancreditOrder = payOrderMapper.queryOrder(orderNo);
         return yuancreditOrder;
     }
 

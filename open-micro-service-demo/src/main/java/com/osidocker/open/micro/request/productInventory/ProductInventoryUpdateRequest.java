@@ -16,10 +16,14 @@ import com.osidocker.open.micro.service.IProductInventoryService;
  */
 public class ProductInventoryUpdateRequest implements IRequest {
 
-    //商品库存
+    /**
+     * 商品库存
+     */
     private ProductInventory productInventory;
 
-    //操作商品库存的服务对象
+    /**
+     * 操作商品库存的服务对象
+     */
     private IProductInventoryService productInventoryService;
 
     public ProductInventoryUpdateRequest(ProductInventory productInventory, IProductInventoryService productInventoryService) {

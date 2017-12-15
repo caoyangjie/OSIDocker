@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  */
 @SpringBootApplication
 @ServletComponentScan
-@MapperScan("com.osidocker.open.micro.mapper")
+@MapperScan(value = {"com.osidocker.open.micro.mapper","com.osidocker.open.**.mapper"})
 @EnableCaching
 public class App
 {

@@ -9,13 +9,13 @@
 package com.osidocker.open.micro.pay.api;
 
 import com.osidocker.open.micro.config.PropertiesConfig;
-import com.osidocker.open.micro.pay.entity.YuancreditOrder;
+import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
 import com.osidocker.open.micro.pay.enums.PayTypeEnums;
 import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.pay.impl.BasePayService;
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
 import com.osidocker.open.micro.utils.JsonTools;
 import com.osidocker.open.micro.utils.StringUtil;
@@ -70,10 +70,10 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public APIResponse execute(TransOrderBase orderInfo){
+    public ApiResponse execute(TransOrderBase orderInfo){
         //检测数据
         if(orderInfo.checkTransData()){
-            APIResponse apiResponse = orderService.getOrderInfo(orderInfo.getOrderId());
+            ApiResponse apiResponse = orderService.getOrderInfo(orderInfo.getOrderId());
             Map<String,Object> map = apiResponse.getRspData();
             Optional.ofNullable(map).orElseThrow(()->new PayException("无法获取订单信息!"));
             Map<String,Object> result = new HashMap<>();
@@ -141,7 +141,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
      * @return
      */
     public Map<String,Object> createOrder(TransOrderBase orderInfo){
-        YuancreditOrder order = Optional.ofNullable(payOrderService.createOrder(orderInfo)).orElseThrow(()->new PayException("创建支付订单失败!"));
+        PayOrder order = Optional.ofNullable(payOrderService.createOrder(orderInfo)).orElseThrow(()->new PayException("创建支付订单失败!"));
         //创建系统订单
         Map<String,Object> result = Optional.ofNullable(createOrder(order)).orElseThrow(()->new PayException("调用第三方创建订单接口失败!"));
         String payUrl = result.get(PAY_URL)+"";
@@ -170,7 +170,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
     public Map<String,Object> getPayUrl(TransOrderBase orderInfo,int timeout,Map<String,Object> payOrder){
         Map<String,Object> result = new HashMap<>();
         // 电脑端支付
-        if(orderInfo.getPayType().equals(PayTypeEnums.getEnum(1).getDbValue())){
+        if(orderInfo.getPayType().equals(PayTypeEnums.PC.getDbValue())){
             if(timeout >= config.getPayTimeOut()){
                 result = createOrder(orderInfo);
             }else {
@@ -178,9 +178,9 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
             }
         }
         // 手机网站支付
-        else if(orderInfo.getPayType().equals(PayTypeEnums.getEnum(2).getDbValue())){
+        else if(orderInfo.getPayType().equals(PayTypeEnums.WEB.getDbValue())){
             // 如果为支付宝支付
-            if(orderInfo.getPayWayCode() == 2){
+            if(orderInfo.getPayWayCode() == PayWayEnums.ali_pay.getData()){
                 if(timeout >= config.getPayTimeOut()){
                     result = createOrder(orderInfo);
                 }else {
@@ -191,7 +191,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
             }
         }
         // 公众号支付
-        else if(orderInfo.getPayType().equals(PayTypeEnums.getEnum(3).getDbValue())){
+        else if(orderInfo.getPayType().equals(PayTypeEnums.JSAPI.getDbValue())){
              result = createOrder(orderInfo);
         }
         result.put(STATUS,"0");
@@ -199,13 +199,13 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
     }
 
     @Override
-    public Map<String,Object> payAgian(String orderNo) {
+    public Map<String,Object> payAgain(String orderNo) {
         return null;
     }
 
     @Override
     public Map<String,String> queryOrder(String orderNo) {
-        YuancreditOrder yuancreditOrder = Optional.ofNullable(payOrderService.queryOrder(orderNo)).orElseThrow(()->new PayException("查询支付订单记录失败!"));
+        PayOrder yuancreditOrder = Optional.ofNullable(payOrderService.queryOrder(orderNo)).orElseThrow(()->new PayException("查询支付订单记录失败!"));
         Map<String,String> map = null;
         if(checkOrderStatus(yuancreditOrder)){
             map =queryOrderStatus(yuancreditOrder);
@@ -213,8 +213,8 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
         return map;
     }
 
-    protected boolean checkOrderStatus(YuancreditOrder yuancreditOrder){
-        if(yuancreditOrder.getOrderStatus().equals(OrderStatusEnums.FAIL)||yuancreditOrder.getOrderStatus().equals(OrderStatusEnums.NEEDPAY)){
+    protected boolean checkOrderStatus(PayOrder payOrder){
+        if(payOrder.getOrderStatus().equals(OrderStatusEnums.FAIL)||payOrder.getOrderStatus().equals(OrderStatusEnums.NEEDPAY)){
             return true;
         }
         return false;
@@ -276,9 +276,9 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
         return "";
     }
 
-    protected abstract Map<String, String> queryOrderStatus(YuancreditOrder order);
+    protected abstract Map<String, String> queryOrderStatus(PayOrder order);
 
-    protected abstract Map<String, Object> createOrder(YuancreditOrder order);
+    protected abstract Map<String, Object> createOrder(PayOrder order);
 
     protected abstract YuancreditPayConfig initConfig();
 }

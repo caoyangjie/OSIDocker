@@ -9,7 +9,7 @@
 package com.osidocker.open.micro.pay.api;
 
 import com.osidocker.open.micro.pay.exceptions.PayException;
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +28,9 @@ public interface ApiPayGateway {
 
     public String getPayName();
 
-    public APIResponse execute(TransOrderBase orderInfo) throws PayException;
+    public ApiResponse execute(TransOrderBase orderInfo) throws PayException;
 
-    public Map<String,Object> payAgian(String orderNo) throws PayException;
+    public Map<String,Object> payAgain(String orderNo) throws PayException;
 
     public  Map<String, String> queryOrder(String orderNo) throws PayException;
 

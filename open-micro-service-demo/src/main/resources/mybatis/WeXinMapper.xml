@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.osidocker.open.micro.pay.mapper.WeXinMapper">
+  <select id="getOpenId" resultType="java.util.Map">
+    SELECT openId FROM system_wexin_user WHERE user_id = #{userId}
+  </select>
+  <insert id="addWeXinUser" parameterType="java.util.Map">
+    INSERT INTO`system_wexin_user`(user_id,openId) VALUE(#{map.userId},#{map.openId})
+  </insert>
+
+  <insert id="saveWeXinUser" parameterType="com.osidocker.open.micro.pay.entity.WeXinUserInfo">
+    INSERT INTO wexin_user (open_id,nick_name,sex,country,province,city,head_image_url,privilege,union_id) values (#{openId},#{nickName},#{sex},#{country},#{province},#{city},#{headImageUrl},#{privilege},#{unionId})
+  </insert>
+</mapper>

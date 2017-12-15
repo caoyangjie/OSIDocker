@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.osidocker.open.micro.pay.mapper.PayOrderMapper">
+
+    <select id="getOrderInfo" resultType="java.util.Map">
+        SELECT order_id,appy_id,discount_price,total_price,order_status,`pay_status` FROM system_order WHERE order_id = #{orderId}
+        <if test='status !=null  and status !=""'>
+            AND pay_status = #{status}
+        </if>
+    </select>
+
+    <insert id="addOrderInfo" useGeneratedKeys="true" keyProperty="applyId" parameterType="java.util.Map">
+        INSERT INTO system_order(apply_id,total_price,discount_price,order_status,pay_status,created_date,updated_date)
+        VALUE (#{map.applyId},#{map.totalPrice},#{map.discountPrice},#{map.orderStatus},#{map.payStatus},NOW(),NOW())
+    </insert>
+
+    <update id="updOrderStatus">
+        UPDATE system_order SET pay_status = #{payStatus} WHERE order_id = #{orderId}
+    </update>
+
+    <update id="orderFailed">
+        UPDATE system_order SET pay_status = 'pay_failure' WHERE order_id = #{orderId} and pay_status = 'not_pay'
+    </update>
+
+</mapper>

@@ -20,6 +20,7 @@ package com.osidocker.open.micro.pay.enums;
 public enum PayWayEnums {
     weixin_pay(1,"wxpay","微信支付"),
     ali_pay(2,"alipay","支付宝支付"),
+    gome_pay(3,"gomepay","国美支付"),
     UNKOWN(4,"unkown","未知状态");
 
 
@@ -50,5 +51,9 @@ public enum PayWayEnums {
 
     public String getDbValue() {
         return dbValue;
+    }
+
+    public int getData() {
+        return data;
     }
 }

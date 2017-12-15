@@ -12,11 +12,17 @@ import com.osidocker.open.micro.service.IProductInventoryService;
  */
 public class ProductInventoryCacheReloadRequest implements IRequest {
 
-    //商品库存对象
+    /**
+     * 商品库存对象
+     */
     private Long productId;
-    //商品库存重新加载服务对象
+    /**
+     * 商品库存重新加载服务对象
+     */
     private IProductInventoryService productInventoryService;
-    //是否强制刷新缓存标识
+    /**
+     * 是否强制刷新缓存标识
+     */
     private boolean forceRefresh;
 
     public ProductInventoryCacheReloadRequest(Long productId, IProductInventoryService productInventoryService, boolean forceRefresh) {
@@ -36,6 +42,7 @@ public class ProductInventoryCacheReloadRequest implements IRequest {
         return String.valueOf(productId);
     }
 
+    @Override
     public boolean isForceRefresh() {
         return forceRefresh;
     }

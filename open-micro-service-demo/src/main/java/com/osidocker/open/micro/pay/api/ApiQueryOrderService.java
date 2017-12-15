@@ -8,7 +8,7 @@
  */
 package com.osidocker.open.micro.pay.api;
 
-import com.osidocker.open.micro.pay.vos.APIResponse;
+import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.pay.vos.QueryOrder;
 
 /**
@@ -22,5 +22,5 @@ import com.osidocker.open.micro.pay.vos.QueryOrder;
  * @版本号： V1.0.0
  */
 public interface ApiQueryOrderService {
-    public APIResponse getQueryOrder(QueryOrder queryOrder);
+    public ApiResponse getQueryOrder(QueryOrder queryOrder);
 }

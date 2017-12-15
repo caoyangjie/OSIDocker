@@ -8,7 +8,7 @@
  */
 package com.osidocker.open.micro.pay.api;
 
-import com.osidocker.open.micro.pay.entity.YuancreditOrder;
+import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
 
 import java.util.Map;
@@ -25,9 +25,9 @@ import java.util.Map;
  */
 public interface ApiPayOrderService {
 
-    public YuancreditOrder createOrder(TransOrderBase orderBase);
+    public PayOrder createOrder(TransOrderBase orderBase);
 
-    public YuancreditOrder queryOrder(String orderNo);
+    public PayOrder queryOrder(String orderNo);
 
     public int updPayCodeUrl(String orderNo, String codeUrl, String payWay);
 

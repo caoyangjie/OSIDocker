@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yuancredit.service.pay.mapper.PayOrderMapper">
-    <insert id="createPayOrder" parameterType="com.osidocker.open.micro.pay.entity.YuancreditOrder" useGeneratedKeys="true" keyColumn="id">
-    INSERT INTO ys_pay_order(order_id,company_id,product_name,order_no,order_price,pay_type,pay_way_code,order_ip,order_date,order_time,order_period,update_date,return_url,notify_url,remark)
+<mapper namespace="com.osidocker.open.micro.pay.mapper.PayOrderMapper">
+    <insert id="createPayOrder" parameterType="com.osidocker.open.micro.pay.entity.PayOrder" useGeneratedKeys="true" keyColumn="id">
+    INSERT INTO pay_order(order_id,company_id,product_name,order_no,order_price,pay_type,pay_way_code,order_ip,order_date,order_time,order_period,update_date,return_url,notify_url,remark)
     VALUE(#{orderId},#{companyId},#{productName},#{orderNo},#{orderPrice},#{payType},#{payWayCode},#{orderIp},NOW(),NOW(),#{orderPeriod},NOW(),#{returnUrl},#{notifyUrl},#{remark})
     on DUPLICATE KEY UPDATE order_no =#{orderNo},order_ip = #{orderIp},update_date = NOW()
     </insert>
     <update id="updPayCodeUrl" parameterType="java.util.Map">
-      UPDATE ys_pay_order SET field1 = #{map.payUrl} WHERE order_id =#{map.orderId} and pay_way_code = #{map.payWay}
+      UPDATE pay_order SET field1 = #{map.payUrl} WHERE order_id =#{map.orderId} and pay_way_code = #{map.payWay}
     </update>
     <select id="getOrderId" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT order_id FROM `ys_pay_order` WHERE order_no = #{orderNo}
     </select>
-    <select id="queryOrder" parameterType="java.lang.String" resultType="com.osidocker.open.micro.pay.entity.YuancreditOrder">
-      SELECT order_no AS orderNo,out_trade_no AS outTradeNo,b.pay_status AS `status` FROM `ys_pay_order` AS a INNER JOIN
-       ys_order AS b ON a.order_id = b.order_id WHERE a.order_no = #{orderNo}
+    <select id="queryOrder" parameterType="java.lang.String" resultType="com.osidocker.open.micro.pay.entity.PayOrder">
+      SELECT order_no AS orderNo,out_trade_no AS outTradeNo,b.pay_status AS `status` FROM `pay_order` AS a INNER JOIN
+       system_order AS b ON a.order_id = b.order_id WHERE a.order_no = #{orderNo}
     </select>
     <update id="updOrderOutTradeNo">
-       UPDATE ys_pay_order SET out_trade_no = #{outTradeNo} WHERE order_no =#{orderNo}
+       UPDATE pay_order SET out_trade_no = #{outTradeNo} WHERE order_no =#{orderNo}
     </update>
     <select id="getPayOrder" resultType="java.util.Map">
-        SELECT field1,order_no,TIMESTAMPDIFF(MINUTE,CONCAT(order_date,' ',order_time),NOW()) AS  timeout FROM ys_pay_order
+        SELECT field1,order_no,TIMESTAMPDIFF(MINUTE,CONCAT(order_date,' ',order_time),NOW()) AS  timeout FROM pay_order
         WHERE order_id =#{orderId} AND pay_way_code = #{payWay} AND pay_type = #{payType}
     </select>
     <select id="getPayOrderById"  resultType="java.util.Map">
-        SELECT order_no,pay_way_code as payWay FROM ys_pay_order
+        SELECT order_no,pay_way_code as payWay FROM pay_order
         WHERE order_id =#{orderId} AND out_trade_no IS NULL
     </select>
     <select id="getOrderByNotPay" resultType="java.util.Map">
-      SELECT order_id FROM ys_order WHERE pay_status = 'not_pay' AND TIMESTAMPDIFF(MINUTE,created_date,NOW()) > 30
+      SELECT order_id FROM system_order WHERE pay_status = 'not_pay' AND TIMESTAMPDIFF(MINUTE,created_date,NOW()) > 30
     </select>
     <select id="queryOrderStatus" resultType="java.lang.String">
-        SELECT pay_status FROM  ys_order WHERE order_id = #{orderId}
+        SELECT pay_status FROM  system_order WHERE order_id = #{orderId}
     </select>
 </mapper>
