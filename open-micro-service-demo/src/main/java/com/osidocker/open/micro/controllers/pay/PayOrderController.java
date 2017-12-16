@@ -6,8 +6,10 @@
  * <p>
  * ===================================================================================
  */
-package com.osidocker.open.micro.controllers;
+package com.osidocker.open.micro.controllers.pay;
 
+import com.osidocker.open.micro.controllers.CoreController;
+import com.osidocker.open.micro.pay.api.ApiOrderService;
 import com.osidocker.open.micro.pay.api.ApiPayGateway;
 import com.osidocker.open.micro.pay.api.ApiQueryOrderService;
 import com.osidocker.open.micro.pay.enums.PayTypeEnums;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 
 /**
  * @公司名称： 深圳原形信息技术有限公司
@@ -32,7 +35,7 @@ import javax.servlet.http.HttpServletRequest;
  * @版本号： V1.0.0
  */
 @RestController
-@RequestMapping("/createOrder")
+@RequestMapping("/pay")
 public class PayOrderController extends CoreController {
     public static final String X_FORWARDED_FOR = "x-forwarded-for";
     public static final String UNKNOWN = "unknown";
@@ -47,7 +50,10 @@ public class PayOrderController extends CoreController {
     @Autowired
     private ApiQueryOrderService queryOrderService;
 
-    @RequestMapping(value = "/{payWay}",method = RequestMethod.POST)
+    @Autowired
+    private ApiOrderService orderService;
+
+    @RequestMapping(value = "/{payWay}",method = {RequestMethod.POST,RequestMethod.GET})
     public ApiResponse unifiedPayOrder(@RequestBody TransOrderBase order, @PathVariable String payWay, HttpServletRequest request){
         // 公众号支付时获取openId
         if(order.getPayType().equals(PayTypeEnums.JSAPI.getDbValue())){
@@ -60,6 +66,7 @@ public class PayOrderController extends CoreController {
             }
         }
         order.setOrderIp(getIpAddr(request));
+        order.setPayWayCode(payWay);
         try{
             ApiPayGateway gateway = getServiceBy(payWay+ GATEWAY,ApiPayGateway.class,version());
             return gateway.execute(order);
@@ -72,6 +79,16 @@ public class PayOrderController extends CoreController {
     @RequestMapping(value = "/query/order",method = RequestMethod.POST)
     public ApiResponse getQueryOrder(@RequestBody QueryOrder queryOrder) {
         return queryOrderService.getQueryOrder(queryOrder);
+    }
+
+    @RequestMapping(value = "/create",method = {RequestMethod.POST,RequestMethod.GET})
+    public ApiResponse createSystemOrder(@RequestParam("applyId") String applyId, @RequestParam("totalPrice") BigDecimal totalPrice){
+        try{
+            orderService.createSystemOrder(applyId,totalPrice);
+        }catch(Exception e){
+            return getTryCatchExceptions(e);
+        }
+        return getDefaultApiRosponse();
     }
 
     /**

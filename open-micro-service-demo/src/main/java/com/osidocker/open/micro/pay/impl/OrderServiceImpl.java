@@ -46,13 +46,14 @@ public class OrderServiceImpl extends BasePayService implements ApiOrderService{
         return buildFail("无法获取订单信息!");
     }
 
-    public ApiResponse createOrderInfo(String applyId,BigDecimal totalPrice){
+    @Override
+    public ApiResponse createSystemOrder(String applyId,BigDecimal totalPrice){
         SystemOrder order = new SystemOrder();
         order.setApplyId(applyId);
         order.setTotalPrice(totalPrice);
-        order.setOrderStatus(StatusEnum.getEnum(1).getDbValue());
-        order.setPayStatus(PayStatusEnum.getEnum(3).getDbValue());
-        orderMapper.addOrderInfo(order);
+        order.setOrderStatus(StatusEnum.VALID.getDbValue());
+        order.setPayStatus(PayStatusEnum.INIT.getDbValue());
+        orderMapper.addSystemOrder(order);
         return buildSuccess().initData(order);
     }
 
@@ -62,8 +63,8 @@ public class OrderServiceImpl extends BasePayService implements ApiOrderService{
     }
 
     @Override
-    public int updOrderStatus(String orderId, String status) {
-        return orderMapper.updateOrderStatus(orderId,status);
+    public int updOrderStatus(String orderId, String status,String price) {
+        return orderMapper.updateOrderStatus(orderId,status,price);
     }
 
     @Override

@@ -27,9 +27,14 @@ public interface OrderMapper {
 
     Map<String,Object> getOrderInfo(@Param("orderId") String orderId, @Param("status") String status);
 
-    Long addOrderInfo(SystemOrder order);
+    /**
+     * 添加系统订单
+     * @param order
+     * @return
+     */
+    Long addSystemOrder(SystemOrder order);
 
-    int updateOrderStatus(@Param("orderId") String orderId, @Param("status") String status);
+    int updateOrderStatus(@Param("orderId") String orderId, @Param("status") String status,@Param("price")String payPrice);
 
     int orderFailed(String orderId);
 }

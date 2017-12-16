@@ -6,9 +6,10 @@
  * <p>
  * ========================================================
  */
-package com.osidocker.open.micro.controllers;
+package com.osidocker.open.micro.controllers.pay;
 
-import com.osidocker.open.micro.config.PropertiesConfig;
+import com.osidocker.open.micro.config.PayPropertiesConfig;
+import com.osidocker.open.micro.controllers.CoreController;
 import com.osidocker.open.micro.pay.api.ApiWexinService;
 import com.osidocker.open.micro.pay.entity.AccessToken;
 import com.osidocker.open.micro.pay.entity.WeXinUserInfo;
@@ -46,7 +47,7 @@ public class WxAuthorizeController extends CoreController {
     public static final String OPEN_ID = "openId";
 
     @Autowired
-    PropertiesConfig config;
+    PayPropertiesConfig config;
 
     @Autowired
     @Qualifier("wexinService")

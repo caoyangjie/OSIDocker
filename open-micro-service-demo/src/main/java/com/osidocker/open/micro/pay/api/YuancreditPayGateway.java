@@ -8,7 +8,7 @@
  */
 package com.osidocker.open.micro.pay.api;
 
-import com.osidocker.open.micro.config.PropertiesConfig;
+import com.osidocker.open.micro.config.PayPropertiesConfig;
 import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
 import com.osidocker.open.micro.pay.enums.PayTypeEnums;
@@ -17,6 +17,7 @@ import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.pay.impl.BasePayService;
 import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
+import com.osidocker.open.micro.utils.BarCodeFactory;
 import com.osidocker.open.micro.utils.JsonTools;
 import com.osidocker.open.micro.utils.StringUtil;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -54,6 +56,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
     public static final String TRANSACTION_ID = "transaction_id";
     public static final String TRADE_NO = "trade_no";
     public static final String FIELD_1 = "field1";
+    public static final String PNG = ".png";
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -66,7 +69,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
     protected ApiOrderService orderService;
 
     @Autowired
-    private PropertiesConfig config;
+    protected PayPropertiesConfig config;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -102,7 +105,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
     public  Map<String,Object> pendingPay(TransOrderBase orderInfo){
         Map<String,Object> result = new HashMap<>();
         // 支付订单信息
-        Map<String,Object> payOrder = payOrderService.getPayOrder(orderInfo.getOrderId(), PayWayEnums.getEnum(orderInfo.getPayWayCode()).getDbValue(),orderInfo.getPayType());
+        Map<String,Object> payOrder = payOrderService.getPayOrder(orderInfo.getOrderId(), orderInfo.getPayWayCode(),orderInfo.getPayType());
         if(StringUtil.isEmpty(payOrder)){
             result = createOrder(orderInfo);
         }else{
@@ -154,7 +157,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
             }
         }else{
             //支付二维码生成失败
-            new PayException("创建支付二维码失败!");
+            throw new PayException("创建支付二维码失败!");
         }
         return  result;
     }
@@ -180,7 +183,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
         // 手机网站支付
         else if(orderInfo.getPayType().equals(PayTypeEnums.WEB.getDbValue())){
             // 如果为支付宝支付
-            if(orderInfo.getPayWayCode() == PayWayEnums.ali_pay.getData()){
+            if( PayWayEnums.ali_pay.getDbValue().equals(orderInfo.getPayWayCode()) ){
                 if(timeout >= config.getPayTimeOut()){
                     result = createOrder(orderInfo);
                 }else {
@@ -240,7 +243,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
                         updProductQuantity(orderId);
                     } else {
                         //更新订单状态
-                        orderService.updOrderStatus(orderId,OrderStatusEnums.FAIL.getStatus());
+                        orderService.updOrderStatus(orderId,OrderStatusEnums.FAIL.getStatus(),null);
                     }
                 //支付宝支付
                 }else if(context.containsKey(TRADE_STATUS)){
@@ -252,7 +255,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
                         updProductQuantity(orderId);
                     }else{
                         //更新订单状态
-                        orderService.updOrderStatus(orderId,OrderStatusEnums.FAIL.getStatus());
+                        orderService.updOrderStatus(orderId,OrderStatusEnums.FAIL.getStatus(),null);
                     }
                 }
                 return true;
@@ -267,13 +270,18 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
      */
     public void updProductQuantity(String orderId){
         //更新订单状态
-        orderService.updOrderStatus(orderId,OrderStatusEnums.SUCCESS.getStatus());
+        orderService.updOrderStatus(orderId,OrderStatusEnums.SUCCESS.getStatus(),null);
     }
 
 
     protected String buildPayUrl(String qrCode,String orderNo){
         //TODO 实现获取支付二维码地址路径返回
-        return "";
+        String qrCodeImg = orderNo+ PNG;
+        String str = BarCodeFactory.encode(qrCode,300,300,config.getPayPathIcon(),config.getPayPathQrCode()+ qrCodeImg,false);
+        if(StringUtil.isEmpty(str)){
+            throw new PayException("生成二维码失败!");
+        }
+        return config.getBaseUrl()+ File.pathSeparator+qrCodeImg;
     }
 
     protected abstract Map<String, String> queryOrderStatus(PayOrder order);

@@ -6,9 +6,9 @@ server:
 spring:
   datasource:
     name: micro_db
-    url: jdbc:mysql://192.168.31.181:3306/micro_db
+    url: jdbc:mysql://192.168.188.215:3306/micro_db
     username: root
-    password: caoyangjie
+    password: yx123456
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
     filters: stat,wall,log4j
@@ -34,8 +34,9 @@ spring:
 
 pay:
   url:
-    notify: https://www.szeiv.com/notify
-    return: https://www.szeiv.com/return
+    notify: ${pay.url.base}/notify
+    return: ${pay.url.base}/return
+    base: https://www.szeiv.com
   time:
     connect: 3000
     read: 15000
@@ -49,3 +50,7 @@ pay:
     mchid: 1487017392
     key: 7b304f3e0cad637538231b1d69bb7b8d
     secret: 9f7615f750a413d10134fc5041accd57
+  path:
+    icon: ${pay.path.base}\logo.png
+    qrcode: ${pay.path.base}\qrcode\
+    base: F:\unionbank

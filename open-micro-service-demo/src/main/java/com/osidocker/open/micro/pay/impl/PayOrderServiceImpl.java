@@ -9,12 +9,11 @@
 package com.osidocker.open.micro.pay.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.osidocker.open.micro.config.PropertiesConfig;
+import com.osidocker.open.micro.config.PayPropertiesConfig;
 import com.osidocker.open.micro.pay.api.ApiOrderService;
 import com.osidocker.open.micro.pay.api.ApiPayOrderService;
 import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
-import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.pay.mapper.PayOrderMapper;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
@@ -40,13 +39,12 @@ import java.util.Optional;
 @Service("payOrderService")
 public class PayOrderServiceImpl implements ApiPayOrderService {
 
-    public static final String COMPANY_ID = "company_id";
-    public static final String DISCOUNT_PRICE = "discount_price";
+    public static final String PRICE = "pay_price";
     public static final String PAY_URL = "payUrl";
     public static final String ORDER_ID = "orderId";
     public static final String PAY_WAY = "payWay";
     @Autowired
-    private PropertiesConfig config;
+    private PayPropertiesConfig config;
 
     @Autowired
     private PayOrderMapper payOrderMapper;
@@ -56,27 +54,26 @@ public class PayOrderServiceImpl implements ApiPayOrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public PayOrder createOrder(TransOrderBase context) {
-        Map<String,Object> order =  orderService.getOrderInfo(context.getOrderId(),null);
-        Optional.ofNullable(order).orElseThrow(()->new PayException("获取支付订单信息失败!"));
+    public PayOrder createOrder(TransOrderBase order) {
+        Map<String,Object> orderMap =  orderService.getOrderInfo(order.getOrderId(),null);
+        Optional.ofNullable(orderMap).orElseThrow(()->new PayException("获取支付订单信息失败!"));
         PayOrder payOrder = new PayOrder();
-        String  payWay = PayWayEnums.getEnum(context.getPayWayCode()).getDbValue();
+        String  payWay = order.getPayWayCode();
         payOrder.setOrderNo(DataUtils.getOrderNo());
-        payOrder.setCompanyId(String.valueOf(order.get(COMPANY_ID)));
-        payOrder.setProductName(context.getProductName());
-        payOrder.setOrderPrice(String.valueOf(order.get(DISCOUNT_PRICE)));
+        payOrder.setProductName(order.getProductName());
+        payOrder.setOrderPrice(String.valueOf(order.getPayPrice()));
         payOrder.setPayWayCode(payWay);
-        payOrder.setPayType(context.getPayType());
-        payOrder.setOrderIp(context.getOrderIp());
+        payOrder.setPayType(order.getPayType());
+        payOrder.setOrderIp(order.getOrderIp());
         payOrder.setOrderPeriod(30L);
         payOrder.setNotifyUrl(config.getNotifyUrl()+payWay);
         payOrder.setReturnUrl(config.getReturnUrl()+"?t="+DataUtils.getTimeStamp());
-        payOrder.setOrderId(context.getOrderId());
-        payOrder.setOpenId(context.getOpenId());
-        payOrder.setRemark(context.getRemark());
+        payOrder.setOrderId(order.getOrderId());
+        payOrder.setOpenId(order.getOpenId());
+        payOrder.setRemark(order.getRemark());
         int row = payOrderMapper.createPayOrder(payOrder);
         if(row > 0){
-            orderService.updOrderStatus(context.getOrderId(), OrderStatusEnums.NEEDPAY.getStatus());
+            orderService.updOrderStatus(order.getOrderId(), OrderStatusEnums.NEEDPAY.getStatus(),String.valueOf(order.getPayPrice()));
             return payOrder;
         }
         return null;

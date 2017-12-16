@@ -6,8 +6,9 @@
  * <p>
  * ===================================================================================
  */
-package com.osidocker.open.micro.controllers;
+package com.osidocker.open.micro.controllers.pay;
 
+import com.osidocker.open.micro.controllers.CoreController;
 import com.osidocker.open.micro.pay.api.ApiPayGateway;
 import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.pay.vos.ApiResponse;
@@ -35,6 +36,12 @@ public class PayNoticeController extends CoreController {
 
     private static final String GATEWAY = "Gateway";
 
+    /**
+     * @see com.osidocker.open.micro.pay.enums.PayWayEnums
+     * @param payWay 支持的模式,详见 @see
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/{payWay}",method = RequestMethod.POST)
     public ApiResponse NoticePayOrder(@PathVariable String payWay, HttpServletRequest request) {
         try{

@@ -23,13 +23,13 @@ import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
  */
 public class PayOrder extends CoreEntity {
     /**
-     * 订单Id
+     * 支付Id
      */
-    private String orderId;
+    private Long id;
     /**
-     * 商品id
+     * 关联id
      */
-    private String companyId;
+    private String applyId;
     /**
      * 商品名称
      */
@@ -39,7 +39,11 @@ public class PayOrder extends CoreEntity {
      */
     private String outTradeNo;
     /**
-     * 订单编号
+     * 订单Id
+     */
+    private String orderId;
+    /**
+     * 订单流水号
      */
     private String orderNo;
     /**
@@ -86,6 +90,11 @@ public class PayOrder extends CoreEntity {
      * openId
      */
     private String openId;
+
+    /**
+     * 支付二维码地址
+     */
+    private String payCodeUrl;
     /**
      * 备用字段
      */
@@ -115,6 +124,14 @@ public class PayOrder extends CoreEntity {
         this.orderId = orderId;
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
     public OrderStatusEnums getOrderStatus(){
         return OrderStatusEnums.getOrderStatus(this.getStatus());
     }
@@ -127,28 +144,12 @@ public class PayOrder extends CoreEntity {
         this.outTradeNo = outTradeNo;
     }
 
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
-
     public String getProductName() {
         return productName;
     }
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
     public String getOrderPrice() {
@@ -239,6 +240,30 @@ public class PayOrder extends CoreEntity {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
+    }
+
+    public String getPayCodeUrl() {
+        return payCodeUrl;
+    }
+
+    public void setPayCodeUrl(String payCodeUrl) {
+        this.payCodeUrl = payCodeUrl;
     }
 
     public String getField1() {

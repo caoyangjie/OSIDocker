@@ -11,7 +11,6 @@ package com.osidocker.open.micro.pay.impl;
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayUtil;
-import com.osidocker.open.micro.config.PropertiesConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayGateway;
 import com.osidocker.open.micro.pay.config.YuancreditWxPayConfig;
@@ -21,7 +20,6 @@ import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.utils.DataUtils;
 import com.osidocker.open.micro.utils.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,8 +66,6 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
     public static final String CODE_URL = "code_url";
     public static final String MWEB_URL = "mweb_url";
     public static final String REDIRECT_URL = "redirect_url";
-    @Autowired
-    private PropertiesConfig config;
 
     private WXPay pay;
 

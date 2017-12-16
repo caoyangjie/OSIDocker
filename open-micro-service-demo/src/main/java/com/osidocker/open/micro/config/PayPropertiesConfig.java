@@ -23,12 +23,15 @@ import org.springframework.context.annotation.Configuration;
  * @版本号： V1.0.0
  */
 @Configuration
-public class PropertiesConfig {
+public class PayPropertiesConfig {
     @Value("${pay.url.notify}")
     private String notifyUrl;
 
     @Value("${pay.url.return}")
     private String returnUrl;
+
+    @Value("${pay.url.base}")
+    private String baseUrl;
 
     @Value("${pay.ali.appid}")
     private String aliAppid ;
@@ -59,6 +62,15 @@ public class PropertiesConfig {
 
     @Value("${pay.time.out}")
     private int payTimeOut;
+
+    @Value("${pay.path.icon}")
+    private String payPathIcon;
+
+    @Value("${pay.path.qrcode}")
+    private String payPathQrCode;
+
+    @Value("${pay.path.base}")
+    private String payPathBase;
 
     public String getNotifyUrl() {
         return notifyUrl;
@@ -110,5 +122,21 @@ public class PropertiesConfig {
 
     public int getReadTimeOutMs() {
         return readTimeOutMs;
+    }
+
+    public String getPayPathIcon() {
+        return payPathIcon;
+    }
+
+    public String getPayPathQrCode() {
+        return payPathQrCode;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public String getPayPathBase() {
+        return payPathBase;
     }
 }

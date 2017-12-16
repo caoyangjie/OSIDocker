@@ -12,6 +12,7 @@ import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.utils.StringUtil;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @公司名称： 深圳原形信息技术有限公司
@@ -34,7 +35,7 @@ public class TransOrderBase implements Serializable {
     /**
      * 支付模式
      */
-    private int payWayCode;
+    private String payWayCode;
     /**
      * 下单IP
      */
@@ -51,6 +52,10 @@ public class TransOrderBase implements Serializable {
      * 公众号支付需要传入openId
      */
     private String openId;
+    /**
+     * 支付金额
+     */
+    private BigDecimal payPrice;
 
     public String getOrderId() {
         return orderId;
@@ -66,13 +71,6 @@ public class TransOrderBase implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public int getPayWayCode() {
-        return payWayCode;
-    }
-    public void setPayWayCode(int payWayCode) {
-        this.payWayCode = payWayCode;
     }
 
     public String getOrderIp() {
@@ -105,6 +103,22 @@ public class TransOrderBase implements Serializable {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getPayWayCode() {
+        return payWayCode;
+    }
+
+    public void setPayWayCode(String payWayCode) {
+        this.payWayCode = payWayCode;
+    }
+
+    public BigDecimal getPayPrice() {
+        return payPrice;
+    }
+
+    public void setPayPrice(BigDecimal payPrice) {
+        this.payPrice = payPrice;
     }
 
     public boolean checkTransData() {

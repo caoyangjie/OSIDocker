@@ -20,7 +20,6 @@ import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.osidocker.open.micro.config.PropertiesConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayGateway;
 import com.osidocker.open.micro.pay.config.YuancreditAlipayConfig;
@@ -29,7 +28,6 @@ import com.osidocker.open.micro.pay.enums.PayTypeEnums;
 import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.utils.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,8 +61,6 @@ public class AlipayGatewayImpl extends YuancreditPayGateway {
     public static final String FAIL = "fail";
     public static final String JSON = "json";
     public static final String QUICK_WAP_WAY = "QUICK_WAP_WAY";
-    @Autowired
-    private PropertiesConfig config;
 
     private AlipayClient client;
 

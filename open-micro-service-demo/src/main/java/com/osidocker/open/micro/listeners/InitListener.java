@@ -15,13 +15,13 @@ public class InitListener implements ServletContextListener{
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         //初始化工作线程池和内存队列
-        MicroRequestProcessorThreadPool.getInstance();
+//        MicroRequestProcessorThreadPool.getInstance();
         //设置SpringContent上下文对象
         initSpringContext(sce);
         //启动kafka消费者线程
 //        new Thread(new KafkaConsumer("cache-message")).start();
         //启动缓存重建线程
-        new Thread(new RebuildCacheThread()).start();
+//        new Thread(new RebuildCacheThread()).start();
         //获取ZookeeperSession对象
 //        ZooKeeperSession.getInstance();
     }

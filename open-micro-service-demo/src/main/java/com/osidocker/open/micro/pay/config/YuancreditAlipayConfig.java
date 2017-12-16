@@ -8,7 +8,7 @@
  */
 package com.osidocker.open.micro.pay.config;
 
-import com.osidocker.open.micro.config.PropertiesConfig;
+import com.osidocker.open.micro.config.PayPropertiesConfig;
 import com.osidocker.open.micro.pay.api.YuancreditPayConfig;
 
 import java.io.InputStream;
@@ -25,9 +25,9 @@ import java.io.InputStream;
  */
 public class YuancreditAlipayConfig implements YuancreditPayConfig {
 
-    private PropertiesConfig config;
+    private PayPropertiesConfig config;
 
-    public YuancreditAlipayConfig(PropertiesConfig config){
+    public YuancreditAlipayConfig(PayPropertiesConfig config){
         this.config = config;
     }
 

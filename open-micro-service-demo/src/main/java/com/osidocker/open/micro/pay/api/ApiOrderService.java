@@ -10,6 +10,7 @@ package com.osidocker.open.micro.pay.api;
 
 import com.osidocker.open.micro.pay.vos.ApiResponse;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -31,6 +32,14 @@ public interface ApiOrderService {
     ApiResponse getOrderInfo(String orderId);
 
     /**
+     * 创建一个系统订单
+     * @param applyId 订单关联对象id
+     * @param totalPrice 订单总金额
+     * @return
+     */
+    ApiResponse createSystemOrder(String applyId, BigDecimal totalPrice);
+
+    /**
      * 根据订单id和订单状态获取订单信息
      * @param orderId   订单id
      * @param status    订单状态
@@ -44,7 +53,7 @@ public interface ApiOrderService {
      * @param status 订单状态
      * @return 返回受影响行数
      */
-    int updOrderStatus(String orderId, String status);
+    int updOrderStatus(String orderId, String status,String price);
 
     /**
      * 订单失败

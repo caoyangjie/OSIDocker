@@ -114,8 +114,7 @@ public class QueryOrderServiceImpl extends BasePayService implements ApiQueryOrd
      * 更新产品支付状态
      * @param map
      */
-    @Transactional(rollbackFor = Exception.class)
-    public  boolean updateOrder(Map<String,String> map,String outTradeNo){
+    protected boolean updateOrder(Map<String,String> map,String outTradeNo){
         String orderNo = map.get(OUT_TRADE_NO);
         String orderId = payOrderMapper.getOrderId(orderNo);
         if(!StringUtil.isEmpty(orderId)){
@@ -124,7 +123,7 @@ public class QueryOrderServiceImpl extends BasePayService implements ApiQueryOrd
             if(status.equals(OrderStatusEnums.NEEDPAY.getStatus()) || status.equals(OrderStatusEnums.FAIL.getStatus())){
                 payOrderMapper.updOrderOutTradeNo(orderNo,outTradeNo);
                 //更新订单状态
-               int  row = orderService.updOrderStatus(orderId, OrderStatusEnums.SUCCESS.getStatus());
+               int  row = orderService.updOrderStatus(orderId, OrderStatusEnums.SUCCESS.getStatus(),null);
                if(row > 0){
                    //TODO 更新产品数量
                }
