@@ -10,15 +10,15 @@
     </select>
 
     <insert id="addSystemOrder" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.osidocker.open.micro.pay.entity.SystemOrder">
-        INSERT INTO system_order(apply_id,total_price,order_status,pay_status,created_date,updated_date)
-        VALUE (#{map.applyId},#{map.totalPrice},#{map.orderStatus},#{map.payStatus},NOW(),NOW())
+        INSERT INTO system_order(order_id,apply_id,total_price,order_status,pay_status,created_date,updated_date)
+        VALUE (#{orderId},#{applyId},#{totalPrice},#{orderStatus},#{payStatus},NOW(),NOW())
     </insert>
 
     <update id="updateOrderStatus">
         UPDATE system_order
         <set>
             <if test="price!=null and price!=''">
-              pay_price = #{price},
+              pay_price = pay_price + #{price},
             </if>
             pay_status = #{status}
         </set>

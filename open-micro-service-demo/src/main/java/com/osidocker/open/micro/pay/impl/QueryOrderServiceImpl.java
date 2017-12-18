@@ -11,7 +11,9 @@ package com.osidocker.open.micro.pay.impl;
 import com.osidocker.open.micro.pay.api.ApiOrderService;
 import com.osidocker.open.micro.pay.api.ApiPayGateway;
 import com.osidocker.open.micro.pay.api.ApiQueryOrderService;
+import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
+import com.osidocker.open.micro.pay.enums.PayStatusEnum;
 import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.mapper.PayOrderMapper;
 import com.osidocker.open.micro.pay.vos.ApiResponse;
@@ -114,19 +116,18 @@ public class QueryOrderServiceImpl extends BasePayService implements ApiQueryOrd
      * 更新产品支付状态
      * @param map
      */
-    protected boolean updateOrder(Map<String,String> map,String outTradeNo){
+    protected boolean updateOrder(Map<String,String> map, String outTradeNo){
         String orderNo = map.get(OUT_TRADE_NO);
-        String orderId = payOrderMapper.getOrderId(orderNo);
-        if(!StringUtil.isEmpty(orderId)){
-            String status = payOrderMapper.queryOrderStatus(orderId);
+        PayOrder order = payOrderMapper.queryOrder(orderNo);
+        if(!StringUtil.isEmpty(order.getOrderId())){
+            String status = payOrderMapper.queryOrderStatus(order.getOrderId());
             //当前订单为待支付或订单失败
             if(status.equals(OrderStatusEnums.NEEDPAY.getStatus()) || status.equals(OrderStatusEnums.FAIL.getStatus())){
-                payOrderMapper.updOrderOutTradeNo(orderNo,outTradeNo);
+                int updVal = payOrderMapper.updOrderOutTradeNo(orderNo,outTradeNo, PayStatusEnum.PAYSUCCESS.getDbValue());
                 //更新订单状态
-               int  row = orderService.updOrderStatus(orderId, OrderStatusEnums.SUCCESS.getStatus(),null);
-               if(row > 0){
-                   //TODO 更新产品数量
-               }
+                if( updVal > 0 ){
+                    orderService.updOrderStatus(order.getOrderId(), OrderStatusEnums.SUCCESS.getStatus(),order.getOrderPrice());
+                }
             }
         }
         return false;

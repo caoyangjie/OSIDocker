@@ -56,9 +56,10 @@ public interface PayOrderMapper {
      * 更新订单外部流水号
      * @param orderNo
      * @param outTradeNo
+     * @param payStatus
      * @return
      */
-    int updOrderOutTradeNo(@Param("orderNo") String orderNo, @Param("outTradeNo") String outTradeNo);
+    int updOrderOutTradeNo(@Param("orderNo") String orderNo, @Param("outTradeNo") String outTradeNo, @Param("payStatus") String payStatus);
 
     /**
      * 根据请求参数获取订单信息
@@ -67,7 +68,7 @@ public interface PayOrderMapper {
      * @param payType 下单类型
      * @return
      */
-    Map<String,Object> getPayOrder(@Param("orderId") String orderId, @Param("payWay") String payWay, @Param("payType") String payType);
+    List<Map<String,Object>> getPayOrder(@Param("orderId") String orderId, @Param("payWay") String payWay, @Param("payType") String payType);
 
     /**
      * 跟进订单Id获取订单信息

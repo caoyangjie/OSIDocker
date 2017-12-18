@@ -33,6 +33,10 @@ public class TransOrderBase implements Serializable {
      */
     private String orderId;
     /**
+     * 订单流水
+     */
+    private String orderNo;
+    /**
      * 支付模式
      */
     private String payWayCode;

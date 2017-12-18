@@ -11,6 +11,7 @@ package com.osidocker.open.micro.pay.api;
 import com.osidocker.open.micro.config.PayPropertiesConfig;
 import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
+import com.osidocker.open.micro.pay.enums.PayStatusEnum;
 import com.osidocker.open.micro.pay.enums.PayTypeEnums;
 import com.osidocker.open.micro.pay.enums.PayWayEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -55,7 +57,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
     public static final String RESULT_CODE = "result_code";
     public static final String TRANSACTION_ID = "transaction_id";
     public static final String TRADE_NO = "trade_no";
-    public static final String FIELD_1 = "field1";
+    public static final String PAY_CODE_URL = "pay_code_url";
     public static final String PNG = ".png";
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -85,7 +87,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
                 result = pendingPay(orderInfo);
             }
             // 订单为初始化状态
-            else if(map.get(PAY_STATUS).equals(OrderStatusEnums.INIT.getStatus())){
+            else if(map.get(PAY_STATUS).equals(OrderStatusEnums.INIT.getStatus()) || OrderStatusEnums.SUCCESS.getStatus().equals(map.get(PAY_STATUS))){
                 result = createOrder(orderInfo);
                 result.put(STATUS,"0");
             }else{
@@ -103,36 +105,39 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
      * @return
      */
     public  Map<String,Object> pendingPay(TransOrderBase orderInfo){
-        Map<String,Object> result = new HashMap<>();
+        final Map<String,Object> result = new HashMap<>();
         // 支付订单信息
-        Map<String,Object> payOrder = payOrderService.getPayOrder(orderInfo.getOrderId(), orderInfo.getPayWayCode(),orderInfo.getPayType());
-        if(StringUtil.isEmpty(payOrder)){
-            result = createOrder(orderInfo);
+        List<Map<String,Object>> payOrderMap = payOrderService.getPayOrder(orderInfo.getOrderId(), orderInfo.getPayWayCode(),orderInfo.getPayType());
+        if(StringUtil.isEmpty(payOrderMap)){
+            result.putAll(createOrder(orderInfo));
         }else{
-            int timeout = Integer.parseInt(payOrder.get(TIMEOUT)+"");
-            //查询第三方支付订单
-            Map<String,String>  queryOrder = queryOrder(payOrder.get(ORDER_NO)+"");
-            //微信订单
-            if(queryOrder.containsKey(TRADE_STATE)){
-                if(queryOrder.get(TRADE_STATE).equals(SUCCESS)){
-                    noticeOrder(queryOrder);
-                    result.put(STATUS,"1");
-                }else{
-                    result = getPayUrl(orderInfo,timeout,payOrder);
-                }
-            //支付宝订单
-            }else if(queryOrder.containsKey(TRADE_STATUS)){
-                if(!StringUtil.isEmpty(queryOrder.get(TRADE_STATUS))){
-                    if(queryOrder.get(TRADE_STATUS).equals(TRADE_SUCCESS) || queryOrder.get(TRADE_STATUS).equals(TRADE_FINISHED)){
+            payOrderMap.forEach(payOrder->{
+                int timeout = Integer.parseInt(payOrder.get(TIMEOUT)+"");
+                //查询第三方支付订单
+                Map<String,String>  queryOrder = queryOrder(payOrder.get(ORDER_NO)+"");
+                //微信订单
+                if(queryOrder.containsKey(TRADE_STATE)){
+                    if(queryOrder.get(TRADE_STATE).equals(SUCCESS)){
                         noticeOrder(queryOrder);
                         result.put(STATUS,"1");
-                    }else {
-                        result =getPayUrl(orderInfo,timeout,payOrder);
+                    }else{
+                        result.putAll(getPayUrl(orderInfo,timeout,payOrder));
                     }
-                }else {
-                    result =getPayUrl(orderInfo,timeout,payOrder);
+                    //支付宝订单
+                }else if(queryOrder.containsKey(TRADE_STATUS)){
+                    if(!StringUtil.isEmpty(queryOrder.get(TRADE_STATUS))){
+                        if(queryOrder.get(TRADE_STATUS).equals(TRADE_SUCCESS) || queryOrder.get(TRADE_STATUS).equals(TRADE_FINISHED)){
+                            noticeOrder(queryOrder);
+                            result.put(STATUS,"1");
+                        }else {
+                            result.putAll(getPayUrl(orderInfo,timeout,payOrder));
+                        }
+                    }else {
+                        result.putAll(getPayUrl(orderInfo,timeout,payOrder));
+                    }
                 }
-            }
+            });
+
         }
         return  result;
     }
@@ -150,10 +155,10 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
         String payUrl = result.get(PAY_URL)+"";
         if(!StringUtil.isEmpty(payUrl)){
             if(orderInfo.getPayType().equals(PayTypeEnums.JSAPI.getDbValue())){
-                payOrderService.updPayCodeUrl(order.getOrderId(), JsonTools.toJson(result),order.getPayWayCode());
+                payOrderService.updPayCodeUrl(order.getOrderNo(), JsonTools.toJson(result),order.getPayWayCode(),PayStatusEnum.NOTPAY);
             }else {
                 // 更新支付二维码
-                payOrderService.updPayCodeUrl(order.getOrderId(),result.get(PAY_URL)+"",order.getPayWayCode());
+                payOrderService.updPayCodeUrl(order.getOrderNo(),result.get(PAY_URL)+"",order.getPayWayCode(),PayStatusEnum.NOTPAY);
             }
         }else{
             //支付二维码生成失败
@@ -175,9 +180,10 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
         // 电脑端支付
         if(orderInfo.getPayType().equals(PayTypeEnums.PC.getDbValue())){
             if(timeout >= config.getPayTimeOut()){
+                payOrderService.updPayCodeUrl(payOrder.get(ORDER_NO)+"", JsonTools.toJson(result),payOrder.get(PAY_CODE_URL)+"", PayStatusEnum.CANCEL);
                 result = createOrder(orderInfo);
             }else {
-                result.put(PAY_URL, JsonTools.jsonStr2Map(payOrder.get(FIELD_1)+"").get(PAY_URL));
+                result.put(PAY_URL, JsonTools.jsonStr2Map(payOrder.get(PAY_CODE_URL)+"").get(PAY_URL));
             }
         }
         // 手机网站支付
@@ -187,7 +193,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
                 if(timeout >= config.getPayTimeOut()){
                     result = createOrder(orderInfo);
                 }else {
-                    result.put(PAY_URL, JsonTools.jsonStr2Map(payOrder.get(FIELD_1)+"").get(PAY_URL));
+                    result.put(PAY_URL, JsonTools.jsonStr2Map(payOrder.get(PAY_CODE_URL)+"").get(PAY_URL));
                 }
             }else {
                 result = createOrder(orderInfo);
@@ -208,10 +214,10 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
 
     @Override
     public Map<String,String> queryOrder(String orderNo) {
-        PayOrder yuancreditOrder = Optional.ofNullable(payOrderService.queryOrder(orderNo)).orElseThrow(()->new PayException("查询支付订单记录失败!"));
+        PayOrder payOrder = Optional.ofNullable(payOrderService.queryOrder(orderNo)).orElseThrow(()->new PayException("查询支付订单记录失败!"));
         Map<String,String> map = null;
-        if(checkOrderStatus(yuancreditOrder)){
-            map =queryOrderStatus(yuancreditOrder);
+        if(checkOrderStatus(payOrder)){
+            map =queryOrderStatus(payOrder);
         }
         return map;
     }
@@ -231,19 +237,21 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
             logger.info("支付回调参数："+context);
             //执行购买成功后回调操作代码
             String orderNo = context.get(OUT_TRADE_NO);
-            String orderId = payOrderService.getOrderId(orderNo);
-            if(!StringUtil.isEmpty(orderId)){
+            PayOrder order = payOrderService.queryOrder(orderNo);
+            if(!StringUtil.isEmpty(order.getOrderId())){
                 //微信支付
                 if(context.containsKey(RESULT_CODE)){
                     String result_code = context.get(RESULT_CODE);
                     String transaction_id = context.get(TRANSACTION_ID);
                     if (result_code.equals(SUCCESS)) {
                         // 更新支付订单号
-                        payOrderService.updOrderOutTradeNo(orderNo,transaction_id);
-                        updProductQuantity(orderId);
+                        int updVal = payOrderService.updOrderOutTradeNo(orderNo,transaction_id,PayStatusEnum.PAYSUCCESS);
+                        if(updVal>0){
+                            orderService.updOrderStatus(order.getOrderId(),OrderStatusEnums.SUCCESS.getStatus(),order.getOrderPrice());
+                        }
                     } else {
                         //更新订单状态
-                        orderService.updOrderStatus(orderId,OrderStatusEnums.FAIL.getStatus(),null);
+                        orderService.updOrderStatus(order.getOrderId(),OrderStatusEnums.FAIL.getStatus(),"0");
                     }
                 //支付宝支付
                 }else if(context.containsKey(TRADE_STATUS)){
@@ -251,11 +259,13 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
                     String trade_no = context.get(TRADE_NO);
                     if(trade_status.equals(TRADE_SUCCESS) || trade_status.equals(TRADE_FINISHED)){
                         // 更新支付订单号
-                        payOrderService.updOrderOutTradeNo(orderNo,trade_no);
-                        updProductQuantity(orderId);
+                        int updVal = payOrderService.updOrderOutTradeNo(orderNo,trade_no, PayStatusEnum.PAYSUCCESS);
+                        if(updVal>0){
+                            orderService.updOrderStatus(order.getOrderId(),OrderStatusEnums.SUCCESS.getStatus(),order.getOrderPrice());
+                        }
                     }else{
                         //更新订单状态
-                        orderService.updOrderStatus(orderId,OrderStatusEnums.FAIL.getStatus(),null);
+                        orderService.updOrderStatus(order.getOrderId(),OrderStatusEnums.FAIL.getStatus(),"0");
                     }
                 }
                 return true;
@@ -281,7 +291,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
         if(StringUtil.isEmpty(str)){
             throw new PayException("生成二维码失败!");
         }
-        return config.getBaseUrl()+ File.pathSeparator+qrCodeImg;
+        return config.getBaseUrl()+ File.separator+qrCodeImg;
     }
 
     protected abstract Map<String, String> queryOrderStatus(PayOrder order);

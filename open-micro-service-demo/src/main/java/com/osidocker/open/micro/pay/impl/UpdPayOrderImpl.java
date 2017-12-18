@@ -38,7 +38,7 @@ public class UpdPayOrderImpl implements ApiIdempotencyService<Map> {
 
     @Override
     public Map<String,Object> query(Map context) {
-        String orderId= payOrderMapper.getOrderId(context.get(OUT_TRADE_NO)+"");
-        return orderService.getOrderInfo(orderId, OrderStatusEnums.NEEDPAY.getStatus());
+        String systemOrderId= payOrderMapper.getOrderId(context.get(OUT_TRADE_NO)+"");
+        return orderService.getOrderInfo(systemOrderId, OrderStatusEnums.NEEDPAY.getStatus());
     }
 }

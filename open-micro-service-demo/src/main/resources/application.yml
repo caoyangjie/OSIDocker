@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     name: micro_db
-    url: jdbc:mysql://192.168.188.215:3306/micro_db
+    url: jdbc:mysql://192.168.188.226:3306/micro_db
     username: root
     password: yx123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -40,7 +40,7 @@ pay:
   time:
     connect: 3000
     read: 15000
-    out: 30
+    out: 3
   ali:
     appid: 2017080308021407
     mchid: 2088721710278241

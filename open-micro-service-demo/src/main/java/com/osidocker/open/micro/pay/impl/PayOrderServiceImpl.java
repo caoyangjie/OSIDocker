@@ -14,6 +14,7 @@ import com.osidocker.open.micro.pay.api.ApiOrderService;
 import com.osidocker.open.micro.pay.api.ApiPayOrderService;
 import com.osidocker.open.micro.pay.entity.PayOrder;
 import com.osidocker.open.micro.pay.enums.OrderStatusEnums;
+import com.osidocker.open.micro.pay.enums.PayStatusEnum;
 import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.pay.mapper.PayOrderMapper;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
@@ -23,8 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.osidocker.open.micro.pay.api.YuancreditPayGateway.STATUS;
 
 
 /**
@@ -41,7 +45,7 @@ public class PayOrderServiceImpl implements ApiPayOrderService {
 
     public static final String PRICE = "pay_price";
     public static final String PAY_URL = "payUrl";
-    public static final String ORDER_ID = "orderId";
+    public static final String ORDER_No = "orderNo";
     public static final String PAY_WAY = "payWay";
     @Autowired
     private PayPropertiesConfig config;
@@ -71,6 +75,7 @@ public class PayOrderServiceImpl implements ApiPayOrderService {
         payOrder.setOrderId(order.getOrderId());
         payOrder.setOpenId(order.getOpenId());
         payOrder.setRemark(order.getRemark());
+        payOrder.setStatus(PayStatusEnum.INIT.getDbValue());
         int row = payOrderMapper.createPayOrder(payOrder);
         if(row > 0){
             orderService.updOrderStatus(order.getOrderId(), OrderStatusEnums.NEEDPAY.getStatus(),String.valueOf(order.getPayPrice()));
@@ -81,19 +86,19 @@ public class PayOrderServiceImpl implements ApiPayOrderService {
 
     @Override
     public PayOrder queryOrder(String orderNo) {
-        PayOrder yuancreditOrder = payOrderMapper.queryOrder(orderNo);
-        return yuancreditOrder;
+        return payOrderMapper.queryOrder(orderNo);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int updPayCodeUrl(String orderId, String payUrl,String payWay) {
+    public int updPayCodeUrl(String orderNo, String payUrl,String payWay,PayStatusEnum payStatus) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(PAY_URL,payUrl);
         Map<String,Object> map = new HashMap<>();
         map.put(PAY_URL,jsonObject.toJSONString());
-        map.put(ORDER_ID,orderId);
+        map.put(ORDER_No,orderNo);
         map.put(PAY_WAY,payWay);
+        map.put(STATUS,payStatus.getDbValue());
         return  payOrderMapper.updPayCodeUrl(map);
     }
 
@@ -104,14 +109,13 @@ public class PayOrderServiceImpl implements ApiPayOrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int updOrderOutTradeNo(String orderNo, String outTradeNo) {
-        return payOrderMapper.updOrderOutTradeNo(orderNo,outTradeNo);
+    public int updOrderOutTradeNo(String orderNo, String outTradeNo, PayStatusEnum paysuccess) {
+        return payOrderMapper.updOrderOutTradeNo(orderNo,outTradeNo,paysuccess.getDbValue());
     }
 
     @Override
-    public Map<String,Object> getPayOrder(String orderId, String payWay,String payType) {
-        Map<String,Object> map = payOrderMapper.getPayOrder(orderId,payWay,payType);
-        return map;
+    public List<Map<String,Object>> getPayOrder(String orderId, String payWay, String payType) {
+        return payOrderMapper.getPayOrder(orderId,payWay,payType);
     }
 
     @Override

@@ -95,6 +95,11 @@ public class PayOrder extends CoreEntity {
      * 支付二维码地址
      */
     private String payCodeUrl;
+
+    /**
+     * 支付状态
+     */
+    private String status;
     /**
      * 备用字段
      */
@@ -264,6 +269,16 @@ public class PayOrder extends CoreEntity {
 
     public void setPayCodeUrl(String payCodeUrl) {
         this.payCodeUrl = payCodeUrl;
+    }
+
+    @Override
+    public String getStatus() {
+        return status;
+    }
+
+    @Override
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getField1() {

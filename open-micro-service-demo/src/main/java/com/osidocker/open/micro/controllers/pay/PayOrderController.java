@@ -76,7 +76,7 @@ public class PayOrderController extends CoreController {
         }
     }
 
-    @RequestMapping(value = "/query/order",method = RequestMethod.POST)
+    @RequestMapping(value = "/query",method = {RequestMethod.POST,RequestMethod.GET})
     public ApiResponse getQueryOrder(@RequestBody QueryOrder queryOrder) {
         return queryOrderService.getQueryOrder(queryOrder);
     }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2017-12-16 17:07:22
+Date: 2017-12-18 17:31:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -39,10 +39,11 @@ CREATE TABLE `pay_order` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `open_id` varchar(32) DEFAULT NULL COMMENT 'openId',
   `pay_code_url` varchar(255) DEFAULT NULL COMMENT '支付二维码地址',
+  `status` varchar(10) DEFAULT NULL COMMENT '支付状态',
   `field1` varchar(255) DEFAULT NULL,
   `field2` varchar(255) DEFAULT NULL,
   `field3` varchar(255) DEFAULT NULL,
   `field4` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_order_key` (`system_order_id`,`pay_type`,`pay_way_code`,`order_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  UNIQUE KEY `unique_order_key` (`system_order_id`,`pay_type`,`pay_way_code`,`order_no`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
