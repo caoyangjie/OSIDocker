@@ -1,24 +1,8 @@
-#配置激活的环境
-spring:
-  profiles:
-    active: develop
-  http:
-    multipart: #文件上传大小限制
-      maxFileSize: 1024MB
-      maxRequestSize: 10240MB
-  jackson: # Jackson配置
-    timeZone: GMT+8
-    dateFormat: yyyy-MM-dd HH:mm:ss
-
-# 服务配置
-server:
-  port: 80
-
 #数据库连接配置
 spring:
   datasource:
-    name: micro_db
-    url: jdbc:mysql://192.168.188.226:3306/unionbank
+    name: testdb
+    url: jdbc:mysql://192.168.188.226:3306/unionbank-test
     username: root
     password: yx123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -35,7 +19,7 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
   redis:
-    host: 192.168.31.181
+    host: 192.168.188.221
     password:
     port: 6379
     pool:
@@ -43,6 +27,7 @@ spring:
       min-idle: 1
       max-active: 1000
       max-wait: -1
+    database: 13
 
 pay:
   url:
@@ -52,7 +37,7 @@ pay:
   time:
     connect: 3000
     read: 15000
-    out: 3
+    out: 15
   ali:
     appid: 2017080308021407
     mchid: 2088721710278241

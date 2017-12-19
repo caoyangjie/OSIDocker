@@ -53,7 +53,7 @@ public class PayOrderController extends CoreController {
     @Autowired
     private ApiOrderService orderService;
 
-    @RequestMapping(value = "/{payWay}",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/{payWay}",method = RequestMethod.POST)
     public ApiResponse unifiedPayOrder(@RequestBody TransOrderBase order, @PathVariable String payWay, HttpServletRequest request){
         // 公众号支付时获取openId
         if(order.getPayType().equals(PayTypeEnums.JSAPI.getDbValue())){
@@ -76,12 +76,12 @@ public class PayOrderController extends CoreController {
         }
     }
 
-    @RequestMapping(value = "/query",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/query",method = RequestMethod.POST)
     public ApiResponse getQueryOrder(@RequestBody QueryOrder queryOrder) {
         return queryOrderService.getQueryOrder(queryOrder);
     }
 
-    @RequestMapping(value = "/create",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/create",method = RequestMethod.POST)
     public ApiResponse createSystemOrder(@RequestParam("applyId") String applyId, @RequestParam("totalPrice") BigDecimal totalPrice){
         try{
             orderService.createSystemOrder(applyId,totalPrice);
