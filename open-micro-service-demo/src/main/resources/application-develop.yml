@@ -29,6 +29,10 @@ spring:
       max-wait: -1
     database: 12
 
+# 日志配置文件
+logging:
+  config: classpath:logback-develop.xml
+
 pay:
   url:
     notify: ${pay.url.base}/notify
@@ -48,6 +52,6 @@ pay:
     key: 7b304f3e0cad637538231b1d69bb7b8d
     secret: 9f7615f750a413d10134fc5041accd57
   path:
-    icon: ${pay.path.base}\logo.png
-    qrcode: ${pay.path.base}\qrcode\
-    base: F:\unionbank
+    icon: ${pay.path.base}/logo.png
+    qrcode: ${pay.path.base}/qrcode/
+    base: /payservice
