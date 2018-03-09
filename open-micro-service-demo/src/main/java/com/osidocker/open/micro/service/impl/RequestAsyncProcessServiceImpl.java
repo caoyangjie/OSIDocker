@@ -12,8 +12,11 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @author Administrator
  * @creato 2017-12-02 16:40
  */
-@Service("requestAsynProcessServiceImpl")
+@Service(RequestAsyncProcessServiceImpl.REQUEST_ASYN_PROCESS_SERVICE_IMPL)
 public class RequestAsyncProcessServiceImpl implements IRequestAsyncProcessService{
+
+    public static final String REQUEST_ASYN_PROCESS_SERVICE_IMPL = "requestAsynProcessServiceImpl";
+
     @Override
     public void process(IRequest request) {
         try {

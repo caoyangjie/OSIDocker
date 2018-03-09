@@ -55,3 +55,16 @@ pay:
     icon: ${pay.path.base}/logo.png
     qrcode: ${pay.path.base}/qrcode/
     base: /payservice
+
+command:
+  hystrix:
+    coreSize: 10
+    maxQueueSize: 12
+    queueSizeRejectionThreshold: 15
+    circuitBreakerReuqest: 30
+    circuitBreakerErrorPercentage: 40
+    circuitBreakerSleepMilliseconds: 3000
+    timeout: 500
+    fallbackIsolationSemaphoreMaxRequest: 30
+    maxRequestBatch: 20
+    timerDelayInMilliseconds: 20
