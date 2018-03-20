@@ -8,6 +8,7 @@
  */
 package com.osidocker.open.micro.controllers;
 
+import com.osidocker.open.micro.entity.IsDegrade;
 import com.osidocker.open.micro.request.AbsCacheReloadRequest;
 import com.osidocker.open.micro.request.AbsUpdateRequest;
 import com.osidocker.open.micro.request.IRequest;
@@ -16,10 +17,7 @@ import com.osidocker.open.micro.service.IDataOperateService;
 import com.osidocker.open.micro.vo.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -96,6 +94,13 @@ public abstract class AbsConcurrenceController<ResponseEntity,RequestEntity> ext
             return new Response(Response.FAILURE,e.getMessage());
         }
         return new Response(Response.SUCCESS);
+    }
+
+    @RequestMapping("/isDegrade")
+    @ResponseBody
+    public String isDegrade(boolean degrade) {
+        IsDegrade.setDegrade(degrade);
+        return "success";
     }
 
     /**

@@ -6,7 +6,9 @@
  * <p>
  * ===================================================================================
  */
-package com.osidocker.open.micro.kafka;
+package com.osidocker.open.micro.message;
+
+import com.osidocker.open.micro.vo.BaseMessage;
 
 /**
  * @公司名称： 深圳原形信息技术有限公司
@@ -18,16 +20,16 @@ package com.osidocker.open.micro.kafka;
  * @修改日期： 修改于15:08 2018/3/8
  * @版本号： V1.0.0
  */
-public abstract class AbsMessageHandler {
+public abstract class AbsMessageHandler<T extends BaseMessage> {
     /**
      * 执行消息处理
      * @param message   请求参数
      */
-    public abstract <T> void execute(T message);
+    public abstract void execute(T message);
 
     /**
-     * 消息类型
+     * 执行消息转换类型
      * @return
      */
-    public abstract Class messageClass();
+    public abstract Class<T> messageClass();
 }

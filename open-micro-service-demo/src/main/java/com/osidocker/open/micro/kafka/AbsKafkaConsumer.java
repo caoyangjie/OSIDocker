@@ -8,6 +8,7 @@
  */
 package com.osidocker.open.micro.kafka;
 
+import com.osidocker.open.micro.kafka.KafkaMessageProcessor;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.KafkaStream;
