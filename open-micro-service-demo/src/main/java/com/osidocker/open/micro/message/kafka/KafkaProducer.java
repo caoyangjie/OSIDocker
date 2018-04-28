@@ -12,7 +12,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.osidocker.open.micro.message.AbsMessageProducer;
 import com.osidocker.open.micro.message.IProducer;
 import com.osidocker.open.micro.vo.BaseMessage;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
