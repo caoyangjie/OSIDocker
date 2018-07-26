@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.osidocker.open.micro.security.mapper.UserMapper">
+
+    <select id="findByUsername" resultType="com.osidocker.open.micro.security.vos.SecurityUser">
+        select id as userId,password,username from tb_user where username = #{username}
+    </select>
+
+    <insert id="addUserByPhone">
+        INSERT INTO tb_user (`password`, `username`)
+        VALUES
+        ( '******', #{telephone})
+    </insert>
+
+    <update id="updateUser" parameterType="com.osidocker.open.micro.security.vos.SecurityUser">
+        UPDATE
+          tb_user
+        SET
+        <if test='password !=null  and password !=""'>
+            password = #{password},
+        </if>
+        <if test='icon !=null  and icon !=""'>
+            icon = #{icon},
+        </if>
+        <if test='nickname !=null  and nickname !=""'>
+            nickname = #{nickname},
+        </if>
+        <if test='email !=null  and email !=""'>
+            email = #{email},
+        </if>
+        <if test='telephone !=null  and telephone !=""'>
+            telephone = #{telephone},
+        </if>
+        <if test='status !=null  and status !=""'>
+            status = #{status}
+        </if>
+        WHERE
+            username = #{username}
+    </update>
+</mapper>

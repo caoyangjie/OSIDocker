@@ -11,6 +11,8 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * micro service模板服务
@@ -20,12 +22,14 @@ import org.springframework.core.io.ClassPathResource;
 @ServletComponentScan
 @MapperScan(value = {"com.osidocker.open.**.mapper"})
 @EnableCaching
+@EnableSwagger2
 public class App
 {
 
     public static void main( String[] args )
     {
-        SpringApplication.run(new Object[]{App.class,new ClassPathResource("GroovyApplication.groovy")}, args);
+//        SpringApplication.run(new Object[]{App.class,new ClassPathResource("GroovyApplication.groovy")}, args);
+        SpringApplication.run(new Object[]{App.class}, args);
     }
 
 
@@ -43,5 +47,10 @@ public class App
         ServletRegistrationBean registration = new ServletRegistrationBean(new HystrixMetricsStreamServlet());
         registration.addUrlMappings("/hystrix.stream");
         return registration;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
