@@ -1,5 +1,6 @@
 package com.osidocker.open.micro.security.impl;
 
+import com.osidocker.open.micro.model.SystemUser;
 import com.osidocker.open.micro.security.mapper.UserMapper;
 import com.osidocker.open.micro.security.service.UserService;
 import com.osidocker.open.micro.security.vos.SecurityUser;
@@ -54,7 +55,7 @@ public class UserDetailsServiceImpl implements UserDetailsService,UserService {
     }
 
     @Override
-    public boolean updateUser(SecurityUser user) {
+    public boolean updateUser(SystemUser user) {
         return userRepository.updateUser(user)==1;
     }
 

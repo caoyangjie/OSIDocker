@@ -66,6 +66,8 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
     public static final String CODE_URL = "code_url";
     public static final String MWEB_URL = "mweb_url";
     public static final String REDIRECT_URL = "redirect_url";
+    public static final String APP = "APP";
+    public static final String PARTNERID= "partnerid";
 
     private WXPay pay;
 
@@ -100,6 +102,9 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
         else if(order.getPayType().equals(PayTypeEnums.JSAPI.getDbValue())){
             data.put(OPENID,order.getOpenId());
             data.put(TRADE_TYPE, JSAPI);
+        }//app支付
+        else if(order.getPayType().equals(PayTypeEnums.APP.getDbValue())){
+            data.put(TRADE_TYPE, APP);
         }
         data.put(TIME_EXPIRE, DataUtils.getTimeExpire(config.getPayTimeOut()));
         Map<String,String> result = new HashMap<>();
@@ -121,6 +126,10 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
                   else if(order.getPayType().equals(PayTypeEnums.getEnum(3).getDbValue())){
                       result = setBrandWCPayRequest(result);
                   }
+                  // APP支付
+                  else if(order.getPayType().equals(PayTypeEnums.getEnum(4).getDbValue())){
+                      result = setBrandAppPayRequest(result);
+                  }
               }else {
                    new PayException("创建支付订单状态失败!");
               }
@@ -131,6 +140,25 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
         }
         resultData.putAll(result);
         return resultData;
+    }
+
+    /**
+     * 设置APP支付请求参数
+     * @param result
+     * @return
+     * @throws Exception
+     */
+    public Map<String,String> setBrandAppPayRequest(Map<String,String> result) throws Exception {
+        Map<String,String> map = new HashMap<>();
+        map.put(APP_ID,config.getAppAppid());
+        map.put(PARTNERID,config.getAppMchid());
+        map.put(PREPAY_ID,result.get(PREPAY_ID));
+        map.put(PACKAGE, "Sign=WXPay");
+        map.put(NONCE_STR, WXPayUtil.generateNonceStr());
+        map.put("timeStamp",(System.currentTimeMillis()/1000)+"");
+        String sign = WXPayUtil.generateSignature(map, config.getAppKey(), WXPayConstants.SignType.MD5);
+        map.put("sign",sign);
+        return map;
     }
 
     /**

@@ -7,6 +7,7 @@
  */
 package com.osidocker.open.micro.security.service;
 
+import com.osidocker.open.micro.model.SystemUser;
 import com.osidocker.open.micro.security.vos.SecurityUser;
 
 /**
@@ -39,5 +40,5 @@ public interface UserService {
      * @param user
      * @return
      */
-    boolean updateUser(SecurityUser user);
+    boolean updateUser(SystemUser user);
 }

@@ -1,5 +1,7 @@
 package com.osidocker.open.micro.utils;
 
+import java.util.UUID;
+
 public class GlobalIdWorker {
 
     private long workerId;
@@ -102,6 +104,7 @@ public class GlobalIdWorker {
         for (int i = 0; i < 1; i++) {
             long v = worker.nextId();
             System.out.println(v+" = "+Long.toBinaryString(v));
+            System.err.println(UUID.randomUUID().toString().replace("-", "").toLowerCase());
         }
     }
 

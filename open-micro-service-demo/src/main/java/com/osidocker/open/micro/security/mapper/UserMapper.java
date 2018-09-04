@@ -7,6 +7,7 @@
  */
 package com.osidocker.open.micro.security.mapper;
 
+import com.osidocker.open.micro.model.SystemUser;
 import com.osidocker.open.micro.security.vos.SecurityUser;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,5 +26,5 @@ public interface UserMapper {
 
     int addUserByPhone(@Param("telephone") String telephone);
 
-    int updateUser(@Param("user") SecurityUser user);
+    int updateUser(@Param("user") SystemUser user);
 }

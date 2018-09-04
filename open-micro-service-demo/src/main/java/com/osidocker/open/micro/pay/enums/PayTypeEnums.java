@@ -21,6 +21,7 @@ public enum PayTypeEnums {
     PC(1,"pc","电脑支付"),
     WEB(2,"wap","手机H5支付"),
     JSAPI(3,"jsapi","公众号"),
+    APP(4,"app","App支付"),
     UNKOWN(4,"unkown","未知状态");
 
 

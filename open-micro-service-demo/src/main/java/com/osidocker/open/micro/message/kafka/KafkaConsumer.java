@@ -26,7 +26,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaConsumer extends AbsMessageProcessor{
 
-    @KafkaListener(id = "t1", topics = "mykafka")
+    public static final String MYKAFKA = "myKafka";
+    public static final String MY_GROUP = "myGroup";
+
+    @KafkaListener(id = MY_GROUP, topics = MYKAFKA)
     public void handlerMessage(ConsumerRecord<?, ?> cr) throws Exception {
         process(cr.value().toString());
     }

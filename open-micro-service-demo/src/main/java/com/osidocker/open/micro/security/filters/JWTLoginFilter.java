@@ -78,7 +78,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                     //采用什么算法是可以自己选择的，不一定非要采用HS512
                     .compact();
             // 登录成功后，返回token到header里面
-            response.addHeader("Authorization", "Bearer " + token);
+            response.addHeader("Authorization", "Yuancredit " + token);
         } catch (Exception e) {
             e.printStackTrace();
         }

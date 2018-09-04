@@ -1,5 +1,6 @@
 package com.osidocker.open.micro.listeners;
 
+import com.osidocker.open.micro.kafka.KafkaConsumer;
 import com.osidocker.open.micro.rebuild.RebuildCacheThread;
 import com.osidocker.open.micro.spring.SpringContext;
 import com.osidocker.open.micro.threadpool.MicroRequestProcessorThreadPool;

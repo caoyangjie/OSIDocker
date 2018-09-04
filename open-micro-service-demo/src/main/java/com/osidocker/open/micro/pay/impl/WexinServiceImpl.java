@@ -81,6 +81,11 @@ public class WexinServiceImpl extends BasePayService implements ApiWexinService 
     }
 
     @Override
+    public WeXinUserInfo getUserInfoByOpenId(String openId) {
+        return weXinMapper.getWexinUserInfoByOpenId(openId);
+    }
+
+    @Override
     public WeXinUserInfo getUserInfo(String accessToken, String openId) {
         WeXinUserInfo userInfo = null;
         // 拼接请求地址

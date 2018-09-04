@@ -28,4 +28,6 @@ public interface WeXinMapper {
     int addWeXinUser(@Param("map") Map<String, Object> map);
 
     int saveWeXinUserInfo(WeXinUserInfo userInfo);
+
+    WeXinUserInfo getWexinUserInfoByOpenId(@Param("openId") String openId);
 }

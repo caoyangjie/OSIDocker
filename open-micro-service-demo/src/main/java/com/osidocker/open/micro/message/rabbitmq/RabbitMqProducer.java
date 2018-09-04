@@ -27,7 +27,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  * @修改日期： 修改于11:18 2018/3/15
  * @版本号： V1.0.0
  */
-@Service(value = RabbitMqProducer.RABBIT_MQ_PRODUCER)
+//@Service(value = RabbitMqProducer.RABBIT_MQ_PRODUCER)
 public class RabbitMqProducer extends AbsMessageProducer implements IProducer{
 
     public static final String RABBIT_MQ_PRODUCER = "rabbitMqProducer";

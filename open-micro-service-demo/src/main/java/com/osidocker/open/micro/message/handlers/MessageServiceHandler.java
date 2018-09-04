@@ -6,7 +6,7 @@
  * <p>
  * ===================================================================================
  */
-package com.osidocker.open.micro.message.service;
+package com.osidocker.open.micro.message.handlers;
 
 import com.osidocker.open.micro.message.AbsMessageHandler;
 import com.osidocker.open.micro.vo.MessageEntity;

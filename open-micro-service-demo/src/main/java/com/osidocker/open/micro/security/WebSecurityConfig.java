@@ -3,6 +3,7 @@ package com.osidocker.open.micro.security;
 import clojure.lang.Obj;
 import com.osidocker.open.micro.security.filters.JWTAuthenticationFilter;
 import com.osidocker.open.micro.security.filters.JWTLoginFilter;
+import com.osidocker.open.micro.security.filters.OpenIdAuthenticationFilter;
 import com.osidocker.open.micro.security.impl.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] AUTH_WHITELIST = {
             // -- register url
             "/sendSms/**",
+            "/weixinbind",
+            "/wexin/**",
             // -- swagger ui
             "/v2/api-docs",
             "/swagger-resources",
@@ -66,6 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .addFilter(new JWTLoginFilter(authenticationManager()))
             .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+            .addFilter(new OpenIdAuthenticationFilter(authenticationManager()))
             .logout() // 默认注销行为为logout，可以通过下面的方式来修改
             .logoutUrl("/logout")
             .logoutSuccessUrl("/login")

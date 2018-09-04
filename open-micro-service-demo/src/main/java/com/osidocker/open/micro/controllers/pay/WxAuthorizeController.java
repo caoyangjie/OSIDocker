@@ -10,10 +10,12 @@ package com.osidocker.open.micro.controllers.pay;
 
 import com.osidocker.open.micro.config.PayPropertiesConfig;
 import com.osidocker.open.micro.controllers.CoreController;
+import com.osidocker.open.micro.entity.ShowUserEntity;
 import com.osidocker.open.micro.pay.api.ApiWexinService;
 import com.osidocker.open.micro.pay.entity.AccessToken;
 import com.osidocker.open.micro.pay.entity.WeXinUserInfo;
 import com.osidocker.open.micro.pay.vos.ApiResponse;
+import com.osidocker.open.micro.service.LsbAllService;
 import com.osidocker.open.micro.utils.DataUtils;
 import com.osidocker.open.micro.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ import java.io.IOException;
 public class WxAuthorizeController extends CoreController {
 
     private static final String APP_REDIRECT_URI = "您的网站地址跳转地址";
-    public static final String HTTPS_WX_USERBASE = "https://app.moledata.cn/creditmole/wx/userbase";
+    public static final String HTTPS_WX_USERBASE = "https://app.moledata.cn/creditmole/wexin/userbase";
     public static final String CODE = "code";
     public static final String STATE = "state";
     public static final String OPEN_ID = "openId";
@@ -53,6 +55,8 @@ public class WxAuthorizeController extends CoreController {
     @Qualifier("wexinService")
     ApiWexinService wexinService;
 
+    @Autowired
+    LsbAllService lsbAllService;
     /**
      * 根据请求版本获取服务实现
      * @param version           服务版本
@@ -84,6 +88,8 @@ public class WxAuthorizeController extends CoreController {
         AccessToken accessToken =  getWexinService(version()).getAccessToken(config.getWxAppid(), config.getWxSecret(), code);
         logger.info("获取openId："+ accessToken.getOpenId());
         request.getSession().setAttribute(OPEN_ID,accessToken.getOpenId());
+        ShowUserEntity user = lsbAllService.getUserInfo(accessToken.getOpenId());
+        request.getSession().setAttribute("userInfo",user);
         response.sendRedirect(APP_REDIRECT_URI+dispatchPageURL+"?t="+ DataUtils.getTimeStamp());
     }
 

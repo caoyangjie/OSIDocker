@@ -23,8 +23,8 @@ import org.springframework.stereotype.Service;
  * @修改日期： 修改于16:05 2018/3/15
  * @版本号： V1.0.0
  */
-@Service
-@RabbitListener(queues = {"mykafka"})
+//@Service
+//@RabbitListener(queues = {"mykafka"})
 public class RabbitMqConsumer extends AbsMessageProcessor{
 
     @RabbitHandler

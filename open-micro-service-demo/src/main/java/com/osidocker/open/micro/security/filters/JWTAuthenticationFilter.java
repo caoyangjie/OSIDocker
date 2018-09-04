@@ -37,7 +37,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer ")) {
+        if (header == null || !header.startsWith("Yuancredit ")) {
             chain.doFilter(request, response);
             return;
         }
@@ -56,7 +56,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
         try {
             user = Jwts.parser()
                     .setSigningKey(WebSecurityConfig.SIGNING_KEY)
-                    .parseClaimsJws(token.replace("Bearer ", ""))
+                    .parseClaimsJws(token.replace("Yuancredit ", ""))
                     .getBody()
                     .getSubject();
             if (user != null) {

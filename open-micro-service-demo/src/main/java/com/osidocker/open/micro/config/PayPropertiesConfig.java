@@ -54,6 +54,18 @@ public class PayPropertiesConfig {
     @Value("${pay.wx.secret}")
     private String wxSecret;
 
+    @Value("${pay.app.appid}")
+    private String appAppid;
+
+    @Value("${pay.app.mchid}")
+    private String appMchid;
+
+    @Value("${pay.app.key}")
+    private String appKey;
+
+    @Value("${pay.app.secret}")
+    private String appSecret;
+
     @Value("${pay.time.connect}")
     private int connectTimeOutMs;
 
@@ -138,5 +150,21 @@ public class PayPropertiesConfig {
 
     public String getPayPathBase() {
         return payPathBase;
+    }
+
+    public String getAppAppid() {
+        return appAppid;
+    }
+
+    public String getAppMchid() {
+        return appMchid;
+    }
+
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public String getAppSecret() {
+        return appSecret;
     }
 }

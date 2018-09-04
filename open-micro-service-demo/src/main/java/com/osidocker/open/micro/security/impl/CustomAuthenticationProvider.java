@@ -26,6 +26,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     public static final String MODE_PHONE_MESSAGE = "PhoneMessage";
     public static final String MODE_PHONE_PASSWORD = "PhonePassword";
+    public static final String MODE_USER_OPENID = "OpenId";
 
     private UserDetailsService userDetailsService;
 

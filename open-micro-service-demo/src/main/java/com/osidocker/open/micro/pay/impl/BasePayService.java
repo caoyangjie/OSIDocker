@@ -33,7 +33,7 @@ public class BasePayService{
 
     public final ApiResponse buildSuccess()
     {
-        return ApiResponse.generator("000000","SUCCESS");
+        return ApiResponse.generator("000000","SUCCESS_CODE");
     }
 
     public final ApiResponse buildFail(String apiMessage)

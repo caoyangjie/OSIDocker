@@ -40,7 +40,7 @@ public class PayTaskService {
     public static final String PAY_WAY = "payWay";
     public static final String ORDER_NO = "order_no";
     public static final String TRADE_STATE = "trade_state";
-    public static final String SUCCESS = "SUCCESS";
+    public static final String SUCCESS = "SUCCESS_CODE";
     public static final String TRADE_STATUS = "trade_status";
     public static final String TRADE_SUCCESS = "TRADE_SUCCESS";
     public static final String TRADE_FINISHED = "TRADE_FINISHED";

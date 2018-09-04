@@ -42,6 +42,13 @@ public interface ApiWexinService {
     WeXinUserInfo getUserInfo(String accessToken, String openId);
 
     /**
+     * 根据openId获取数据库中注册微信用户
+     * @param openId
+     * @return
+     */
+    WeXinUserInfo getUserInfoByOpenId(String openId);
+
+    /**
      * 公众号授权获取code
      * @param appid 应用Id
      * @param redirectUrl 跳转URL

@@ -36,6 +36,59 @@ public final class StringUtil {
     private StringUtil() {
     }
 
+    public static String left(String fullName,int index) {
+        if (StringUtils.isEmpty(fullName)) {
+            return "";
+        }
+        String name = org.apache.commons.lang.StringUtils.left(fullName, index);
+        return org.apache.commons.lang.StringUtils.rightPad(name, org.apache.commons.lang.StringUtils.length(fullName), "*");
+    }
+
+    /**
+     * [身份证号] 110****58，前面保留3位明文，后面保留2位明文
+     *
+     * @param name
+     * @param index 3
+     * @param end 2
+     * @return
+     */
+    public static String around(String name,int index,int end) {
+        if (StringUtils.isEmpty(name)) {
+            return "";
+        }
+        return org.apache.commons.lang.StringUtils.left(name, index).concat(org.apache.commons.lang.StringUtils.removeStart(org.apache.commons.lang.StringUtils.leftPad(org.apache.commons.lang.StringUtils.right(name, end), org.apache.commons.lang.StringUtils.length(name), "*"), "***"));
+    }
+
+    public static String join(AbstractCollection<String> s, String delimiter) {
+        if(s.isEmpty()){
+            return "";
+        }
+        Iterator<String> iter = s.iterator();
+        StringBuffer buffer = new StringBuffer(String.valueOf(iter.next()));
+        while(iter.hasNext()){
+            buffer.append(delimiter).append(iter.next());
+        }
+        return buffer.toString();
+    }
+
+    public static String join(List<String> s, String delimiter) {
+        if (s.size()==0) return "";
+        Iterator<String> iter = s.iterator();
+        StringBuffer buffer = new StringBuffer(String.valueOf(iter.next()));
+        while (iter.hasNext()) buffer.append(delimiter).append(iter.next());
+        return buffer.toString();
+    }
+
+    public static String join(String[] s, String delimiter) {
+        if (null==s || s.length==0) return "";
+
+        StringBuffer buffer = new StringBuffer(s[0]);
+        for (int i=1;i<s.length;i++){
+            buffer.append(delimiter).append(s[i]);
+        }
+        return buffer.toString();
+    }
+
     /**
      * 函数功能说明 ： 判断字符串是否为空 . 修改者名字： 修改日期： 修改内容：
      *

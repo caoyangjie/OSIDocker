@@ -11,13 +11,16 @@ package com.osidocker.open.micro.pay.impl;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.AlipayTradePrecreateModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.osidocker.open.micro.pay.api.YuancreditPayConfig;
@@ -61,6 +64,7 @@ public class AlipayGatewayImpl extends YuancreditPayGateway {
     public static final String FAIL = "fail";
     public static final String JSON = "json";
     public static final String QUICK_WAP_WAY = "QUICK_WAP_WAY";
+    public static final String QUICK_MSECURITY_PAY = "QUICK_MSECURITY_PAY";
 
     private AlipayClient client;
 
@@ -76,6 +80,8 @@ public class AlipayGatewayImpl extends YuancreditPayGateway {
             result = alipayTradePrecreate(order);
         }else if(order.getPayType().equals(PayTypeEnums.getEnum(2).getDbValue())){
             result = alipayTradeWapPayRequest(order);
+        }else if(order.getPayType().equals(PayTypeEnums.getEnum(4).getDbValue())){
+            result = AlipayTradeAppPayRequest(order);
         }
         return result;
     }
@@ -145,6 +151,40 @@ public class AlipayGatewayImpl extends YuancreditPayGateway {
         return  result;
     }
 
+    /**
+     * app支付
+     * @param order
+     * @return
+     */
+    public Map<String,Object>  AlipayTradeAppPayRequest(PayOrder order){
+        AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest ();
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        String orderNo = order.getOrderNo();
+        model.setOutTradeNo(orderNo);
+        model.setSubject(order.getProductName());
+        model.setTotalAmount(order.getOrderPrice());
+        model.setBody(order.getRemark());
+        model.setProductCode(QUICK_MSECURITY_PAY);
+        model.setTimeoutExpress(config.getPayTimeOut()+"m");
+        request.setBizModel(model);
+        // 设置异步通知地址
+        request.setNotifyUrl(order.getNotifyUrl());
+        // 设置同步地址
+        request.setReturnUrl(order.getReturnUrl());
+        Map<String,Object> result = new HashMap<>();
+        try {
+            AlipayTradeAppPayResponse response = getPayClient().sdkExecute(request);
+            if(response.isSuccess()){
+                result.put(PAY_URL,response.getBody());
+            } else {
+                throw  new PayException("调用支付宝app支付接口失败");
+            }
+        } catch (AlipayApiException e) {
+            logger.error(e.getMessage());
+            return null;
+        }
+        return  result;
+    }
 
     @Override
     protected Map<String,String> queryOrderStatus(PayOrder order) {

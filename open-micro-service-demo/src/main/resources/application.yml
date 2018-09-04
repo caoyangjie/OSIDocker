@@ -9,6 +9,11 @@ spring:
   jackson: # Jackson配置
     timeZone: GMT+8
     dateFormat: yyyy-MM-dd HH:mm:ss
+  mail:
+    host: smtp.163.com
+    username: kingworld890719@163.com
+    password: CyJ890815!
+    port: 25
 
 # 服务配置
 server:

@@ -45,7 +45,7 @@ public class QueryOrderServiceImpl extends BasePayService implements ApiQueryOrd
     public static final String PAY_WAY = "payWay";
     public static final String ORDER_NO = "order_no";
     public static final String TRADE_STATE = "trade_state";
-    public static final String SUCCESS = "SUCCESS";
+    public static final String SUCCESS = "SUCCESS_CODE";
     public static final String TRANSACTION_ID = "transaction_id";
     public static final String TRADE_STATUS = "trade_status";
     public static final String TRADE_SUCCESS = "TRADE_SUCCESS";

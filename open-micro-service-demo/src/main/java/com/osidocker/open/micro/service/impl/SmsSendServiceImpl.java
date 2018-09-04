@@ -63,7 +63,7 @@ public class SmsSendServiceImpl implements SmsSendService<String,Response> {
         }catch(Exception e){
             throw new SmsSendException(-1,"短信验证码发送失败："+e.getMessage());
         }
-        return new Response("000000","SUCCESS");
+        return new Response("000000","SUCCESS_CODE");
     }
 
     /**

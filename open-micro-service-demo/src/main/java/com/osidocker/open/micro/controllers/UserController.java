@@ -41,9 +41,9 @@ public class UserController {
             return new Response("000001","系统暂时只允许更新个人信息");
         }
         // 执行用户信息更新
-        if( userService.updateUser(user) ){
-
-        }
+//        if( userService.updateUser(user) ){
+//
+//        }
         return null;
     }
 
