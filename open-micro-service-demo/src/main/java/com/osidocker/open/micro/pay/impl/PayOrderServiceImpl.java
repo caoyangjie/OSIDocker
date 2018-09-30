@@ -90,6 +90,11 @@ public class PayOrderServiceImpl implements ApiPayOrderService {
     }
 
     @Override
+    public PayOrder queryOrderInfo(String orderId, String payWay, String payType) {
+        return payOrderMapper.queryOrderInfo(orderId,payWay,payType);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public int updPayCodeUrl(String orderNo, String payUrl,String payWay,PayStatusEnum payStatus) {
         JSONObject jsonObject = new JSONObject();

@@ -23,4 +23,6 @@ import com.osidocker.open.micro.pay.vos.QueryOrder;
  */
 public interface ApiQueryOrderService {
     public ApiResponse getQueryOrder(QueryOrder queryOrder);
+
+    public ApiResponse getQueryOrderSuccess(QueryOrder queryOrder);
 }

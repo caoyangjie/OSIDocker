@@ -1,0 +1,103 @@
+#数据库连接配置
+spring:
+  datasource:
+    name: testdb
+    url: jdbc:mysql://192.168.188.226:3306/unionbank15?prepStmtCacheSize=517&cachePrepStmts=true&autoReconnect=true&characterEncoding=utf-8&allowMultiQueries=true
+    username: unionbank
+    password: unionbank
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat,wall,log4j
+    maxActive: 20
+    minIdle: 1
+    initialSize: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'X'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+  redis:
+    host: 192.168.188.221
+    password:
+    port: 6379
+    database: 2
+    pool:
+      max-idle: 100
+      min-idle: 1
+      max-active: 1000
+      max-wait: -1
+  kafka:
+    consumer:
+      bootstrap-servers: 192.168.188.100:9092
+      group-id: myGroup
+    template:
+      default-topic: myKafka
+    producer:
+      bootstrap-servers: 192.168.188.100:9092
+
+
+# 日志配置文件
+logging:
+  config: classpath:logback-develop.xml
+
+pay:
+  url:
+    notify: ${pay.url.base}/payGateway/payNotice
+    return: ${pay.url.base}/payGateway/payNotice
+    base: https://www.szeiv.com
+  time:
+    connect: 3000
+    read: 15000
+    out: 15
+  ali:
+    appid: 2017122801294605
+    mchid: 2088821986613602
+    key: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDJk6OHJa2nUFQQ2dWyt0o5jrqHS6mPlsE2kg8vr4AQgRgaaztetRI5DPt6xfcHbhWsSrVjNngNSnO7qrfvBjFWRvOzZN6qvvwfadmIZa4iPAmzS4VJf7vzTt1BxM/9oG035gnQK4fUFpGWx/+Gjdk9DsZKZ9n2ndAfxCXD4cow9+viOUwOFKnu22yv8uZwvOKG7ZYfUXDvh8MZ7mI48QzhiIOQWrCj6pKFIOEFtbvwl135Y7ulMDZkYXPU6lxyKPe+n//pxtbsJ1hYDPD3Zao2QxPNUX6SaT/3jTSPrZBX1Y8LcHwdeJekMVTpsvQntak2XrxdQTikFqDTKuH5y0JfAgMBAAECggEAFR/Xv03/iM0uQiXR80yqBqYifhM7zcRqsyFTXhfyP8iHkh0yt5YaNshZgmBEpw6uTsP1hlQq+JmYz03wwKfRe80rtN0ZSKODIHejSFv/h67rBVMgwLcWJ0VYgo/xjA7H41fEJ4CoV12WHEsRSDSNU4y80wdXHDUlnm6b1o9O9RqWfLPm1YHlYTWxqOs4Lk2iHJDJEPjXUcG9GePOGEzLhlloOOODCjDbNBuP1adcTYfSqL3TleUJ7hJ48GIKx6ERdEqkmNjXn9z1pPxRMp0rkSLn4/flCTnSRcPuLf6VVgX5DT+KoHBewCVLnEMI/ToWPVnk8hXk2mWncl3u8uYqoQKBgQDvMoC+wcHFZO1eZlaTCofB8K/5vFP6WsXaYT0/7UfhUgWtpgiiJsdzyw7eYAO7IyvAfxKfqSJVln56oIWcOxEfh+dzwkWm8Y8GMZpXzpC/2l279WCF32hFW4K+55O8XNULDM0BD8Hto0CQvPmhj1n7oW9pKp4t4MYrv9MDlKlUMwKBgQDXvJpzmdPBFkPUMPoRJK+rdqxUTqRKzHr7OS4T+nG2ZuwAnuMhgoIxLdDbY6zcY7SqbaAeYWrFs6FoUyVEQMpGDDl7xcrS6niBye8phoaO4FnmH9BuS5KqaR3YI2A6Fuixy+xk1rvppiN37Y6iWjgQThvRyDmFT19MXwh//EaNJQKBgC3uy8xV1sj6JZ7wFgXsir9SYeiaIqI71iymaaWiAiChqJd8/8Frovd4ceWAGJdSHK+9dy0TxJUc7jLMKnwi15nvdiHDl66ESovM8K+V6jP9UeyrJRrwGMzg0s2oGLWeOgcCMUfX58yjgd2JfIJqzcPFb2iJl5CFzmhOUM4qOQ4DAoGBAMdC2JW1mzRY0EWJBzAWZntEnV8xU+YSf/TSl5C0XZtP7OOV3cvxszahTquUoPDe1twjbSUibXA1vfuR8HXeMfYJDH8Z7YBqOOwIC/Ka4mXNKru23tlAzDLB7GLaKeL9jefKpoltHRtt7Iy0ym2CTw4gVumouhg7e5YaoMs1xCRRAoGBAMCPlRmoQN6sJfk22KIB7W79RsRWG5jP556ep8tTLbCr572ssh2Pbsyf+OChgvnpHrvEZlN7UvTOaNQi34r6qHAT/kjr4zWS+aUxrNu1nvsyAOm2EMqhbH+vbcZPuP3OKkGldqt20mGkgIb0dMMLzdPrRqyGAjm1CYvsBdNgTBnn
+  wx:
+    appid: wx2f3df7a1e61ab90d
+    mchid: 1514672641
+    key: bjhljf96321478bjhljf96321478bjhl
+    secret: 695b719ef08ad9d9636e8e1e48fb27b2
+  app:
+    appid: wxfc3e964302d9457a
+    mchid: 1511181791
+    key:  eQcsB2oOtkG1PRdBX0JXKDygUS3AuRKN
+    secret: ea4949cb730cf51a08e28399dc0571cf
+  path:
+    icon: ${pay.path.base}/logo.png
+    qrcode: ${pay.path.base}/qrcode/
+    base: /payservice
+
+lsb:
+  python:
+    service:
+      url: https://www.xiaocuitech.com/pygroup/api/moledata/operation
+      resultUrl: https://www.xiaocuitech.com/pygroup/api/moledata/operationdata
+      ak: 698d53ac-cfd1-4ca4-8a44-fd2d50cfc915
+  pdf:
+    base:
+      path: D://pdftest//
+  img:
+    basePath: D://images//
+
+command:
+  hystrix:
+    coreSize: 10
+    maxQueueSize: 12
+    queueSizeRejectionThreshold: 15
+    circuitBreakerReuqest: 30
+    circuitBreakerErrorPercentage: 40
+    circuitBreakerSleepMilliseconds: 3000
+    timeout: 500
+    fallbackIsolationSemaphoreMaxRequest: 30
+    maxRequestBatch: 20
+    timerDelayInMilliseconds: 20
+
+baidu:
+  properties:
+    appId: 14279554
+    apiKey: 8ouRrPcriKFGzRWbjkIri0RO
+    secretKey: lQLF4e0PuOQclrumcjYloc23uGLSsdDr
+    imgPath: D://test//cardimg//

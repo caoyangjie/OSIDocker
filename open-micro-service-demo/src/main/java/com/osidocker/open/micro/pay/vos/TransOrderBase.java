@@ -25,11 +25,11 @@ import java.math.BigDecimal;
  */
 public class TransOrderBase implements Serializable {
     /**
-     * 商品名称
+     * 商品名称 （必须）
      */
     private String productName;
     /**
-     * 订单编号
+     * 订单编号 (必须)
      */
     private String orderId;
     /**
@@ -45,7 +45,7 @@ public class TransOrderBase implements Serializable {
      */
     private String orderIp;
     /**
-     * 备注
+     * 备注 (可选)
      */
     private String remark;
     /**

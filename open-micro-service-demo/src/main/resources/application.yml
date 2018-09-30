@@ -1,7 +1,7 @@
 # 配置激活的环境
 spring:
   profiles:
-    active: develop
+    active: hanglian
   http:
     multipart: #文件上传大小限制
       maxFileSize: 1024MB
@@ -17,4 +17,13 @@ spring:
 
 # 服务配置
 server:
-  port: 80
+  port: 8888
+  context-path: /payGateway
+
+# 百度服务配置
+baidu:
+  properties:
+    appId: 14279554
+    apiKey: 8ouRrPcriKFGzRWbjkIri0RO
+    secretKey: lQLF4e0PuOQclrumcjYloc23uGLSsdDr
+    imgPath: D://test//cardimg//

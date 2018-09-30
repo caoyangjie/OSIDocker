@@ -18,7 +18,7 @@ package com.osidocker.open.micro.pay.enums;
  * @版本号： V1.0.0
  */
 public enum PayWayEnums {
-    weixin_pay(1,"wxpay","微信支付"),
+    weixin_pay(1,"wxPay","微信支付"),
     ali_pay(2,"alipay","支付宝支付"),
     gome_pay(3,"gomepay","国美支付"),
     UNKOWN(4,"unkown","未知状态");

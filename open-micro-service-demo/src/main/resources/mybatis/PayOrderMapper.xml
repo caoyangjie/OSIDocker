@@ -32,4 +32,36 @@
     <select id="queryOrderStatus" resultType="java.lang.String">
         SELECT pay_status FROM  system_order WHERE order_id = #{orderId}
     </select>
+
+    <select id="queryPaySuccess" resultType="java.lang.Long">
+        SELECT count(apply_id) from system_order where pay_status = 'pay_success' and order_id = #{orderId}
+    </select>
+    
+    <select id="queryOrderInfo" resultType="com.osidocker.open.micro.pay.entity.PayOrder">
+        SELECT
+          `id`,
+          `system_order_id` as orderId,
+          `order_no` as orderNo,
+          `apply_id` as applyId,
+          `product_name` as productName,
+          `out_trade_no` as outTradeNo,
+          `order_price` as orderPrice,
+          `pay_type` as payType,
+          `pay_way_code` as payWayCode,
+          `order_ip` as orderIp,
+          `order_date` as orderDate,
+          `order_time` as orderTime,
+          `order_period` as orderPeriod,
+          `update_date` as updateDate,
+          `return_url` as returnUrl,
+          `notify_url` as notifyUrl,
+          `remark`,
+          `open_id` as openId,
+          `pay_code_url` as payCodeUrl,
+          `status`
+        FROM
+          `pay_order`
+        where
+          system_order_id = #{orderId} and pay_type=#{payType} and pay_way_code = #{payWay}
+    </select>
 </mapper>

@@ -12,11 +12,15 @@ import com.osidocker.open.micro.entity.IsDegrade;
 import com.osidocker.open.micro.request.AbsCacheReloadRequest;
 import com.osidocker.open.micro.request.AbsUpdateRequest;
 import com.osidocker.open.micro.request.IRequest;
+import com.osidocker.open.micro.service.AbsDataOperateService;
 import com.osidocker.open.micro.service.IRequestAsyncProcessService;
 import com.osidocker.open.micro.service.IDataOperateService;
+import com.osidocker.open.micro.service.impl.RequestAsyncProcessServiceImpl;
 import com.osidocker.open.micro.vo.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -33,6 +37,10 @@ import java.util.Optional;
  */
 public abstract class AbsConcurrenceController<ResponseEntity,RequestEntity> extends CoreController {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    @Qualifier(RequestAsyncProcessServiceImpl.REQUEST_ASYN_PROCESS_SERVICE_IMPL)
+    private IRequestAsyncProcessService requestAsyncProcessService;
 
     @GetMapping("/get/{id}")
     public ResponseEntity get(@PathVariable("id") Long id, @RequestParam("forceRefresh")boolean forceRefresh, @RequestBody RequestEntity requestEntity){
@@ -79,7 +87,7 @@ public abstract class AbsConcurrenceController<ResponseEntity,RequestEntity> ext
         return defaultResponseEntity(id, requestEntity);
     }
 
-    @GetMapping("/update")
+    @PostMapping("/update")
     public Response updateViewObject(RequestEntity requestEntity){
         try{
             IRequest request = getUpdateRequestInstance(requestEntity, dataOperateService());
@@ -125,13 +133,15 @@ public abstract class AbsConcurrenceController<ResponseEntity,RequestEntity> ext
      * 设置当前处理请求service
      * @return
      */
-    protected abstract IRequestAsyncProcessService requestAsyncProcessService();
+    protected IRequestAsyncProcessService requestAsyncProcessService(){
+        return requestAsyncProcessService;
+    }
 
     /**
      * 设置当前数据获取后的处理service
      * @return
      */
-    protected abstract IDataOperateService<ResponseEntity> dataOperateService();
+    protected abstract AbsDataOperateService<ResponseEntity> dataOperateService();
 
     /**
      * 数据为获取成功后的默认返回数据方法

@@ -57,7 +57,7 @@ public class ProductInventoryController {
         return new ProductInventory(productId,-1L);
     }
 
-    @GetMapping("/update")
+    @PostMapping("/update")
     public Response updateProductInventory(ProductInventory productInventory){
         try{
             IRequest request = new ProductInventoryUpdateRequest(productInventory,productInventoryService);

@@ -17,6 +17,7 @@ public class RebuildCacheThread implements Runnable {
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+	@Override
 	public void run() {
 		RebuildCacheQueue rebuildCacheQueue = RebuildCacheQueue.getInstance();
 		ZooKeeperSession zkSession = ZooKeeperSession.getInstance();

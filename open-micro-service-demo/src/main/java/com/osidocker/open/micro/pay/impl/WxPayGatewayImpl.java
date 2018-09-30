@@ -78,10 +78,11 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
 
     @Override
     public Map<String, Object> createOrder(PayOrder order) {
+
         Map<String,String> data = new HashMap<>();
         Map<String,Object> resultData = new HashMap<>();
         String orderNo = order.getOrderNo();
-        data.put(BODY, order.getRemark());
+        data.put(BODY, Optional.ofNullable(order.getRemark()).orElse("备注字段!"));
         data.put(OUT_TRADE_NO,orderNo) ;
         data.put(DEVICE_INFO, "WEB");
         data.put(FEE_TYPE, "CNY");
@@ -150,13 +151,13 @@ public class WxPayGatewayImpl extends YuancreditPayGateway {
      */
     public Map<String,String> setBrandAppPayRequest(Map<String,String> result) throws Exception {
         Map<String,String> map = new HashMap<>();
-        map.put(APP_ID,config.getAppAppid());
-        map.put(PARTNERID,config.getAppMchid());
-        map.put(PREPAY_ID,result.get(PREPAY_ID));
+        map.put("appid",config.getWxAppid());
+        map.put(PARTNERID,config.getWxMchid());
+        map.put("prepayid",result.get(PREPAY_ID));
         map.put(PACKAGE, "Sign=WXPay");
-        map.put(NONCE_STR, WXPayUtil.generateNonceStr());
-        map.put("timeStamp",(System.currentTimeMillis()/1000)+"");
-        String sign = WXPayUtil.generateSignature(map, config.getAppKey(), WXPayConstants.SignType.MD5);
+        map.put("noncestr", WXPayUtil.generateNonceStr());
+        map.put("timestamp",DataUtils.getTimeStamp().toString());
+        String sign = WXPayUtil.generateSignature(map, config.getWxKey(), WXPayConstants.SignType.MD5);
         map.put("sign",sign);
         return map;
     }

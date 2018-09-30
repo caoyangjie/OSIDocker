@@ -17,6 +17,7 @@ import com.osidocker.open.micro.pay.exceptions.PayException;
 import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.pay.vos.QueryOrder;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class PayOrderController extends CoreController {
     @Autowired
     private ApiOrderService orderService;
 
+    @ApiOperation("进行支付第三方订单创建")
     @RequestMapping(value = "/{payWay}",method = RequestMethod.POST)
     public ApiResponse unifiedPayOrder(@RequestBody TransOrderBase order, @PathVariable String payWay, HttpServletRequest request){
         // 公众号支付时获取openId
@@ -78,17 +80,18 @@ public class PayOrderController extends CoreController {
 
     @RequestMapping(value = "/query",method = RequestMethod.POST)
     public ApiResponse getQueryOrder(@RequestBody QueryOrder queryOrder) {
-        return queryOrderService.getQueryOrder(queryOrder);
+        return queryOrderService.getQueryOrderSuccess(queryOrder);
     }
 
+    @ApiOperation("查询临时合同信息表")
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     public ApiResponse createSystemOrder(@RequestParam("applyId") String applyId, @RequestParam("totalPrice") BigDecimal totalPrice){
         try{
-            orderService.createSystemOrder(applyId,totalPrice);
+            totalPrice = new BigDecimal(0.01);
+            return orderService.createSystemOrder(applyId,totalPrice);
         }catch(Exception e){
             return getTryCatchExceptions(e);
         }
-        return getDefaultApiRosponse();
     }
 
     /**

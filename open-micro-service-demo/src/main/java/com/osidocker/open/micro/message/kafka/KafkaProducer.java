@@ -30,7 +30,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  * @修改日期： 修改于9:53 2018/3/15
  * @版本号： V1.0.0
  */
-@Service(value = KafkaProducer.KAFKA_PRODUCER)
+//@Service(value = KafkaProducer.KAFKA_PRODUCER)
 public class KafkaProducer extends AbsMessageProducer implements IProducer{
     public static final String KAFKA_PRODUCER = "kafkaProducer";
     protected Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -89,4 +89,20 @@ public interface PayOrderMapper {
      * @return
      */
     String queryOrderStatus(@Param("orderId") String orderId);
+
+    /**
+     * 根据orderId查询是否支付成功
+     * @param orderId
+     * @return
+     */
+    Long queryPaySuccess(@Param("orderId") String orderId);
+
+    /**
+     * 查询支付订单信息
+     * @param orderId   订单号
+     * @param payWay    支付方式
+     * @param payType   支付类型
+     * @return
+     */
+    PayOrder queryOrderInfo(@Param("orderId") String orderId, @Param("payWay") String payWay, @Param("payType") String payType);
 }

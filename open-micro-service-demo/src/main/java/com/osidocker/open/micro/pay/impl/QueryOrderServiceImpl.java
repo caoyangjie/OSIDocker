@@ -8,6 +8,7 @@
  */
 package com.osidocker.open.micro.pay.impl;
 
+import com.osidocker.open.micro.mapper.LoanApplyMapper;
 import com.osidocker.open.micro.pay.api.ApiOrderService;
 import com.osidocker.open.micro.pay.api.ApiPayGateway;
 import com.osidocker.open.micro.pay.api.ApiQueryOrderService;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -45,13 +47,15 @@ public class QueryOrderServiceImpl extends BasePayService implements ApiQueryOrd
     public static final String PAY_WAY = "payWay";
     public static final String ORDER_NO = "order_no";
     public static final String TRADE_STATE = "trade_state";
-    public static final String SUCCESS = "SUCCESS_CODE";
+    public static final String SUCCESS = "SUCCESS";
     public static final String TRANSACTION_ID = "transaction_id";
     public static final String TRADE_STATUS = "trade_status";
     public static final String TRADE_SUCCESS = "TRADE_SUCCESS";
     public static final String TRADE_FINISHED = "TRADE_FINISHED";
-    @Autowired
+    @Resource
     private PayOrderMapper payOrderMapper;
+    @Resource
+    private LoanApplyMapper loanApplyMapper;
 
     @Autowired
     @Qualifier("alipayGateway")
@@ -105,10 +109,19 @@ public class QueryOrderServiceImpl extends BasePayService implements ApiQueryOrd
             if(index > 0){
                 return  buildSuccess();
             }else {
-                return buildFail("100008");
+                return buildFail("更新订单状态失败!");
             }
         }
-        return buildFail("100003");
+        return buildFail("未查询到需要更新状态的订单!");
+    }
+
+    @Override
+    public ApiResponse getQueryOrderSuccess(QueryOrder queryOrder) {
+        if( payOrderMapper.queryPaySuccess(queryOrder.getOrderId()).intValue() != 1 ){
+            return getQueryOrder(queryOrder);
+        }else{
+            return buildSuccess();
+        }
     }
 
 
@@ -128,8 +141,9 @@ public class QueryOrderServiceImpl extends BasePayService implements ApiQueryOrd
                 if( updVal > 0 ){
                     orderService.updOrderStatus(order.getOrderId(), OrderStatusEnums.SUCCESS.getStatus(),order.getOrderPrice());
                 }
+                loanApplyMapper.updateLoanApplyStatus(loanApplyMapper.selectApplyId(order.getOrderId()),"NEXT_HOME");
             }
         }
-        return false;
+        return true;
     }
 }

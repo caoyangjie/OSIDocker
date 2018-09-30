@@ -24,9 +24,11 @@ import com.osidocker.open.micro.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +51,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
     public static final String ORDER_NO = "order_no";
     public static final String TRADE_STATE = "trade_state";
     public static final String TRADE_STATUS = "trade_status";
-    public static final String SUCCESS = "SUCCESS_CODE";
+    public static final String SUCCESS = "SUCCESS";
     public static final String TRADE_SUCCESS = "TRADE_SUCCESS";
     public static final String TRADE_FINISHED = "TRADE_FINISHED";
     public static final String PAY_URL = "payUrl";
@@ -68,6 +70,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
     protected ApiIdempotencyService<Map> idempotencyService;
 
     @Autowired
+    @Qualifier("orderServiceExtends")
     protected ApiOrderService orderService;
 
     @Autowired
@@ -81,6 +84,7 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
             ApiResponse apiResponse = orderService.getOrderInfo(orderInfo.getOrderId());
             Map<String,Object> map = apiResponse.getRspData();
             Optional.ofNullable(map).orElseThrow(()->new PayException("无法获取订单信息!"));
+            orderInfo.setPayPrice((BigDecimal) map.get("total_price"));
             Map<String,Object> result = new HashMap<>();
             // 支付状态为待支付
             if(map.get(PAY_STATUS).equals(OrderStatusEnums.NEEDPAY.getStatus())){
@@ -105,6 +109,12 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
      * @return
      */
     public  Map<String,Object> pendingPay(TransOrderBase orderInfo){
+
+        //如果是app支付,则进行特殊处理
+        if( orderInfo.getPayType().equalsIgnoreCase(PayTypeEnums.APP.getDbValue()) ){
+            return createThirdOrder(orderInfo,payOrderService.queryOrderInfo(orderInfo.getOrderId(),orderInfo.getPayWayCode(),orderInfo.getPayType()));
+        }
+
         final Map<String,Object> result = new HashMap<>();
         // 支付订单信息
         List<Map<String,Object>> payOrderMap = payOrderService.getPayOrder(orderInfo.getOrderId(), orderInfo.getPayWayCode(),orderInfo.getPayType());
@@ -150,13 +160,22 @@ public abstract class YuancreditPayGateway extends BasePayService implements Api
      */
     public Map<String,Object> createOrder(TransOrderBase orderInfo){
         PayOrder order = Optional.ofNullable(payOrderService.createOrder(orderInfo)).orElseThrow(()->new PayException("创建支付订单失败!"));
+        return createThirdOrder(orderInfo, order);
+    }
+
+    private Map<String, Object> createThirdOrder(TransOrderBase orderInfo, PayOrder order) {
+        if( order == null ){
+            order = Optional.ofNullable(payOrderService.createOrder(orderInfo)).orElseThrow(()->new PayException("创建支付订单失败!"));
+        }
         //创建系统订单
         Map<String,Object> result = Optional.ofNullable(createOrder(order)).orElseThrow(()->new PayException("调用第三方创建订单接口失败!"));
         String payUrl = result.get(PAY_URL)+"";
         if(!StringUtil.isEmpty(payUrl)){
             if(orderInfo.getPayType().equals(PayTypeEnums.JSAPI.getDbValue())){
                 payOrderService.updPayCodeUrl(order.getOrderNo(), JsonTools.toJson(result),order.getPayWayCode(),PayStatusEnum.NOTPAY);
-            }else {
+            }else if( orderInfo.getPayType().equals(PayTypeEnums.APP.getDbValue()) ) {
+                payOrderService.updPayCodeUrl(order.getOrderNo(),"",order.getPayWayCode(),PayStatusEnum.NOTPAY);
+            }else{
                 // 更新支付二维码
                 payOrderService.updPayCodeUrl(order.getOrderNo(),result.get(PAY_URL)+"",order.getPayWayCode(),PayStatusEnum.NOTPAY);
             }

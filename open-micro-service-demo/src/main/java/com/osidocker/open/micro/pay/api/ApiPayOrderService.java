@@ -31,6 +31,8 @@ public interface ApiPayOrderService {
 
     public PayOrder queryOrder(String orderNo);
 
+    public PayOrder queryOrderInfo(String orderId,String payWay,String payType);
+
     public int updPayCodeUrl(String orderNo, String codeUrl, String payWay,PayStatusEnum payStatus);
 
     public String getOrderId(String orderNo);

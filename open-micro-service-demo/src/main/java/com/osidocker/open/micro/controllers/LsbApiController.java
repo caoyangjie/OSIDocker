@@ -102,8 +102,7 @@ public class LsbApiController {
      */
     @PostMapping("/update")
     public ApiResponse updateUserInfo(@RequestBody SystemUser user){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        ShowUserEntity userInfo = (ShowUserEntity) auth.getCredentials();
+        ShowUserEntity userInfo = getUserDetails();
         Optional.ofNullable(user.getEmail()).ifPresent(x->{
             userInfo.setEmail(x);
         });

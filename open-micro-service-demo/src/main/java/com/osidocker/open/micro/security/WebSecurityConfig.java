@@ -38,6 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/sendSms/**",
             "/weixinbind",
             "/wexin/**",
+            "/pay/**",
+            "/upload/**",
+            "/payGateway/**",
             // -- swagger ui
             "/v2/api-docs",
             "/swagger-resources",

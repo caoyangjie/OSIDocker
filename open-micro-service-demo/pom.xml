@@ -54,6 +54,11 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>4.2.0</version>
+        </dependency>
         <!-- 添加 spring session支持 -->
         <!--<dependency>
             <groupId>org.springframework.session</groupId>
