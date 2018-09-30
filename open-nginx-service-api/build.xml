@@ -1,0 +1,51 @@
+<project name="api-project" default="dist" basedir=".">
+    <description>
+        run pic-server
+    </description>
+    <!-- set global properties for this build -->
+    <property name="openresty-home" location="D:\testOpenresty"/>
+    <property name="conf" location="${basedir}/config"/>
+    <property name="lua" location="${basedir}/lua"/>
+    <property name="libs" location="${basedir}/lualib"/>
+    <property name="template" location="${basedir}/template"/>
+    <property name="target-conf" location="${openresty-home}/conf"/>
+    <property name="target-lua" location="${openresty-home}/${ant.project.name}"/>
+    <property name="target-lualib" location="${openresty-home}/lualib"/>
+    <property name="target-template" location="${openresty-home}/${ant.project.name}/templates"/>
+
+
+    <echo>######开发版本的ant配置#####</echo>
+    <target name="clean" depends="">
+        <echo>清理openresty目录 ${dist}下的conf,logs,janus,januslib</echo>
+        <delete dir="${target-conf}"/>
+        <delete dir="${target-lua}"/>
+        <delete>
+            <fileset dir="${openresty-home}/logs" includes="*.log">
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="init" depends="clean">
+        <echo>创建安装目录</echo>
+        <mkdir dir="${target-conf}"/>
+        <mkdir dir="${target-lua}"/>
+        <mkdir dir="${target-template}"/>
+    </target>
+
+    <target name="dist" depends="init" description="generate the distribution" >
+        <echo>复制安装文件</echo>
+        <copy todir="${target-conf}">
+            <fileset dir="${conf}"></fileset>
+        </copy>
+        <copy todir="${target-lua}">
+            <fileset dir="${lua}"></fileset>
+        </copy>
+        <copy todir="${target-lualib}">
+            <fileset dir="${libs}"></fileset>
+        </copy>
+        <copy todir="${target-template}">
+            <fileset dir="${template}"></fileset>
+        </copy>
+    </target>
+
+</project>
