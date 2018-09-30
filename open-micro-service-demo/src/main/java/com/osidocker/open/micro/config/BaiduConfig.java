@@ -39,11 +39,11 @@ public class BaiduConfig {
     private String secretKey;
     private String imgPath;
 
-    public UserFront getUserFront(String image){
+    public UserFront getUserFront(String image) throws Exception {
        return new UserFront().init(getJsonFormBaiduApi(FRONT,image));
     }
 
-    public UserBack getUserBack(String image){
+    public UserBack getUserBack(String image) throws Exception{
         return new UserBack().init(getJsonFormBaiduApi(BACK,image));
     }
 

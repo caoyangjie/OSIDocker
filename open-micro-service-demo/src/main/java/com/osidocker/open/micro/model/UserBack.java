@@ -25,7 +25,7 @@ public class UserBack {
     private String validate2;
     private String authority;
 
-    public UserBack init(JSONObject data){
+    public UserBack init(JSONObject data) throws Exception {
         //{"失效日期":{"words":"20190622","location":{"top":339,"left":352,"width":96,"height":19}},"签发机关":{"words":"济南市公安局长清分局","location":{"top":0,"left":0,"width":433,"height":316}},"签发日期":{"words":"20090522","location":{"top":337,"left":240,"width":96,"height":21}}}
         try {
             JSONObject json = data.getJSONObject("words_result");
@@ -33,6 +33,7 @@ public class UserBack {
             this.validate2 = json.getJSONObject("失效日期").getString("words");
             this.authority = json.getJSONObject("签发机关").getString("words");
         } catch (JSONException e) {
+            throw new Exception("图片内容识别失败!");
         }
         return this;
     }

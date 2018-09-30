@@ -74,14 +74,18 @@ public class ImageUploadController {
     @RequestMapping(value = "/{type}",method = RequestMethod.POST)
     public ApiResponse uploadImgAndGetInfo(@PathVariable("type") String type,@RequestPart("file") MultipartFile file){
         ApiResponse response = uploadImage(file);
-        if( response.getApiCode().equalsIgnoreCase("000000") ){
-            if( type.equalsIgnoreCase("front") ){
-                return ApiResponse.generator("000000","识别成功!").initData(baidu.getUserFront(response.getRspVo()+""));
-            }else if( type.equalsIgnoreCase("back") ){
-                return ApiResponse.generator("000000","识别成功!").initData(baidu.getUserBack(response.getRspVo()+""));
-            }else{
-                return ApiResponse.generator("999999","不支持的类型!");
+        try {
+            if (response.getApiCode().equalsIgnoreCase("000000")) {
+                if (type.equalsIgnoreCase("front")) {
+                    return ApiResponse.generator("000000", "识别成功!").initData(baidu.getUserFront(response.getRspVo() + ""));
+                } else if (type.equalsIgnoreCase("back")) {
+                    return ApiResponse.generator("000000", "识别成功!").initData(baidu.getUserBack(response.getRspVo() + ""));
+                } else {
+                    return ApiResponse.generator("999999", "不支持的类型!");
+                }
             }
+        }catch (Exception e){
+            return ApiResponse.generator("999999",e.getMessage());
         }
         return response;
     }

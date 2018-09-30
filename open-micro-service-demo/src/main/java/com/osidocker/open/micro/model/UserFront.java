@@ -29,7 +29,7 @@ public class UserFront {
     private String cardNo;
     private String sex;
 
-    public UserFront init(JSONObject data){
+    public UserFront init(JSONObject data) throws Exception{
         //{"姓名":{"words":"王迎峰","location":{"top":48,"left":136,"width":88,"height":32}},"民族":{"words":"汉","location":{"top":113,"left":274,"width":18,"height":23}},"住址":{"words":"安徽省淮南市大通区大通居仁村三区39-5-6室","location":{"top":222,"left":135,"width":286,"height":65}},"公民身份号码":{"words":"340402197303110018","location":{"top":361,"left":245,"width":358,"height":33}},"出生":{"words":"19730311","location":{"top":163,"left":137,"width":219,"height":27}},"性别":{"words":"男","location":{"top":109,"left":137,"width":19,"height":26}}}
         try {
             JSONObject json = data.getJSONObject("words_result");
@@ -40,7 +40,7 @@ public class UserFront {
             this.cardNo = json.getJSONObject("公民身份号码").getString("words");
             this.sex = json.getJSONObject("性别").getString("words");
         } catch (JSONException e) {
-            e.printStackTrace();
+            throw new Exception("图片内容识别识别!");
         }
         return this;
     }
