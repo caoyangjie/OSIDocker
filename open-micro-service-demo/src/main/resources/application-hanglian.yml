@@ -100,4 +100,4 @@ baidu:
     appId: 14279554
     apiKey: 8ouRrPcriKFGzRWbjkIri0RO
     secretKey: lQLF4e0PuOQclrumcjYloc23uGLSsdDr
-    imgPath: D://test//cardimg//
+    imgPath: /home/service/pay/images
