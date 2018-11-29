@@ -9,6 +9,8 @@
 package com.osidocker.open.micro.pay.impl;
 
 import com.osidocker.open.micro.pay.vos.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -24,6 +26,7 @@ import java.util.Map;
  */
 public class BasePayService{
 
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private Map<String, Object> rspData;
 
     public final ApiResponse buildSuccMap(Map<String,Object> map)

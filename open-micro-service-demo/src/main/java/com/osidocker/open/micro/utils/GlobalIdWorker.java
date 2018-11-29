@@ -103,7 +103,7 @@ public class GlobalIdWorker {
         GlobalIdWorker  worker = new GlobalIdWorker (1,1,1,1);
         for (int i = 0; i < 1; i++) {
             long v = worker.nextId();
-            System.out.println(v+" = "+Long.toBinaryString(v));
+            System.out.println(v+" = "+Long.toHexString(v));
             System.err.println(UUID.randomUUID().toString().replace("-", "").toLowerCase());
         }
     }

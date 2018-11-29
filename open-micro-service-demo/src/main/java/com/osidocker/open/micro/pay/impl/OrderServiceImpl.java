@@ -48,12 +48,14 @@ public class OrderServiceImpl extends BasePayService implements ApiOrderService{
 
     @Override
     public ApiResponse createSystemOrder(String applyId,BigDecimal totalPrice){
+        logger.info("调用createSystemOrder:"+applyId+","+totalPrice);
         SystemOrder order = new SystemOrder();
         order.setApplyId(applyId);
         order.setTotalPrice(totalPrice);
         order.setOrderStatus(StatusEnum.VALID.getDbValue());
         order.setPayStatus(PayStatusEnum.INIT.getDbValue());
         orderMapper.addSystemOrder(order);
+        logger.info("添加订单成功!");
         return buildSuccess().initData(order);
     }
 

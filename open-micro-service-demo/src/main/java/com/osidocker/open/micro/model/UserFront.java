@@ -40,7 +40,7 @@ public class UserFront {
             this.cardNo = json.getJSONObject("公民身份号码").getString("words");
             this.sex = json.getJSONObject("性别").getString("words");
         } catch (JSONException e) {
-            throw new Exception("图片内容识别识别!");
+            throw new Exception("图片内容识别失败!");
         }
         return this;
     }

@@ -14,6 +14,7 @@ import com.osidocker.open.micro.pay.api.ApiPayGateway;
 import com.osidocker.open.micro.pay.api.ApiQueryOrderService;
 import com.osidocker.open.micro.pay.enums.PayTypeEnums;
 import com.osidocker.open.micro.pay.exceptions.PayException;
+import com.osidocker.open.micro.pay.impl.OrderServiceExtendsImpl;
 import com.osidocker.open.micro.pay.vos.ApiResponse;
 import com.osidocker.open.micro.pay.vos.QueryOrder;
 import com.osidocker.open.micro.pay.vos.TransOrderBase;
@@ -21,6 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +54,7 @@ public class PayOrderController extends CoreController {
     private ApiQueryOrderService queryOrderService;
 
     @Autowired
+    @Qualifier(OrderServiceExtendsImpl.ORDER_SERVICE_EXTENDS)
     private ApiOrderService orderService;
 
     @ApiOperation("进行支付第三方订单创建")
@@ -87,6 +90,7 @@ public class PayOrderController extends CoreController {
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     public ApiResponse createSystemOrder(@RequestParam("applyId") String applyId, @RequestParam("totalPrice") BigDecimal totalPrice){
         try{
+            logger.info("开始进行订单创建操作");
             totalPrice = new BigDecimal(0.01);
             return orderService.createSystemOrder(applyId,totalPrice);
         }catch(Exception e){

@@ -30,9 +30,10 @@ import java.util.Map;
  * @修改日期： 11:41 2018/9/17
  * @版本号： V1.0.0
  */
-@Service("orderServiceExtends")
+@Service(OrderServiceExtendsImpl.ORDER_SERVICE_EXTENDS)
 public class OrderServiceExtendsImpl  extends BasePayService implements ApiOrderService {
 
+    public static final String ORDER_SERVICE_EXTENDS = "orderServiceExtends";
     @Autowired
     @Qualifier("orderService")
     private ApiOrderService apiOrderService;
