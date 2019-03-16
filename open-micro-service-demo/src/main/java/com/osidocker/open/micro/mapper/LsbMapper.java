@@ -7,6 +7,7 @@
  */
 package com.osidocker.open.micro.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.osidocker.open.micro.entity.MyReportResponse;
 import com.osidocker.open.micro.entity.SendReportResponse;
 import com.osidocker.open.micro.entity.ShowUserEntity;
@@ -25,7 +26,7 @@ import java.util.List;
  * @修改日期： 16:16 2018/7/31
  * @版本号： V1.0.0
  */
-public interface LsbMapper {
+public interface LsbMapper extends BaseMapper<ValidateInfo> {
 
     Long addValidateInfo(ValidateInfo info);
 

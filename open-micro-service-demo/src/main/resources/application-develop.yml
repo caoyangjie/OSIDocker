@@ -1,12 +1,15 @@
 #数据库连接配置
 spring:
   datasource:
-    name: testdb
-    url: jdbc:mysql://192.168.188.100:3306/liushuibao?prepStmtCacheSize=517&cachePrepStmts=true&autoReconnect=true&characterEncoding=utf-8&allowMultiQueries=true
+    #name: testdb
+    name: draw_activity
+    #url: jdbc:mysql://192.168.188.100:3306/liushuibao?prepStmtCacheSize=517&cachePrepStmts=true&autoReconnect=true&characterEncoding=utf-8&allowMultiQueries=true
+    url: jdbc:mysql://localhost:3306/draw_activity?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false
     username: root
-    password: yx12345
+    password: CyJ890815!
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.jdbc.Driver
+    #driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     filters: stat,wall,log4j
     maxActive: 20
     minIdle: 1

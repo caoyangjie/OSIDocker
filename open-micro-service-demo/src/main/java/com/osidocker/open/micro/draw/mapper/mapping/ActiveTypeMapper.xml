@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.osidocker.open.micro.draw.mapper.ActiveTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.osidocker.open.micro.draw.model.ActiveType">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="date" property="date" />
+        <result column="content" property="content" />
+        <result column="active_id" property="activeId" />
+        <result column="password" property="password" />
+        <result column="is_tlimit" property="isTlimit" />
+        <result column="is_visit" property="isVisit" />
+        <result column="is_grant" property="isGrant" />
+        <result column="is_all" property="isAll" />
+        <result column="chance_sum" property="chanceSum" />
+        <result column="stime" property="stime" />
+        <result column="etime" property="etime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, date, content, active_id AS activeId, password, is_tlimit AS isTlimit, is_visit AS isVisit, is_grant AS isGrant, is_all AS isAll, chance_sum AS chanceSum, stime, etime
+    </sql>
+
+</mapper>

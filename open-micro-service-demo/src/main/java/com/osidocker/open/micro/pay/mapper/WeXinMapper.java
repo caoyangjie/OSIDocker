@@ -8,6 +8,7 @@
  */
 package com.osidocker.open.micro.pay.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.osidocker.open.micro.pay.entity.WeXinUserInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,7 +23,7 @@ import java.util.Map;
  * @修改日期： 修改于 2017/9/5 9:37
  * @版本号： V1.0.0
  */
-public interface WeXinMapper {
+public interface WeXinMapper extends BaseMapper<WeXinUserInfo> {
     Map<String,Object> getOpenId(@Param("userId") long userId);
 
     int addWeXinUser(@Param("map") Map<String, Object> map);

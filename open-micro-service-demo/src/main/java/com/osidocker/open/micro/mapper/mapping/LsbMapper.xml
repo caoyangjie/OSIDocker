@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.osidocker.open.micro.mapper.LsbMapper" >
+
+    <insert id="addValidateInfo" keyProperty="validateId" useGeneratedKeys="true" parameterType="com.osidocker.open.micro.model.ValidateInfo">
+      INSERT INTO validate_info (
+        `cust_mbl`,
+        `user_id`,
+        `cust_name`,
+        `account_no`,
+        `bank_name`,
+        `status`,
+        `pdf_url`,
+        `create_date`,
+        `regist_date`,
+        `flow_no`,
+        `message`
+      )
+      VALUES
+     (
+        #{custMbl},
+        #{userId},
+        #{custName},
+        #{accountNo},
+        #{bankName},
+        #{status},
+        #{pdfUrl},
+        #{createDate},
+        #{registDate},
+        #{flowNo},
+        #{message}
+      )
+    </insert>
+
+    <select id="getTransactionInfoList" resultType="com.osidocker.open.micro.model.TransactionInfo">
+        SELECT
+          `txn_id` as txnId,
+          `validate_id` as validateId,
+          `balance`,
+          `trans_time` as transTime,
+          `trans_remark` as transRemark,
+          `trans_currency` as transCurrency,
+          `trans_address` as transAddress,
+          `trans_money` as transMoney,
+          `other_account_name` as otherAccountName,
+          `other_account` as otherAccount,
+          `trans_type` as transType
+          FROM
+            transaction_info
+          WHERE validate_id = #{validateId}
+          ORDER BY trans_time
+    </select>
+
+    <select id="searchValidateInfo" resultType="com.osidocker.open.micro.model.ValidateInfo">
+        SELECT
+          `validate_id` as validateId,
+          `cust_mbl` as custMbl,
+          `cust_name` as custName,
+          `account_no` as accountNo,
+          `bank_name` as bankName,
+          `status` as status,
+          `pdf_url` as pdfUrl,
+          `create_date` as createDate,
+          `regist_date` as registDate
+        FROM
+          validate_info
+        WHERE
+          validate_id = #{validateId}
+    </select>
+
+    <select id="getValidateInfoList" resultType="com.osidocker.open.micro.model.ValidateInfo">
+        SELECT
+          `validate_id` as validateId,
+          `cust_mbl` as custMbl,
+          `cust_name` as custName,
+          `account_no` as accountNo,
+          `bank_name` as bankName,
+          `status` as status,
+          `pdf_url` as pdfUrl,
+          `create_date` as createDate,
+          `regist_date` as registDate
+        FROM
+          validate_info
+        WHERE
+          user_id = #{custId}
+    </select>
+    
+    <insert id="insertTransactionInfoList" parameterType="java.util.List">
+        INSERT INTO transaction_info (
+        `validate_id`,
+        `balance`,
+        `trans_time`,
+        `trans_remark`,
+        `trans_currency`,
+        `trans_address`,
+        `trans_money`,
+        `other_account_name`,
+        `other_account`,
+        `trans_type`
+        )
+        VALUES
+        <foreach collection="list" item="item" index= "index" separator =",">
+            (
+            #{item.validateId},
+            #{item.balance},
+            #{item.transTime},
+            #{item.transRemark},
+            #{item.transCurrency},
+            #{item.transAddress},
+            #{item.transMoney},
+            #{item.otherAccountName},
+            #{item.otherAccount},
+            #{item.transType}
+            )
+        </foreach>
+    </insert>
+
+    <select id="getMyReportList" resultType="com.osidocker.open.micro.entity.MyReportResponse">
+        SELECT  distinct
+	      vi.validate_id AS validateId,
+	      vi.cust_mbl AS custMbl,
+	      vi.user_id AS userId,
+	      vi.cust_name AS custName,
+	      vi.account_no AS accountNo,
+	      vi.bank_name AS bankName,
+	      vi.pdf_url AS pdfUrl,
+	      vi.create_date AS createDate,
+	      cc.iconurl as iconUrl
+        FROM
+	      validate_info vi left join crawler_cfg cc on cc.name=vi.bank_name
+        WHERE
+	      vi.user_id = #{userId}
+	    ORDER BY create_date desc
+    </select>
+
+    <select id="getMyLastReportList" resultType="com.osidocker.open.micro.entity.MyReportResponse">
+        SELECT
+	      validate_id AS validateId,
+	      cust_mbl AS custMbl,
+	      user_id AS userId,
+	      cust_name AS custName,
+	      account_no AS accountNo,
+	      bank_name AS bankName,
+	      pdf_url AS pdfUrl,
+	      create_date AS createDate
+        FROM
+	      validate_info
+        WHERE
+	      cust_id = #{custId}
+	    ORDER BY create_date desc
+	    limit 0,1
+    </select>
+
+    <select id="getReportSendMailList" resultType="com.osidocker.open.micro.entity.SendReportResponse">
+        SELECT ttt.*,vi.pdf_url AS pdfUrl
+        FROM (
+          SELECT
+            DISTINCT ri.report_id AS reportId,
+	        ri.validate_id AS validateId,
+	        ri.receive_mail AS receiveMail,
+	        ri.status AS STATUS,
+	        ri.userId AS userId,
+	        ri.create_date AS createDate,
+	        ri.receive_name AS receiveName
+          FROM
+	        receive_info ri
+          WHERE
+	        ri.user_id = #{userId}
+	      ) AS ttt
+	      LEFT JOIN validate_info vi ON vi.user_id = ttt.userId AND vi.validate_id=ttt.validateId
+	    WHERE ttt.userId = #{userId}
+    </select>
+
+    <insert id="insertReceiveInfo" parameterType="com.osidocker.open.micro.model.ReceiveInfo">
+        INSERT INTO receive_info (
+          `validate_id`,
+          `receive_mail`,
+          `status`,
+          `user_id`,
+          `create_date`,
+          `receive_name`
+        )
+        VALUES
+       (
+          #{validateId},
+          #{receiveMail},
+          #{status},
+          #{userId},
+          #{createDate},
+          #{receiveName}
+        )
+    </insert>
+
+    <select id="getUserInfo" resultType="com.osidocker.open.micro.entity.ShowUserEntity">
+      SELECT
+        su.user_id AS userId,su.telephone,su.union_type AS unionType,su.union_id AS unionId,su.email,
+	    wu.open_id AS openId,wu.nick_name AS nickname,wu.sex,wu.country,wu.province,wu.city,wu.head_image_url AS headImageUrl,wu.privilege
+      FROM
+        weixin_user wu
+      LEFT JOIN SYSTEM_USER su
+      ON wu.user_id = su.user_id
+      WHERE
+        wu.open_id = #{openI}
+    </select>
+
+    <insert id="addSystemUser" parameterType="com.osidocker.open.micro.entity.ShowUserEntity">
+        INSERT INTO `system_user` (
+          `user_id`,
+          `telephone`,
+          `union_id`,
+          `union_type`,
+          `email`
+        )
+        VALUES
+        (
+            #{userId},
+            #{telephone},
+            #{unionId},
+            #{unionType},
+            #{email}
+        )
+    </insert>
+
+    <update id="updateWexinUser" parameterType="com.osidocker.open.micro.entity.ShowUserEntity">
+      update weixin_user set user_id = #{userId} where open_id = #{openId}
+    </update>
+
+    <update id="updateUserInfo" parameterType="com.osidocker.open.micro.entity.ShowUserEntity">
+      update `system_user` set telephone=#{telephone},email=#{email} where user_id =#{userId}
+    </update>
+    
+    <insert id="insertValidateInfo">
+        insert into validate_info (flow_no,user_id) value( #{flowNo},#{userId})
+    </insert>
+
+    <select id="checkFlowNo" resultType="java.lang.Integer">
+        select count(flow_no) from validate_info where flow_no =#{flowNo} and user_id = #{userId}
+    </select>
+
+    <insert id="insertUserEducational" parameterType="com.osidocker.open.micro.model.UserEducational">
+        INSERT INTO user_educational (
+          `user_id`,
+          `flow_no`,
+          `birth_date`,
+          `name`,
+          `sex`,
+          `enrollment_date`,
+          `graduation_date`,
+          `profession`,
+          `qualification_type`,
+          `length_of_schooling`,
+          `instructional_mode`,
+          `branch_college`,
+          `graduation_or_completion`,
+          `principal_name`,
+          `certificate_num`,
+          `photo`
+        )
+        VALUES
+          (
+            #{userId},
+            #{flowNo},
+            #{birthDate},
+            #{name},
+            #{sex},
+            #{enrollmentDate},
+            #{graduationDate},
+            #{profession},
+            #{qualificationType},
+            #{lengthOfSchooling},
+            #{instructionalMode},
+            #{branchCollege},
+            #{graduationOrCompletion},
+            #{principalName},
+            #{certificateNum},
+            #{photoName}
+          )
+    </insert>
+
+    <select id="getUserEducationalInfos" resultType="com.osidocker.open.micro.model.UserEducational">
+        select
+          `edu_id` as eduId,
+          `user_id` as userId,
+          `flow_no` as flowNo,
+          `birth_date` as birthDate,
+          `name`,
+          `sex`,
+          `enrollment_date` as enrollmentDate,
+          `graduation_date` as graduationDate,
+          `profession` as profession,
+          `qualification_type` as qualificationType,
+          `length_of_schooling` as lengthOfSchooling,
+          `instructional_mode` as instructionalMode,
+          `branch_college` as branchCollege,
+          `graduation_or_completion` as graduationOrCompletion,
+          `principal_name` as principalName,
+          `certificate_num` as certificateNum,
+          `photo`
+        from
+          user_educational
+        where user_id = #{userId}
+    </select>
+
+    <select id="searchOperationByType" resultType="com.osidocker.open.micro.model.SupportOperation">
+        SELECT
+          `oper_id` as operId,
+          `python_old` as pythonOld,
+          `business_name` as businessName,
+          `business_type` as businessType,
+          `status`
+        FROM
+          support_operation
+        where business_type = #{type} and status = 'online'
+    </select>
+</mapper>

@@ -7,8 +7,10 @@
  */
 package com.osidocker.open.micro.security.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.osidocker.open.micro.model.SystemUser;
 import com.osidocker.open.micro.security.vos.SecurityUser;
+import com.osidocker.open.micro.security.vos.User;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -21,7 +23,7 @@ import org.apache.ibatis.annotations.Param;
  * @修改日期： 21:25 2018/7/25
  * @版本号： V1.0.0
  */
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User> {
     SecurityUser findByUsername(@Param("username") String username);
 
     int addUserByPhone(@Param("telephone") String telephone);

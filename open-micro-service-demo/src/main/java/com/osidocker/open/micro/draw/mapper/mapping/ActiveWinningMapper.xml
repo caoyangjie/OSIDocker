@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.osidocker.open.micro.draw.mapper.ActiveWinningMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.osidocker.open.micro.draw.model.ActiveWinning">
+        <id column="id" property="id" />
+        <result column="type" property="type" />
+        <result column="class_id" property="classId" />
+        <result column="uid" property="uid" />
+        <result column="nickname" property="nickname" />
+        <result column="win_time" property="winTime" />
+        <result column="prize_type" property="prizeType" />
+        <result column="prize_id" property="prizeId" />
+        <result column="prize_name" property="prizeName" />
+        <result column="prize_pic" property="prizePic" />
+        <result column="amount" property="amount" />
+        <result column="realname" property="realname" />
+        <result column="telphone" property="telphone" />
+        <result column="address" property="address" />
+        <result column="status" property="status" />
+        <result column="ip" property="ip" />
+        <result column="sub_time" property="subTime" />
+        <result column="welfare" property="welfare" />
+        <result column="welfare_type" property="welfareType" />
+        <result column="ticket_id" property="ticketId" />
+        <result column="ticket_amount" property="ticketAmount" />
+        <result column="app_products" property="appProducts" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="trade_no" property="tradeNo" />
+        <result column="isfree" property="isfree" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, type, class_id AS classId, uid, nickname, win_time AS winTime, prize_type AS prizeType, prize_id AS prizeId, prize_name AS prizeName, prize_pic AS prizePic, amount, realname, telphone, address, status, ip, sub_time AS subTime, welfare, welfare_type AS welfareType, ticket_id AS ticketId, ticket_amount AS ticketAmount, app_products AS appProducts, start_time AS startTime, end_time AS endTime, trade_no AS tradeNo, isfree
+    </sql>
+
+</mapper>

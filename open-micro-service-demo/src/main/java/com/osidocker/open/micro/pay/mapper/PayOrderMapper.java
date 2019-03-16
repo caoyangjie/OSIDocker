@@ -8,6 +8,7 @@
  */
 package com.osidocker.open.micro.pay.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.osidocker.open.micro.pay.entity.PayOrder;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,7 +24,7 @@ import java.util.Map;
  * @修改日期： 修改于 2017/8/1 9:58
  * @版本号： V1.0.0
  */
-public interface PayOrderMapper {
+public interface PayOrderMapper extends BaseMapper<PayOrder> {
     /**
      * 创建内部支付订单
      * @param yuancreditOrder 订单信息

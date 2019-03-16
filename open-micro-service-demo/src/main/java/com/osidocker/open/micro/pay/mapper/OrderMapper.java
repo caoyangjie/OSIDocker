@@ -8,6 +8,7 @@
  */
 package com.osidocker.open.micro.pay.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.osidocker.open.micro.pay.entity.SystemOrder;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,7 +24,7 @@ import java.util.Map;
  * @修改日期： 修改于16:40 2017/12/15
  * @版本号： V1.0.0
  */
-public interface OrderMapper {
+public interface OrderMapper extends BaseMapper<SystemOrder> {
 
     Map<String,Object> getOrderInfo(@Param("orderId") String orderId, @Param("status") String status);
 

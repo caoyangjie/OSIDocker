@@ -7,6 +7,8 @@
  */
 package com.osidocker.open.micro.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.osidocker.open.micro.model.ProductInfo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -19,7 +21,7 @@ import org.apache.ibatis.annotations.Param;
  * @修改日期： 11:54 2018/9/17
  * @版本号： V1.0.0
  */
-public interface LoanApplyMapper {
+public interface LoanApplyMapper extends BaseMapper<ProductInfo> {
 
     /**
      * 更新进件信息表当前状态

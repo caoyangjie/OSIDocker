@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.osidocker.open.micro.pay.mapper.PayOrderMapper">
+    <insert id="createPayOrder" parameterType="com.osidocker.open.micro.pay.entity.PayOrder" useGeneratedKeys="true" keyColumn="id">
+    INSERT INTO pay_order(system_order_id,order_no,apply_id,product_name,order_price,pay_type,pay_way_code,order_ip,order_date,order_time,order_period,update_date,return_url,notify_url,remark,status)
+    VALUE(#{orderId},#{orderNo},#{applyId},#{productName},#{orderPrice},#{payType},#{payWayCode},#{orderIp},NOW(),NOW(),#{orderPeriod},NOW(),#{returnUrl},#{notifyUrl},#{remark},#{status})
+    on DUPLICATE KEY UPDATE order_no =#{orderNo},order_ip = #{orderIp},update_date = NOW()
+    </insert>
+    <update id="updPayCodeUrl" parameterType="java.util.Map">
+      UPDATE pay_order SET pay_code_url = #{map.payUrl},status=#{map.status} WHERE order_no =#{map.orderNo} and pay_way_code = #{map.payWay}
+    </update>
+    <select id="getOrderId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT system_order_id FROM `pay_order` WHERE order_no = #{orderNo}
+    </select>
+    <select id="queryOrder" parameterType="java.lang.String" resultType="com.osidocker.open.micro.pay.entity.PayOrder">
+      SELECT a.system_order_id AS orderId,a.order_no as orderNo,out_trade_no AS outTradeNo,a.status AS `status`,a.order_price FROM `pay_order` AS a WHERE a.order_no = #{orderNo}
+    </select>
+    <update id="updOrderOutTradeNo">
+       UPDATE pay_order SET out_trade_no = #{outTradeNo},status=#{payStatus} WHERE order_no =#{orderNo} and status != 'pay_success'
+    </update>
+    <select id="getPayOrder" resultType="java.util.Map">
+        SELECT pay_code_url,order_no,pay_way_code,TIMESTAMPDIFF(MINUTE,CONCAT(order_date,' ',order_time),NOW()) AS  timeout FROM pay_order
+        WHERE system_order_id =#{orderId} AND pay_way_code = #{payWay} AND pay_type = #{payType} AND status = 'not_pay'
+    </select>
+    <select id="getPayOrderById"  resultType="java.util.Map">
+        SELECT order_no,pay_way_code as payWay FROM pay_order
+        WHERE system_order_id =#{orderId} AND out_trade_no IS NULL
+    </select>
+    <select id="getOrderByNotPay" resultType="java.util.Map">
+      SELECT system_order_id FROM system_order WHERE pay_status = 'not_pay' AND TIMESTAMPDIFF(MINUTE,created_date,NOW()) > 30
+    </select>
+    <select id="queryOrderStatus" resultType="java.lang.String">
+        SELECT pay_status FROM  system_order WHERE order_id = #{orderId}
+    </select>
+
+    <select id="queryPaySuccess" resultType="java.lang.Long">
+        SELECT count(apply_id) from system_order where pay_status = 'pay_success' and order_id = #{orderId}
+    </select>
+    
+    <select id="queryOrderInfo" resultType="com.osidocker.open.micro.pay.entity.PayOrder">
+        SELECT
+          `id`,
+          `system_order_id` as orderId,
+          `order_no` as orderNo,
+          `apply_id` as applyId,
+          `product_name` as productName,
+          `out_trade_no` as outTradeNo,
+          `order_price` as orderPrice,
+          `pay_type` as payType,
+          `pay_way_code` as payWayCode,
+          `order_ip` as orderIp,
+          `order_date` as orderDate,
+          `order_time` as orderTime,
+          `order_period` as orderPeriod,
+          `update_date` as updateDate,
+          `return_url` as returnUrl,
+          `notify_url` as notifyUrl,
+          `remark`,
+          `open_id` as openId,
+          `pay_code_url` as payCodeUrl,
+          `status`
+        FROM
+          `pay_order`
+        where
+          system_order_id = #{orderId} and pay_type=#{payType} and pay_way_code = #{payWay}
+    </select>
+</mapper>

@@ -1,5 +1,5 @@
-import com.yuancredit.haibao.bussiness.rules.RuleAService
-import com.yuancredit.haibao.bussiness.rules.RuleBService
+import com.osidocker.open.micro.rules.RuleAService
+import com.osidocker.open.micro.rules.RuleBService
 
 /**
  * @公司名称: 深圳原型信息技术有限公司
@@ -13,5 +13,5 @@ import com.yuancredit.haibao.bussiness.rules.RuleBService
  */
 beans {
     ruleA(RuleAService)
-//    ruleB(RuleBService)
+    ruleB(RuleBService)
 }

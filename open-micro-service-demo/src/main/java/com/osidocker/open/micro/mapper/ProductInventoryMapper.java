@@ -1,6 +1,8 @@
 package com.osidocker.open.micro.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.osidocker.open.micro.entity.ProductInventory;
+import com.osidocker.open.micro.model.ReceiveInfo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -9,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
  * @author Administrator
  * @creato 2017-12-02 15:51
  */
-public interface ProductInventoryMapper {
+public interface ProductInventoryMapper extends BaseMapper<ReceiveInfo> {
 
     void updateProductInventory(ProductInventory productInventory);
 

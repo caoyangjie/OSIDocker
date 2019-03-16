@@ -1,7 +1,7 @@
 # 配置激活的环境
 spring:
   profiles:
-    active: hanglian
+    active: develop
   http:
     multipart: #文件上传大小限制
       maxFileSize: 1024MB
@@ -27,3 +27,21 @@ baidu:
     apiKey: 8ouRrPcriKFGzRWbjkIri0RO
     secretKey: lQLF4e0PuOQclrumcjYloc23uGLSsdDr
     imgPath: D://test//cardimg//
+
+mybatis-plus:
+  mapper-locations: classpath*:com/osidocker/open/micro/**/mapping/*.xml
+  typeAliasesPackage: open.osidocker.open.micro.model
+  global-config:
+    #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
+    id-type: 0
+    db-column-underline: false
+    refresh-mapper: true
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+    #sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: false
+    cache-enabled: true #配置的缓存的全局开关
+    lazyLoadingEnabled: true #延时加载的开关
+    multipleResultSetsEnabled: true #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用

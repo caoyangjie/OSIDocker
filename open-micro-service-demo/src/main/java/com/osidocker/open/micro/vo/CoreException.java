@@ -12,6 +12,11 @@ public class CoreException extends RuntimeException implements GlobalException {
     // 异常可带出结果数据
     private Object data;
 
+    public CoreException(ServiceExceptionEnum serviceExceptionEnum) {
+        this.code = serviceExceptionEnum.getCode();
+        this.data = serviceExceptionEnum.getMessage();
+    }
+
     public CoreException() {
         super();
     }
