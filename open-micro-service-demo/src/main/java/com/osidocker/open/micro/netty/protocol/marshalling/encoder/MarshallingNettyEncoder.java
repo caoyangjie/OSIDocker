@@ -1,6 +1,6 @@
 package com.osidocker.open.micro.netty.protocol.marshalling.encoder;
 
-import com.osidocker.open.micro.netty.NettyMessage;
+import com.osidocker.open.micro.netty.protocol.NettyMessage;
 import com.osidocker.open.micro.netty.protocol.marshalling.ChannelBufferByteOutput;
 import com.osidocker.open.micro.netty.protocol.marshalling.MarshallingCodeCFactory;
 import com.osidocker.open.micro.vo.CoreException;

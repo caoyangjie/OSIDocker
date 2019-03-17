@@ -25,7 +25,7 @@ import java.io.IOException;
  *
  *
  */
-class ChannelBufferByteOutput implements ByteOutput {
+public class ChannelBufferByteOutput implements ByteOutput {
 
     private final ByteBuf buffer;
 

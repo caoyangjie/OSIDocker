@@ -1,4 +1,4 @@
-package com.osidocker.open.micro.netty;
+package com.osidocker.open.micro.netty.protocol;
 
 import com.osidocker.open.micro.netty.protocol.MessageHeader;
 import lombok.Data;

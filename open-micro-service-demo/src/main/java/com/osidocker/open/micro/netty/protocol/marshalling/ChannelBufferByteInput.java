@@ -23,7 +23,7 @@ import java.io.IOException;
 /**
  * {@link ByteInput} implementation which reads its data from a {@link ByteBuf}
  */
-class ChannelBufferByteInput implements ByteInput {
+public class ChannelBufferByteInput implements ByteInput {
 
     private final ByteBuf buffer;
 

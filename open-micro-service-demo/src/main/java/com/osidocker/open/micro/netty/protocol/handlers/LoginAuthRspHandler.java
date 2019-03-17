@@ -1,12 +1,11 @@
 package com.osidocker.open.micro.netty.protocol.handlers;
 
-import com.osidocker.open.micro.netty.NettyMessage;
+import com.osidocker.open.micro.netty.protocol.NettyMessage;
 import com.osidocker.open.micro.netty.protocol.MessageHeader;
 import com.osidocker.open.micro.netty.protocol.MessageType;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
