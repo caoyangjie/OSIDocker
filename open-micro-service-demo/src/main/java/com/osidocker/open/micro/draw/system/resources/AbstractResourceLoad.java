@@ -13,12 +13,11 @@ import java.util.concurrent.locks.Lock;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月13日 8:48
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public abstract class AbstractResourceLoad <RequestContent extends DrawRequestContext,Source> extends AbstractFlushData implements IResourceLoad<RequestContent,Source> {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     //TODO 这里需要从配置中读取
 
     /**
@@ -36,7 +35,7 @@ public abstract class AbstractResourceLoad <RequestContent extends DrawRequestCo
         if( lock.tryLock() ){
             //TODO info("获取锁资源:{}",resourceName);
             try{
-                System.out.println("获取锁资源的线程实例:"+resourceName+Thread.currentThread().getName());
+                System.out.println("获取锁资源的线程实例:"+resourceName);
                 process(ctx);
             }finally {
                 //释放锁资源

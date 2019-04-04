@@ -6,7 +6,7 @@
     <resultMap id="BaseResultMap" type="com.osidocker.open.micro.draw.model.ActivePrize">
         <id column="id" property="id" />
         <result column="type" property="type" />
-        <result column="class_id" property="classId" />
+        <result column="class" property="class" />
         <result column="mold" property="mold" />
         <result column="name" property="name" />
         <result column="chance" property="chance" />
@@ -31,7 +31,14 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type, class_id AS classId, mold, name, chance, amount, welfare_id AS welfareId, addtime, total_num AS totalNum, day_num AS dayNum, visits, over_num AS overNum, today_num AS todayNum, week_num AS weekNum, month_num AS monthNum, min, max, remark, del, prize_pic AS prizePic, sort, desc
+        id, type, class, mold, name, chance, amount, welfare_id AS welfareId, addtime, total_num AS totalNum, day_num AS dayNum, visits, over_num AS overNum, today_num AS todayNum, week_num AS weekNum, month_num AS monthNum, min, max, remark, del, prize_pic AS prizePic, sort, desc
     </sql>
-
+    <select id="list" resultType="map">
+        select  hd_active_prize.id as id ,hd_active.name as type ,`tclass`,`mold`,hd_active_prize.name as name ,`chance` ,`amount`,`welfare_id` ,`addtime` ,`total_num`,`day_num` ,`visits` ,`over_num` ,`today_num` ,`week_num` ,`month_num` ,`min` ,`max`,`remark`,`del` ,`prize_pic` ,`sort` ,`desc`  from hd_active_prize join hd_active
+        where  hd_active.id=hd_active_prize.type and type = #{active_id}
+        <if test="condition != null and condition != ''">
+            AND name like CONCAT('%',#{condition},'%')
+        </if>
+        order by id ASC
+    </select>
 </mapper>

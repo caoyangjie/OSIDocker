@@ -11,8 +11,8 @@ spring:
     #driver-class-name: com.mysql.jdbc.Driver
     driver-class-name: com.mysql.cj.jdbc.Driver
     filters: stat,wall,log4j
-    maxActive: 20
-    minIdle: 1
+    maxActive: 200
+    minIdle: 10
     initialSize: 1
     timeBetweenEvictionRunsMillis: 60000
     minEvictableIdleTimeMillis: 30000

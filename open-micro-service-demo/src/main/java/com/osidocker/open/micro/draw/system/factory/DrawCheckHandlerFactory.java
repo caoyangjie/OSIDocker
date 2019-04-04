@@ -9,7 +9,7 @@ import com.osidocker.open.micro.vo.ServiceExceptionEnum;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月11日 10:15
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class DrawCheckHandlerFactory {
 
@@ -34,17 +34,6 @@ public class DrawCheckHandlerFactory {
                     return "未注入对应的规则检测器!";
                 }
             });
-        }
-    };
-
-    /**
-     * 添加一个默认成功的规则检测器
-     */
-    public static AbstractCheckHandler<DrawRequestContext> NULL_SUCCESS_HANDLER = new AbstractCheckHandler<DrawRequestContext>(){
-
-        @Override
-        public boolean validate(DrawRequestContext ctx) throws CoreException {
-            return true;
         }
     };
 

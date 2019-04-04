@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Lock;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 9:45
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public interface ILockResource {
 

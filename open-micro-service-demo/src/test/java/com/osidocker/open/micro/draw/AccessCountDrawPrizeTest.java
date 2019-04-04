@@ -1,11 +1,15 @@
 package com.osidocker.open.micro.draw;
 
 import com.osidocker.open.micro.base.BaseJunit;
-import com.osidocker.open.micro.draw.system.factory.DrawStrategyFactory;
+import com.osidocker.open.micro.draw.system.IDrawStrategy;
+import com.osidocker.open.micro.draw.system.impl.DrawPrizePartakeService;
 import com.osidocker.open.micro.draw.system.transfer.DrawRequestContext;
+import com.osidocker.open.micro.draw.system.transfer.DrawResponseContext;
 import com.osidocker.open.micro.utils.DateTimeKit;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -15,11 +19,15 @@ import java.util.Optional;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 13:38
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class AccessCountDrawPrizeTest extends BaseJunit {
 
     private DrawRequestContext requestContext = new DrawRequestContext();
+
+    @Autowired
+    @Qualifier(DrawPrizePartakeService.DRAW_PRIZE_PARTAKE_SERVICE)
+    IDrawStrategy<DrawRequestContext, DrawResponseContext> drawStrategy;
 
     @Before
     public void initArgs(){
@@ -40,12 +48,12 @@ public class AccessCountDrawPrizeTest extends BaseJunit {
     @Test
     public void testAccessDrawProcessTypeIsNotExist(){
         requestContext.getTransData().put("receive_type",3);
-        DrawStrategyFactory.buildBigWheel().execute(requestContext);
+        drawStrategy.execute(requestContext);
     }
 
     @Test
     public void testAccessDrawProcess(){
-        assert Optional.ofNullable(DrawStrategyFactory.buildBigWheel().execute(requestContext).getTransData()).isPresent();
+        assert Optional.ofNullable(drawStrategy.execute(requestContext).getTransData()).isPresent();
     }
 
 }

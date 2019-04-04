@@ -2,33 +2,33 @@ package com.osidocker.open.micro.draw.system.transfer;
 
 import com.osidocker.open.micro.draw.system.enums.DrawEnums;
 import com.osidocker.open.micro.security.vos.User;
-
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @Description:
  * @author: caoyj
  * @date: 2019年03月11日 10:59
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class DrawRequestContext extends AbstractContext {
     /**
      * 抽奖模式： 枚举类型
      */
-    private DrawEnums drawEnums;
+    private transient DrawEnums drawEnums;
     /**
      * 口令方式参与抽奖，口令密码值
      */
     private String token;
+    /**
+     * 用户参与活动Ip
+     */
+    private String ip;
 
     /**
      * 是否使用口令参与抽奖
      */
     private boolean useTokenFlag = false;
-
     /**
      * 登录的shiro用户信息
      */
@@ -39,9 +39,9 @@ public class DrawRequestContext extends AbstractContext {
      */
     private Map<String,Object> processCacheData = new HashMap<>();
 
-    public Map<String, Object> getProcessCacheData() {
-        return processCacheData;
-    }
+//    public Map<String, Object> getProcessCacheData() {
+//        return processCacheData;
+//    }
 
     public void setProcessCacheData(Map<String, Object> processCacheData) {
         this.processCacheData = processCacheData;
@@ -77,5 +77,24 @@ public class DrawRequestContext extends AbstractContext {
 
     public void setDrawEnums(int type){
         this.drawEnums = DrawEnums.getInstance(type);
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    @Override
+    public String toString() {
+        return "DrawRequestContext{" +
+                "drawEnums=" + drawEnums +
+                ", token='" + token + '\'' +
+                ", useTokenFlag=" + useTokenFlag +
+                ", user=" + user +
+                ", processCacheData=" + processCacheData +
+                '}';
     }
 }

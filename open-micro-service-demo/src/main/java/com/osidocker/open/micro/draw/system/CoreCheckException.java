@@ -7,11 +7,11 @@ import com.osidocker.open.micro.vo.ServiceExceptionEnum;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月11日 9:09
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
-public class GunsCheckException extends CoreException {
+public class CoreCheckException extends CoreException {
 
-    private GunsCheckException(ServiceExceptionEnum serviceExceptionEnum) {
+    private CoreCheckException(ServiceExceptionEnum serviceExceptionEnum) {
         super(serviceExceptionEnum);
     }
 
@@ -30,6 +30,16 @@ public class GunsCheckException extends CoreException {
         INIT_DB_PRIZE_IS_NOT_EXIST(501,"当前活动的活动类别还未设置活动奖品!"),
         /***/
         NOT_EXIST_ID(501,"当前奖品Id未找到对应的数据!"),
+        /***/
+        NOT_ACCESS_IP_ADDRESS(501,"访问IP地址未通过校验!"),
+        /***/
+        NOT_FIND_DRAW_STRATEGY(501,"未能找到匹配的抽奖策略,请检查是否支持改抽奖策略!"),
+        /***/
+        NOT_FIND_INSERT_ACTIVE_USERS(501,"中奖后,在返回数据上下文中未能找到中奖ActiveUsers对象!"),
+        /***/
+        NOT_FIND_INSERT_ACTIVE_WINNING(501,"中奖后,在返回数据上下文中未能找到中奖ActiveWinning对象!"),
+        /***/
+        NOT_PUBLISH_ACTIVE(501,"当前活动还暂未发布,不能参与活动!"),
         /***/
         NOT_EXIST_ARGS(501,"缺少请求参数!"),
         /***/

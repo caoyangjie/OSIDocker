@@ -8,15 +8,14 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
 
 /**
  * <p>
  * 获奖表
  * </p>
  *
- * @author caoyj123
- * @since 2019-03-16
+ * @author stylefeng123
+ * @since 2019-01-26
  */
 @TableName("hd_active_winning")
 public class ActiveWinning extends Model<ActiveWinning> {
@@ -32,8 +31,7 @@ public class ActiveWinning extends Model<ActiveWinning> {
     /**
      * 奖池分类
      */
-    @TableField("class_id")
-    private Integer classId;
+    private Integer tclass;
     /**
      * 用户ID
      */
@@ -157,12 +155,12 @@ public class ActiveWinning extends Model<ActiveWinning> {
         this.type = type;
     }
 
-    public Integer getClassId() {
-        return classId;
+    public Integer getTclass() {
+        return tclass;
     }
 
-    public void setClassId(Integer classId) {
-        this.classId = classId;
+    public void setTclass(Integer tclass) {
+        this.tclass = tclass;
     }
 
     public Integer getUid() {
@@ -359,7 +357,7 @@ public class ActiveWinning extends Model<ActiveWinning> {
         return "ActiveWinning{" +
         "id=" + id +
         ", type=" + type +
-        ", classId=" + classId +
+        ", class=" + tclass +
         ", uid=" + uid +
         ", nickname=" + nickname +
         ", winTime=" + winTime +

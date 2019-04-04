@@ -6,7 +6,7 @@ import com.osidocker.open.micro.vo.CoreException;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月13日 16:11
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public interface IFlushDataToDb<R> {
 

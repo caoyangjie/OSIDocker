@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.osidocker.open.micro.draw.model.ActivePartake;
 import com.osidocker.open.micro.draw.service.IActivePartakeService;
 import com.osidocker.open.micro.draw.service.impl.ActivePartakeServiceImpl;
-import com.osidocker.open.micro.draw.system.GunsCheckException;
+import com.osidocker.open.micro.draw.system.CoreCheckException;
 import com.osidocker.open.micro.draw.system.concurrent.LocalDayPartakeCount;
 import com.osidocker.open.micro.draw.system.factory.DrawConstantFactory;
 import com.osidocker.open.micro.draw.system.factory.DrawProcessCacheKeyFactory;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * @Description:    统计活动Id，活动类别，每日参与次数
  * @author: caoyj
  * @date: 2019年03月12日 15:44
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 @Service(LocalResourceActivePartakeDayCount.ACTIVE_PARTAKE_RESOURCE)
 public class LocalResourceActivePartakeDayCount extends AbstractResourceLoadLocal<DrawRequestContext, LocalDayPartakeCount> {
@@ -46,12 +46,12 @@ public class LocalResourceActivePartakeDayCount extends AbstractResourceLoadLoca
         Optional<ActivePartake> activePartakeOpt = Optional.ofNullable(getActivePartakeService().selectOne(where));
         ActivePartake activePartake = new ActivePartake();
         if( !activePartakeOpt.isPresent() ){
-            activePartake.setVisit(1);
+            activePartake.setVisit(0);
             activePartake.setClassId(ctx.getActiveId());
             activePartake.setDate(dateStr);
             activePartake.setType(ctx.getActiveTypeId());
             if( !getActivePartakeService().insert(activePartake) ){
-                throw new CoreException(GunsCheckException.CheckExceptionEnum.INSERT_ACTIVE_PARTAKE_ERROR);
+                throw new CoreException(CoreCheckException.CheckExceptionEnum.INSERT_ACTIVE_PARTAKE_ERROR);
             }
             resourceMap.putIfAbsent(resourceName(ctx), new LocalDayPartakeCount(activePartake));
         }else{

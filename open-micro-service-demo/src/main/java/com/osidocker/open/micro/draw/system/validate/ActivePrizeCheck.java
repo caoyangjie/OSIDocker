@@ -1,6 +1,5 @@
 package com.osidocker.open.micro.draw.system.validate;
 
-
 import com.osidocker.open.micro.draw.system.AbstractCheckHandler;
 import com.osidocker.open.micro.draw.system.resources.local.LocalResourceActivePrize;
 import com.osidocker.open.micro.draw.system.transfer.DrawRequestContext;
@@ -11,7 +10,7 @@ import com.osidocker.open.micro.vo.CoreException;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月13日 17:07
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class ActivePrizeCheck extends AbstractCheckHandler<DrawRequestContext> {
 

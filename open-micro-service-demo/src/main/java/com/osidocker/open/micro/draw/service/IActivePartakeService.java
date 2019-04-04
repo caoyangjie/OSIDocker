@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.service.IService;
  * 活动参与次数表 服务类
  * </p>
  *
- * @author caoyj123
- * @since 2019-03-16
+ * @author stylefeng123
+ * @since 2019-01-26
  */
 public interface IActivePartakeService extends IService<ActivePartake> {
 

@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月11日 10:25
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public abstract class AbstractCheckHandler<RequestContext extends DrawRequestContext> implements ICheckHandler<RequestContext> {
 
@@ -29,13 +29,13 @@ public abstract class AbstractCheckHandler<RequestContext extends DrawRequestCon
 
     @Override
     public boolean process(RequestContext ctx) throws CoreException {
-        Optional handlerOpt = Optional.ofNullable(checkHandlers);
         if( !Optional.ofNullable(ctx.getTransData()).isPresent() ){
-            throw new CoreException(GunsCheckException.CheckExceptionEnum.TRANS_DATA_NOT_EXIST);
+            throw new CoreException(CoreCheckException.CheckExceptionEnum.TRANS_DATA_NOT_EXIST);
         }
         if( !validate(ctx) ){
             return false;
         }
+        Optional handlerOpt = Optional.ofNullable(checkHandlers);
         if( handlerOpt.isPresent() ){
             return Optional.ofNullable(checkHandlers).get()
                     .stream()

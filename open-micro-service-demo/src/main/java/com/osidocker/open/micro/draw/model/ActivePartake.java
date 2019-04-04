@@ -2,20 +2,19 @@ package com.osidocker.open.micro.draw.model;
 
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
 
 /**
  * <p>
  * 活动参与次数表
  * </p>
  *
- * @author caoyj123
- * @since 2019-03-16
+ * @author stylefeng123
+ * @since 2019-01-26
  */
 @TableName("hd_active_partake")
 public class ActivePartake extends Model<ActivePartake> {
@@ -93,7 +92,7 @@ public class ActivePartake extends Model<ActivePartake> {
         return "ActivePartake{" +
         "id=" + id +
         ", type=" + type +
-        ", classId=" + classId +
+        ", class=" + classId +
         ", date=" + date +
         ", visit=" + visit +
         "}";

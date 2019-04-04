@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 17:42
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public abstract class AtomicEntity<T> implements Serializable {
 

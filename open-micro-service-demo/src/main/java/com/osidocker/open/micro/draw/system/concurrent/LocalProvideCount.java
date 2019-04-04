@@ -1,21 +1,22 @@
 package com.osidocker.open.micro.draw.system.concurrent;
 
 import com.osidocker.open.micro.draw.model.ActivePrize;
-import com.osidocker.open.micro.draw.system.GunsCheckException;
+import com.osidocker.open.micro.draw.system.CoreCheckException;
+import com.osidocker.open.micro.utils.StringUtil;
 import com.osidocker.open.micro.vo.CoreException;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
  * @Description:
  * @author: caoyj
  * @date: 2019年03月13日 16:04
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class LocalProvideCount extends AtomicEntity<ActivePrize> {
     /**
@@ -27,10 +28,39 @@ public class LocalProvideCount extends AtomicEntity<ActivePrize> {
      * 奖品列表对应的缓存map
      */
     private Map<String, ConcurrentActivePrize> activePrizeMap;
+    private ConcurrentHashMap<String,Integer> jackPotMap;
 
-    public LocalProvideCount(String cacheKey, List<ActivePrize> list){
+    public Map<String, Integer> getJackPotMap() {
+        return jackPotMap;
+    }
+
+    private int jackPotNum;
+
+    public Integer getJackPotNum() {
+        return jackPotNum;
+    }
+
+    public LocalProvideCount(String cacheKey, List<ActivePrize> list, Integer jackPotNum){
         this.cacheKey = cacheKey;
+        this.jackPotNum = jackPotNum;
+        initJackpotMap(list);
         this.activePrizeMap = list.stream().collect(Collectors.toMap(prize->cacheKey+"@"+prize.getId(),prize->new ConcurrentActivePrize(prize)));
+    }
+
+    private void initJackpotMap(List<ActivePrize> list) {
+        jackPotMap = new ConcurrentHashMap<>(list.parallelStream().flatMapToInt(prize -> IntStream.of(prize.getChance())).sum());
+        //构造奖池
+        list.stream().forEach(prize -> {
+            int chance = prize.getChance();
+            while ( chance > 0 ){
+                String key = new Random().nextInt(jackPotNum)+"";
+                if( jackPotMap.containsKey(key) ){
+                    continue;
+                }
+                jackPotMap.put(key,prize.getId());
+                chance--;
+            }
+        });
     }
 
     /**
@@ -39,7 +69,7 @@ public class LocalProvideCount extends AtomicEntity<ActivePrize> {
      * @return
      */
     private ConcurrentActivePrize getActivePrizeBy(Integer prizeId){
-        return Optional.ofNullable(activePrizeMap.get(cacheKey+"@"+prizeId)).orElseThrow(()->new CoreException(GunsCheckException.CheckExceptionEnum.NOT_EXIST_ID));
+        return Optional.ofNullable(activePrizeMap.get(cacheKey+"@"+prizeId)).orElseThrow(()->new CoreException(CoreCheckException.CheckExceptionEnum.NOT_EXIST_ID));
     }
 
     /**
@@ -67,10 +97,10 @@ public class LocalProvideCount extends AtomicEntity<ActivePrize> {
      */
     @Override
     public ActivePrize getInstance(String... prizeId) {
-        if( prizeId!=null && prizeId.length==1){
+        if( !StringUtil.isAllEmpty(prizeId) && prizeId.length==1){
             return getActivePrizeBy(Integer.parseInt(prizeId[0])).getInstance();
         }
-        throw new CoreException(GunsCheckException.CheckExceptionEnum.NOT_EXIST_ARGS);
+        throw new CoreException(CoreCheckException.CheckExceptionEnum.NOT_EXIST_ARGS);
     }
 
     /**
@@ -79,7 +109,7 @@ public class LocalProvideCount extends AtomicEntity<ActivePrize> {
      * @return
      */
     public Integer getOverNum(String... prizeId){
-        return getActivePrizeBy(Integer.parseInt(prizeId[0])).getOverNum();
+        return getActivePrizeBy(Integer.parseInt(prizeId[0])).getInstance().getOverNum();
     }
 
     /**
@@ -112,7 +142,7 @@ public class LocalProvideCount extends AtomicEntity<ActivePrize> {
 
         @Override
         public void setOverNum(Integer overNum) {
-            throw new CoreException(GunsCheckException.CheckExceptionEnum.CONCURRENT_PARTAKE_UN_SUPPORT_METHOD);
+            throw new CoreException(CoreCheckException.CheckExceptionEnum.CONCURRENT_PARTAKE_UN_SUPPORT_METHOD);
         }
     }
 }

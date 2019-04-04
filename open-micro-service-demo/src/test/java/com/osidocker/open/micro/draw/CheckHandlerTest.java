@@ -1,10 +1,15 @@
 package com.osidocker.open.micro.draw;
 
-import com.osidocker.open.micro.draw.system.factory.DrawStrategyFactory;
+import com.osidocker.open.micro.base.BaseJunit;
+import com.osidocker.open.micro.draw.system.IDrawStrategy;
+import com.osidocker.open.micro.draw.system.impl.DrawPrizePartakeService;
 import com.osidocker.open.micro.draw.system.transfer.DrawRequestContext;
+import com.osidocker.open.micro.draw.system.transfer.DrawResponseContext;
 import com.osidocker.open.micro.utils.DateTimeKit;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,10 +18,14 @@ import java.util.HashMap;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月11日 11:34
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
-public class CheckHandlerTest {
+public class CheckHandlerTest extends BaseJunit {
     private DrawRequestContext requestContext = new DrawRequestContext();
+
+    @Autowired
+    @Qualifier(DrawPrizePartakeService.DRAW_PRIZE_PARTAKE_SERVICE)
+    IDrawStrategy<DrawRequestContext, DrawResponseContext> drawStrategy;
 
     @Before
     public void initArgs(){
@@ -34,7 +43,7 @@ public class CheckHandlerTest {
         HashMap transData = (HashMap) requestContext.getTransData();
         transData.put("start", DateTimeKit.offsiteWeek(new Date(),-2).toDate());
         transData.put("end", DateTimeKit.offsiteWeek(new Date(),-1).toDate());
-        DrawStrategyFactory.buildBigWheel().execute(requestContext);
+        drawStrategy.execute(requestContext);
     }
 
     @Test
@@ -42,38 +51,38 @@ public class CheckHandlerTest {
         HashMap transData = (HashMap) requestContext.getTransData();
         transData.put("start", DateTimeKit.offsiteWeek(new Date(),2).toDate());
         transData.put("end", DateTimeKit.offsiteWeek(new Date(),1).toDate());
-        DrawStrategyFactory.buildBigWheel().execute(requestContext);
+        drawStrategy.execute(requestContext);
     }
 
     @Test
     public void testDrawLimitTimesDay(){
         requestContext.getTransData().put("day_over",true);
-        DrawStrategyFactory.buildBigWheel().execute(requestContext);
+        drawStrategy.execute(requestContext);
     }
 
     @Test
     public void testDrawLimitTimesWeek(){
         requestContext.getTransData().put("week_over",true);
-        DrawStrategyFactory.buildBigWheel().execute(requestContext);
+        drawStrategy.execute(requestContext);
     }
 
     @Test
     public void testDrawLimitTimesMouth(){
         requestContext.getTransData().put("mouth_over",true);
-        DrawStrategyFactory.buildBigWheel().execute(requestContext);
+        drawStrategy.execute(requestContext);
     }
 
     @Test
     public void testDrawUseToken(){
         requestContext.setUseTokenFlag(true);
         requestContext.setToken("password1");
-        DrawStrategyFactory.buildBigWheel().execute(requestContext);
+        drawStrategy.execute(requestContext);
     }
 
     @Test
     public void testDrawUseTokenFalse(){
         requestContext.setUseTokenFlag(false);
         requestContext.setToken("password1");
-        DrawStrategyFactory.buildBigWheel().execute(requestContext);
+        drawStrategy.execute(requestContext);
     }
 }

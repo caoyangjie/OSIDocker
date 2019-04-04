@@ -2,7 +2,7 @@ package com.osidocker.open.micro.draw;
 
 import com.osidocker.open.micro.base.BaseJunit;
 import com.osidocker.open.micro.draw.system.concurrent.LocalAccessCount;
-import com.osidocker.open.micro.draw.system.concurrent.LocalActivePartakeStatistics;
+import com.osidocker.open.micro.draw.system.concurrent.LocalActivePrizeStatistics;
 import com.osidocker.open.micro.draw.system.concurrent.LocalDayPartakeCount;
 import com.osidocker.open.micro.draw.system.concurrent.LocalProvideCount;
 import com.osidocker.open.micro.draw.system.factory.DrawPrizeProcessFactory;
@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月13日 9:36
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class LocalResourceTest extends BaseJunit {
 
@@ -46,7 +46,7 @@ public class LocalResourceTest extends BaseJunit {
 
     @Autowired
     @Qualifier(LocalResourceActivePrizeStatistics.ACTIVE_PARTAKE_STATISTICS_RESOURCE)
-    protected AbstractResourceLoad<DrawRequestContext, LocalActivePartakeStatistics> activePrizeLoad;
+    protected AbstractResourceLoad<DrawRequestContext, LocalActivePrizeStatistics> activePrizeLoad;
 
     private DrawRequestContext requestContext = new DrawRequestContext();
 
@@ -94,12 +94,15 @@ public class LocalResourceTest extends BaseJunit {
         System.out.println("每日次数:"+activePrizeLoad.getResource(requestContext).countInDay(11));
         System.out.println("每周次数:"+activePrizeLoad.getResource(requestContext).countInWeek(11));
         System.out.println("每月次数:"+activePrizeLoad.getResource(requestContext).countInMouth(11));
+        System.out.println("每月次数:"+activePrizeLoad.getResource(requestContext).countSum(11));
         System.out.println("每日次数:"+activePrizeLoad.getResource(requestContext).countInDay(14));
         System.out.println("每周次数:"+activePrizeLoad.getResource(requestContext).countInWeek(14));
         System.out.println("每月次数:"+activePrizeLoad.getResource(requestContext).countInMouth(14));
+        System.out.println("每月次数:"+activePrizeLoad.getResource(requestContext).countSum(14));
         System.out.println("每日次数:"+activePrizeLoad.getResource(requestContext).countInDay(8));
         System.out.println("每周次数:"+activePrizeLoad.getResource(requestContext).countInWeek(8));
         System.out.println("每月次数:"+activePrizeLoad.getResource(requestContext).countInMouth(8));
+        System.out.println("每月次数:"+activePrizeLoad.getResource(requestContext).countSum(8));
     }
 
     @Test

@@ -6,14 +6,14 @@
     <resultMap id="BaseResultMap" type="com.osidocker.open.micro.draw.model.ActivePartake">
         <id column="id" property="id" />
         <result column="type" property="type" />
-        <result column="class_id" property="classId" />
+        <result column="class" property="class" />
         <result column="date" property="date" />
         <result column="visit" property="visit" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type, class_id AS classId, date, visit
+        id, type, class, date, visit
     </sql>
 
 </mapper>

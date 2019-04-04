@@ -6,7 +6,7 @@ import com.osidocker.open.micro.vo.CoreException;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 8:42
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public interface IResourceLoad<RequestContent,ResponseContent> {
 

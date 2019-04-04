@@ -7,7 +7,7 @@ import com.osidocker.open.micro.vo.ServiceExceptionEnum;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 9:56
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class GunsLockException extends CoreException {
 

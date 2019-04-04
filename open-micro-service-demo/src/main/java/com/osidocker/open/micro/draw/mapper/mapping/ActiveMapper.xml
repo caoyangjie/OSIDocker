@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.osidocker.open.micro.draw.mapper.ActiveMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.osidocker.open.micro.draw.model.Active">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="date" property="date" />
+        <result column="release_date" property="releaseDate" />
+        <result column="content" property="content" />
+        <result column="status" property="status" />
+        <result column="is_user" property="isUser" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, date, release_date AS releaseDate, content, status, is_user AS isUser
+    </sql>
+    <select id="list" resultType="map">
+        select * from hd_active
+        where 1=1
+        <if test="condition != null and condition != ''">
+            AND name like CONCAT('%',#{condition},'%')
+        </if>
+        order by id ASC
+    </select>
+</mapper>

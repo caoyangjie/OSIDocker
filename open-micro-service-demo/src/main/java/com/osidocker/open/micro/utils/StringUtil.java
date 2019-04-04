@@ -17,6 +17,7 @@ import java.net.URLDecoder;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * @类功能说明： String字符串工具类.
@@ -271,5 +272,9 @@ public final class StringUtil {
         }
 
         return result;
+    }
+
+    public static boolean isAllEmpty(String[] prizeId) {
+        return Stream.of(prizeId).allMatch(StringUtil::isEmpty);
     }
 }

@@ -6,7 +6,7 @@ import java.util.Arrays;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月11日 12:00
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public enum  DrawEnums {
     /**

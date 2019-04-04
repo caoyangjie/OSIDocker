@@ -7,15 +7,14 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
 
 /**
  * <p>
- * 活动中奖次数统计信息表
+ * 活动类别下的奖品中奖次数统计信息表
  * </p>
  *
  * @author caoyj123
- * @since 2019-03-16
+ * @since 2019-03-14
  */
 @TableName("hd_active_prize_statistics")
 public class ActivePrizeStatistics extends Model<ActivePrizeStatistics> {
@@ -23,7 +22,7 @@ public class ActivePrizeStatistics extends Model<ActivePrizeStatistics> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键自增Id
+     * id
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -33,7 +32,7 @@ public class ActivePrizeStatistics extends Model<ActivePrizeStatistics> {
     @TableField("class_id")
     private Integer classId;
     /**
-     * 活动类别Id
+     * 活动类型Id
      */
     private Integer type;
     /**
@@ -41,7 +40,7 @@ public class ActivePrizeStatistics extends Model<ActivePrizeStatistics> {
      */
     private Integer prize;
     /**
-     * 活动时间
+     * 参与日期
      */
     @TableField("partake_date")
     private String partakeDate;

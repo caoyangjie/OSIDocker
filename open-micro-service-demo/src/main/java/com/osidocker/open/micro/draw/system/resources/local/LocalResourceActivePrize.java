@@ -2,9 +2,12 @@ package com.osidocker.open.micro.draw.system.resources.local;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.osidocker.open.micro.draw.model.ActivePrize;
+import com.osidocker.open.micro.draw.model.ActiveType;
 import com.osidocker.open.micro.draw.service.IActivePrizeService;
+import com.osidocker.open.micro.draw.service.IActiveTypeService;
 import com.osidocker.open.micro.draw.service.impl.ActivePrizeServiceImpl;
-import com.osidocker.open.micro.draw.system.GunsCheckException;
+import com.osidocker.open.micro.draw.service.impl.ActiveTypeServiceImpl;
+import com.osidocker.open.micro.draw.system.CoreCheckException;
 import com.osidocker.open.micro.draw.system.concurrent.LocalProvideCount;
 import com.osidocker.open.micro.draw.system.factory.DrawConstantFactory;
 import com.osidocker.open.micro.draw.system.factory.DrawProcessCacheKeyFactory;
@@ -23,7 +26,7 @@ import java.util.stream.Stream;
  * @Description:    活动Id，活动类别，活动奖品 的发放次数
  * @author: caoyj
  * @date: 2019年03月13日 15:55
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 @Service(LocalResourceActivePrize.PROVIDE_COUNT_LOCAL_RESOURCE)
 public class LocalResourceActivePrize extends AbstractResourceLoadLocal<DrawRequestContext, LocalProvideCount> {
@@ -40,9 +43,15 @@ public class LocalResourceActivePrize extends AbstractResourceLoadLocal<DrawRequ
     protected void process(DrawRequestContext ctx) {
         Optional<List<ActivePrize>> activePrizesOpt = Optional.ofNullable(getActivePartakeService().selectList(getWhere(ctx.getActiveId(),ctx.getActiveTypeId())));
         if( !activePrizesOpt.isPresent() || activePrizesOpt.get().isEmpty() ){
-            throw new CoreException(GunsCheckException.CheckExceptionEnum.INIT_DB_PRIZE_IS_NOT_EXIST);
+            throw new CoreException(CoreCheckException.CheckExceptionEnum.INIT_DB_PRIZE_IS_NOT_EXIST);
         }else{
-            resourceMap.putIfAbsent(resourceName(ctx),new LocalProvideCount(resourceName(ctx),activePrizesOpt.get()));
+            resourceMap.putIfAbsent(resourceName(ctx),
+                new LocalProvideCount(
+                    resourceName(ctx),
+                    activePrizesOpt.get(),
+                    getActiveTypeService().selectById(ctx.getActiveTypeId()).getChanceSum()
+                )
+            );
         }
     }
 
@@ -53,10 +62,10 @@ public class LocalResourceActivePrize extends AbstractResourceLoadLocal<DrawRequ
 
     @Override
     protected boolean drawPrizeFlushToDb(DrawResponseContext ctx) {
-        LocalProvideCount count = resourceMap.get(DrawProcessCacheKeyFactory.getProvideCountsById(ctx.getActiveId(),ctx.getActiveTypeId()));
+        LocalProvideCount count = resourceMap.get(resourceName(ctx.getRequestContext()));
         ActivePrize ap = new ActivePrize();
         ap.setId(count.getInstance(ctx.getPrizeId().toString()).getId());
-        ap.setOverNum(count.getOverNum(ctx.getPrizeId().toString()));
+        ap.setOverNum(count.incrementAndGet(ctx.getPrizeId()));
         return getActivePartakeService().updateById(ap);
     }
 
@@ -71,7 +80,17 @@ public class LocalResourceActivePrize extends AbstractResourceLoadLocal<DrawRequ
         return where;
     }
 
+    private EntityWrapper<ActiveType> getWhere(Integer activeTypeId){
+        EntityWrapper<ActiveType> where = new EntityWrapper<>();
+        where.eq(DrawConstantFactory.DB_ID,activeTypeId);
+        return where;
+    }
+
     private IActivePrizeService getActivePartakeService(){
         return SpringContextHolder.getBean(ActivePrizeServiceImpl.ACTIVE_PRIZE_SERVICE_IMPL);
+    }
+
+    private IActiveTypeService getActiveTypeService(){
+        return SpringContextHolder.getBean(ActiveTypeServiceImpl.ACTIVE_TYPE_SERVICE_IMPL);
     }
 }

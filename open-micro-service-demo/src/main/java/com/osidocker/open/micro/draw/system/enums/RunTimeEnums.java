@@ -4,7 +4,7 @@ package com.osidocker.open.micro.draw.system.enums;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 16:48
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public enum RunTimeEnums {
     /** 本地环境 **/

@@ -1,7 +1,8 @@
 package com.osidocker.open.micro.draw.system.transfer;
 
 import com.osidocker.open.micro.draw.system.factory.DrawConstantFactory;
-
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -10,13 +11,13 @@ import java.util.stream.Stream;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月15日 9:29
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
-public abstract class AbstractContext {
+public abstract class AbstractContext implements Serializable {
     /**
      * 抽奖逻辑数据上下文对象
      */
-    private Map<String,Object> transData;
+    private Map<String,Object> transData=new HashMap<>(64);
 
     public Map<String, Object> getTransData() {
         return transData;
@@ -24,6 +25,16 @@ public abstract class AbstractContext {
 
     public void setTransData(Map<String, Object> transData) {
         this.transData = transData;
+    }
+
+    private String beanName;
+
+    public String getBeanName() {
+        return beanName;
+    }
+
+    public void setBeanName(String beanName) {
+        this.beanName = beanName;
     }
 
     /**

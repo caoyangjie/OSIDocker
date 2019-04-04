@@ -1,7 +1,7 @@
 package com.osidocker.open.micro.draw.system.concurrent;
 
 import com.osidocker.open.micro.draw.model.ActivePrizeStatistics;
-import com.osidocker.open.micro.draw.system.GunsCheckException;
+import com.osidocker.open.micro.draw.system.CoreCheckException;
 import com.osidocker.open.micro.draw.system.factory.DrawProcessCacheKeyFactory;
 import com.osidocker.open.micro.vo.CoreException;
 
@@ -16,9 +16,9 @@ import java.util.stream.Stream;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月14日 10:00
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
-public class LocalActivePartakeStatistics extends AtomicEntity<ActivePrizeStatistics>{
+public class LocalActivePrizeStatistics extends AtomicEntity<ActivePrizeStatistics>{
 
     /**
      * 请求
@@ -28,12 +28,14 @@ public class LocalActivePartakeStatistics extends AtomicEntity<ActivePrizeStatis
     private Integer activeTypeId;
     private Map<String, Integer> mouthCount;
     private Map<String, Integer> weekCount;
+    private Map<String, Integer> sumCount;
 
-    public LocalActivePartakeStatistics(Integer activeId, Integer activeTypeId, Map<String,Integer> weekCount, Map<String,Integer> mouthCount, List<ActivePrizeStatistics> statistics){
+    public LocalActivePrizeStatistics(Integer activeId, Integer activeTypeId, Map<String,Integer> weekCount, Map<String,Integer> mouthCount, Map<String,Integer> sumCount, List<ActivePrizeStatistics> statistics){
         this.activeId = activeId;
         this.activeTypeId = activeTypeId;
         this.mouthCount = mouthCount;
         this.weekCount = weekCount;
+        this.sumCount = sumCount;
         activePrizeStatMap = statistics.stream().flatMap(aps-> Stream.of(new ConcurrentActivePrizeStatistics(aps)))
                 .collect(
                         Collectors.toMap(
@@ -77,6 +79,14 @@ public class LocalActivePartakeStatistics extends AtomicEntity<ActivePrizeStatis
         }
     }
 
+    public Integer countSum(Integer prizeId){
+        if( sumCount.containsKey(key(prizeId)) ){
+            return sumCount.get(key(prizeId))+countInDay(prizeId);
+        }else{
+            return countInDay(prizeId);
+        }
+    }
+
     /**
      * 针对参数Id的奖品的并发中奖更新次数
      * @param prizeId
@@ -85,6 +95,25 @@ public class LocalActivePartakeStatistics extends AtomicEntity<ActivePrizeStatis
     public Integer incrementAndGet(Integer prizeId){
         setChangeFlag(true);
         return activePrizeStatMap.get(key(prizeId)).incrementAndGet();
+    }
+
+    /**
+     * 针对参数Id的奖品的并发中奖更新次数
+     * @param prizeId
+     * @return
+     */
+    public Integer getAndIncrement(Integer prizeId){
+        setChangeFlag(true);
+        return activePrizeStatMap.get(key(prizeId)).getAndIncrement();
+    }
+
+    public Integer decrementAndGet(Integer prizeId){
+        setChangeFlag(true);
+        return activePrizeStatMap.get(key(prizeId)).decrementAndGet();
+    }
+
+    public Integer get(Integer prizeId){
+        return activePrizeStatMap.get(key(prizeId)).getPrizeAccess();
     }
 
     /**
@@ -139,11 +168,19 @@ public class LocalActivePartakeStatistics extends AtomicEntity<ActivePrizeStatis
 
         @Override
         public void setPrizeAccess(Integer prizeAccess) {
-            throw new CoreException(GunsCheckException.CheckExceptionEnum.CONCURRENT_PARTAKE_UN_SUPPORT_METHOD);
+            throw new CoreException(CoreCheckException.CheckExceptionEnum.CONCURRENT_PARTAKE_UN_SUPPORT_METHOD);
         }
 
         public Integer incrementAndGet(){
             return accessUpdater.incrementAndGet(this);
+        }
+
+        public Integer getAndIncrement(){
+            return accessUpdater.getAndIncrement(this);
+        }
+
+        public Integer decrementAndGet(){
+            return accessUpdater.decrementAndGet(this);
         }
     }
 }

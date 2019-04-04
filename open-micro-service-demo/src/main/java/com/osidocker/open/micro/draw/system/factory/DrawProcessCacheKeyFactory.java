@@ -8,7 +8,7 @@ import java.util.Date;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 11:54
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class DrawProcessCacheKeyFactory {
     public static final String ACTIVE = "active_";

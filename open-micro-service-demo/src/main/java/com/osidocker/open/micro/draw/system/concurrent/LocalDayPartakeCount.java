@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 16:42
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class LocalDayPartakeCount extends AtomicEntity<ActivePartake> {
 

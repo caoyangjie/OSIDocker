@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Description:    //TODO 单机环境可以使用,多机环境会有问题
  * @author: caoyj
  * @date: 2019年03月12日 8:45
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public abstract class AbstractResourceLoadLocal<RequestContent extends DrawRequestContext, Source extends AtomicEntity> extends AbstractResourceLoad<RequestContent, Source> {
 
@@ -18,7 +18,7 @@ public abstract class AbstractResourceLoadLocal<RequestContent extends DrawReque
     /**
      * 加载后的资源内容
      */
-    protected ConcurrentHashMap<String,Source> resourceMap = new ConcurrentHashMap<String,Source>(128);
+    protected ConcurrentHashMap<String,Source> resourceMap = new ConcurrentHashMap<String,Source>(2048);
 
     @Override
     protected boolean containsResource(RequestContent ctx) {
@@ -42,5 +42,9 @@ public abstract class AbstractResourceLoadLocal<RequestContent extends DrawReque
             lockResource = new LocalLockResource();
         }
         return lockResource;
+    }
+
+    public ConcurrentHashMap<String, Source> getResourceMap() {
+        return resourceMap;
     }
 }

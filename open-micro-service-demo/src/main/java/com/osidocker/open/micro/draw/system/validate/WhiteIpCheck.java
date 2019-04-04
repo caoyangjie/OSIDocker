@@ -2,24 +2,31 @@ package com.osidocker.open.micro.draw.system.validate;
 
 import com.osidocker.open.micro.draw.system.AbstractCheckHandler;
 import com.osidocker.open.micro.draw.system.CoreCheckException;
-import com.osidocker.open.micro.draw.system.factory.DrawConstantFactory;
 import com.osidocker.open.micro.draw.system.transfer.DrawRequestContext;
 import com.osidocker.open.micro.vo.CoreException;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Description:
  * @author: caoyj
- * @date: 2019年03月12日 13:50
+ * @date: 2019年03月29日 11:57
  * @Copyright: © Caoyj
  */
-public class SignCheck extends AbstractCheckHandler<DrawRequestContext> {
+public class WhiteIpCheck extends AbstractCheckHandler<DrawRequestContext> {
+
+    private static Set<String> whiteList = new HashSet();
+    {
+        whiteList.add("192.168.188.100");
+    }
 
     @Override
     protected boolean validate(DrawRequestContext ctx) throws CoreException {
-        //TODO 执行签名验证校验
-        if( ctx.getTransData().getOrDefault(DrawConstantFactory.SIGN,-1).equals("88888888") ){
-            return true;
+        boolean success = whiteList.contains(ctx.getIp());
+        if( !success ){
+            throw new CoreException(CoreCheckException.CheckExceptionEnum.NOT_ACCESS_IP_ADDRESS);
         }
-        throw new CoreException(CoreCheckException.CheckExceptionEnum.REQUEST_SIGN_IS_NOT_VALID);
+        return true;
     }
 }

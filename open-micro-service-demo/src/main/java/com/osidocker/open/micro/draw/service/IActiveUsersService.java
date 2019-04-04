@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.service.IService;
  * 参与用户表 服务类
  * </p>
  *
- * @author caoyj123
- * @since 2019-03-16
+ * @author stylefeng123
+ * @since 2019-03-28
  */
 public interface IActiveUsersService extends IService<ActiveUsers> {
-
+    ActiveUsers findByArgs(Integer type, Integer uid, Integer activeId);
 }

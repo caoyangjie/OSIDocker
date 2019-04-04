@@ -8,15 +8,14 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
 
 /**
  * <p>
  * 奖品设置表
  * </p>
  *
- * @author caoyj123
- * @since 2019-03-16
+ * @author stylefeng123
+ * @since 2019-01-26
  */
 @TableName("hd_active_prize")
 public class ActivePrize extends Model<ActivePrize> {
@@ -306,7 +305,7 @@ public class ActivePrize extends Model<ActivePrize> {
         return "ActivePrize{" +
         "id=" + id +
         ", type=" + type +
-        ", classId=" + classId +
+        ", class=" + classId +
         ", mold=" + mold +
         ", name=" + name +
         ", chance=" + chance +

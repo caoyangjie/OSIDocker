@@ -8,15 +8,14 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
 
 /**
  * <p>
  * 参与用户表
  * </p>
  *
- * @author caoyj123
- * @since 2019-03-16
+ * @author stylefeng123
+ * @since 2019-03-28
  */
 @TableName("hd_active_users")
 public class ActiveUsers extends Model<ActiveUsers> {
@@ -107,8 +106,16 @@ public class ActiveUsers extends Model<ActiveUsers> {
     /**
      * 活动分类
      */
-    private Integer classid;
+    @TableField("class_id")
+    private Integer classId;
 
+    public Integer getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Integer classId) {
+        this.classId = classId;
+    }
 
     public Integer getId() {
         return id;
@@ -262,14 +269,6 @@ public class ActiveUsers extends Model<ActiveUsers> {
         this.investmentDenomination = investmentDenomination;
     }
 
-    public Integer getClassid() {
-        return classid;
-    }
-
-    public void setClassid(Integer classid) {
-        this.classid = classid;
-    }
-
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -297,7 +296,7 @@ public class ActiveUsers extends Model<ActiveUsers> {
         ", todayNum=" + todayNum +
         ", wapNum=" + wapNum +
         ", investmentDenomination=" + investmentDenomination +
-        ", classid=" + classid +
+        ", classid=" + classId +
         "}";
     }
 }

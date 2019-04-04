@@ -6,7 +6,7 @@
     <resultMap id="BaseResultMap" type="com.osidocker.open.micro.draw.model.ActiveWinning">
         <id column="id" property="id" />
         <result column="type" property="type" />
-        <result column="class_id" property="classId" />
+        <result column="class" property="class" />
         <result column="uid" property="uid" />
         <result column="nickname" property="nickname" />
         <result column="win_time" property="winTime" />
@@ -34,7 +34,15 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type, class_id AS classId, uid, nickname, win_time AS winTime, prize_type AS prizeType, prize_id AS prizeId, prize_name AS prizeName, prize_pic AS prizePic, amount, realname, telphone, address, status, ip, sub_time AS subTime, welfare, welfare_type AS welfareType, ticket_id AS ticketId, ticket_amount AS ticketAmount, app_products AS appProducts, start_time AS startTime, end_time AS endTime, trade_no AS tradeNo, isfree
+        id, type, class, uid, nickname, win_time AS winTime, prize_type AS prizeType, prize_id AS prizeId, prize_name AS prizeName, prize_pic AS prizePic, amount, realname, telphone, address, status, ip, sub_time AS subTime, welfare, welfare_type AS welfareType, ticket_id AS ticketId, ticket_amount AS ticketAmount, app_products AS appProducts, start_time AS startTime, end_time AS endTime, trade_no AS tradeNo, isfree
     </sql>
 
+    <select id="list" resultType="map">
+        select * from hd_active_winning
+        where type = #{active_id}
+        <if test="condition != null and condition != ''">
+            AND nickname like CONCAT('%',#{condition},'%')
+        </if>
+        order by id ASC
+    </select>
 </mapper>

@@ -11,19 +11,18 @@ import java.util.stream.Stream;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月15日 10:40
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public abstract class AbstractFlushData implements IFlushDataToDb<DrawResponseContext> {
 
     @Override
     public boolean write(DrawResponseContext ctx) throws CoreException {
         //写入数据的时候进行参数校验
-        if( ctx.isPrizeFlag() ){
-            validate( ctx, Stream.of(DrawConstantFactory.ACTIVE_ID,DrawConstantFactory.ACTIVE_TYPE_ID,DrawConstantFactory.PRIZE_ID) );
+        if( !ctx.isPrizeFlag() ){
+            validate( ctx, normalArgsCheck() );
             return normalFlushToDb(ctx);
         }else{
-            //TODO 之前定时数据刷入数据库操作
-            validate( ctx, normalArgsCheck() );
+            validate( ctx, Stream.of(DrawConstantFactory.ACTIVE_ID,DrawConstantFactory.ACTIVE_TYPE_ID,DrawConstantFactory.PRIZE_ID) );
             return drawPrizeFlushToDb(ctx);
         }
     }
@@ -37,7 +36,7 @@ public abstract class AbstractFlushData implements IFlushDataToDb<DrawResponseCo
     protected final void validate(AbstractContext ctx, Stream<String> fields){
         if( !ctx.checkNotNull(fields) ){
             //TODO 记录日志,为何中奖后未能找到中奖数据
-            throw new CoreException(GunsCheckException.CheckExceptionEnum.NOT_EXIST_ARGS);
+            throw new CoreException(CoreCheckException.CheckExceptionEnum.NOT_EXIST_ARGS);
         }
     }
 

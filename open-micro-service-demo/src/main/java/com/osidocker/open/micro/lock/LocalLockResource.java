@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Description:    //TODO 实现 单机 锁资源功能
  * @author: caoyj
  * @date: 2019年03月12日 10:02
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class LocalLockResource implements ILockResource{
     /**

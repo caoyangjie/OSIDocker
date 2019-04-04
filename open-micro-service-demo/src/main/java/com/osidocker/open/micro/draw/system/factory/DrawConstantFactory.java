@@ -4,7 +4,7 @@ package com.osidocker.open.micro.draw.system.factory;
  * @Description:
  * @author: caoyj
  * @date: 2019年03月12日 9:20
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 public class DrawConstantFactory {
 
@@ -32,6 +32,34 @@ public class DrawConstantFactory {
      * 签名字段
      */
     public static final String SIGN = "sign";
+    /**
+     * 口令字段
+     */
+    public static final String TOKEN = "token";
+    /**
+     * 新增的ActiveUsers记录的key
+     */
+    public static final String INSERT_USER = "insert_user";
+    /**
+     * 新增的ActiveWinning记录的key
+     */
+    public static final String INSERT_WINNING = "insert_winning";
+    /**
+     * 抽奖算法名称字段
+     */
+    public static final String ARITHMETIC_NAME = "arithmeticName";
+    /**
+     * 抽奖逻辑执行次数字段
+     */
+    public static final String PARTAKE_DAY_COUNT = "partakeDayCount";
+    /**
+     * 中奖用户信息
+     */
+    public static final String USER_INFO = "userInfo";
+    /**
+     * 某个活动参与总次数
+     */
+    public static final String SUM_ACCESS_COUNT = "sumAccessCount";
 
 
     /*******************************************    请求参数字段名 与 数据库字段名 分割线   **********************************************************************/
@@ -53,6 +81,10 @@ public class DrawConstantFactory {
      */
     public static final String DB_PRIZE = "prize";
     /**
+     * 活动奖品Id
+     */
+    public static final String DB_PRIZE_ID = "prize_id";
+    /**
      * 数据库自增Id字段
      */
     public static final String DB_ID = "id";
@@ -64,6 +96,10 @@ public class DrawConstantFactory {
      * 日期字段
      */
     public static final String DB_DATE = "date";
+    /**
+     * 数据库用户id字段
+     */
+    public static final String DB_UID = "uid";
 
     /******************************************   分隔符   ******************************************************************************************************/
     public static final String REGEX = ",";

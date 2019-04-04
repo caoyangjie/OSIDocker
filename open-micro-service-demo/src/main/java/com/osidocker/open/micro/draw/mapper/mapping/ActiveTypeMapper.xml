@@ -24,4 +24,23 @@
         id, name, date, content, active_id AS activeId, password, is_tlimit AS isTlimit, is_visit AS isVisit, is_grant AS isGrant, is_all AS isAll, chance_sum AS chanceSum, stime, etime
     </sql>
 
+    <select id="getHdActiveTypeList" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+        select * from hd_active_type where 1 = 1
+
+        <if test="name != null and name !=''">
+            and name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="active_id != null and active_id !=''">
+            and active_id =#{active_id}
+        </if>
+
+    </select>
+    <select id="list" resultType="map">
+        select * from hd_active_type
+        where active_id = #{active_id}
+        <if test="condition != null and condition != ''">
+            AND name like CONCAT('%',#{condition},'%')
+        </if>
+        order by id ASC
+    </select>
 </mapper>

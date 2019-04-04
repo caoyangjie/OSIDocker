@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * @Description:    统计 活动Id，活动类别下的 参与总次数
  * @author: caoyj
  * @date: 2019年03月12日 8:44
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 @Service(LocalResourceSumAccessCount.ACCESS_COUNT_RESOURCE)
 public class LocalResourceSumAccessCount extends AbstractResourceLoadLocal<DrawRequestContext, LocalAccessCount> {

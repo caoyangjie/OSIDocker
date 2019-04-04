@@ -3,16 +3,14 @@ package com.osidocker.open.micro.draw.system.resources.local;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.osidocker.open.micro.draw.model.ActivePrizeStatistics;
 import com.osidocker.open.micro.draw.service.IActivePrizeStatisticsService;
-import com.osidocker.open.micro.draw.service.impl.ActivePrizeStatisticsServiceImpl;
-import com.osidocker.open.micro.draw.system.GunsCheckException;
-import com.osidocker.open.micro.draw.system.concurrent.LocalActivePartakeStatistics;
+import com.osidocker.open.micro.draw.system.CoreCheckException;
+import com.osidocker.open.micro.draw.system.concurrent.LocalActivePrizeStatistics;
 import com.osidocker.open.micro.draw.system.concurrent.LocalProvideCount;
 import com.osidocker.open.micro.draw.system.factory.DrawConstantFactory;
 import com.osidocker.open.micro.draw.system.factory.DrawProcessCacheKeyFactory;
 import com.osidocker.open.micro.draw.system.resources.AbstractResourceLoadLocal;
 import com.osidocker.open.micro.draw.system.transfer.DrawRequestContext;
 import com.osidocker.open.micro.draw.system.transfer.DrawResponseContext;
-import com.osidocker.open.micro.spring.SpringContextHolder;
 import com.osidocker.open.micro.utils.DateTimeKit;
 import com.osidocker.open.micro.vo.CoreException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +27,10 @@ import java.util.stream.Stream;
  * @Description:    活动奖品中奖次数统计信息表
  * @author: caoyj
  * @date: 2019年03月14日 9:56
- * @Copyright: © 麓山云
+ * @Copyright: © Caoyj
  */
 @Service(LocalResourceActivePrizeStatistics.ACTIVE_PARTAKE_STATISTICS_RESOURCE)
-public class LocalResourceActivePrizeStatistics extends AbstractResourceLoadLocal<DrawRequestContext, LocalActivePartakeStatistics> {
+public class LocalResourceActivePrizeStatistics extends AbstractResourceLoadLocal<DrawRequestContext, LocalActivePrizeStatistics> {
 
     public static final String ACTIVE_PARTAKE_STATISTICS_RESOURCE = "localResourceActivePartakeStatistics";
 
@@ -44,7 +42,7 @@ public class LocalResourceActivePrizeStatistics extends AbstractResourceLoadLoca
     @Override
     protected void process(DrawRequestContext ctx) {
         String today = DateTimeKit.format(new Date(),DrawProcessCacheKeyFactory.YYYY_MM_DD);
-        Optional<List<ActivePrizeStatistics>> apsOpt = Optional.ofNullable(getActivePrizeStatisticsService().selectList(getActivePrizeStatisticsEntityWrapper(ctx)));
+        Optional<List<ActivePrizeStatistics>> apsOpt = Optional.ofNullable(statisticsService.selectList(getActivePrizeStatisticsEntityWrapper(ctx)));
         List<ActivePrizeStatistics> todayList = new ArrayList<>();
         //存在历史数据
         if( apsOpt.isPresent() ){
@@ -58,16 +56,18 @@ public class LocalResourceActivePrizeStatistics extends AbstractResourceLoadLoca
             todayList.addAll(initTodayActivePrizeStatistics(ctx,today));
         }
         resourceMap.putIfAbsent(resourceName(ctx),
-                new LocalActivePartakeStatistics(
-                        //获取 activeId， activeTypeId
-                        ctx.getActiveId(),ctx.getActiveTypeId(),
-                        //实时统计  本周    今天之前的某个奖品中奖次数Map
-                        activePartakeStatisticsSum(apsOpt,DateTimeKit::beforeTodayInThisWeek),
-                        //实时统计  本月    今天之前的某个奖品中奖次数Map
-                        activePartakeStatisticsSum(apsOpt,DateTimeKit::beforeTodayInThisMouth),
-                        //保存      今日    统一活动Id，活动类别 下的 不同奖品的中奖次数
-                        todayList.stream().filter(aps->today.equalsIgnoreCase(aps.getPartakeDate())).collect(Collectors.toList())
-                )
+            new LocalActivePrizeStatistics(
+                    //获取 activeId， activeTypeId
+                    ctx.getActiveId(),ctx.getActiveTypeId(),
+                    //实时统计  本周    今天之前的某个奖品中奖次数Map
+                    activePartakeStatisticsSum(apsOpt.isPresent()?apsOpt:Optional.ofNullable(todayList),DateTimeKit::beforeTodayInThisWeek),
+                    //实时统计  本月    今天之前的某个奖品中奖次数Map
+                    activePartakeStatisticsSum(apsOpt.isPresent()?apsOpt:Optional.ofNullable(todayList),DateTimeKit::beforeTodayInThisMouth),
+                    //实时统计  活动开始之后的某个奖品中奖次数Map
+                    activePartakeStatisticsSum(apsOpt.isPresent()?apsOpt:Optional.ofNullable(todayList),date->true),
+                    //保存      今日    同一活动Id，活动类别 下的 不同奖品的中奖次数
+                    todayList.stream().filter(aps->today.equalsIgnoreCase(aps.getPartakeDate())).collect(Collectors.toList())
+            )
         );
     }
 
@@ -81,8 +81,8 @@ public class LocalResourceActivePrizeStatistics extends AbstractResourceLoadLoca
             aps.setPrizeAccess(0);
             return Stream.of(aps);
         }).collect(Collectors.toList());
-        if( !getActivePrizeStatisticsService().insertBatch(apsList) ){
-            throw new CoreException(GunsCheckException.CheckExceptionEnum.INSERT_ACTIVE_PARTAKE_ERROR);
+        if( !statisticsService.insertBatch(apsList) ){
+            throw new CoreException(CoreCheckException.CheckExceptionEnum.INSERT_ACTIVE_PARTAKE_ERROR);
         }
         return apsList;
     }
@@ -126,11 +126,11 @@ public class LocalResourceActivePrizeStatistics extends AbstractResourceLoadLoca
 
     @Override
     protected boolean drawPrizeFlushToDb(DrawResponseContext ctx) {
-        LocalActivePartakeStatistics laps = resourceMap.get(resourceName(ctx.getRequestContext()));
+        LocalActivePrizeStatistics laps = resourceMap.get(resourceName(ctx.getRequestContext()));
         ActivePrizeStatistics aps = new ActivePrizeStatistics();
         aps.setId(laps.getInstance(ctx.getPrizeId().toString()).getId());
         aps.setPrizeAccess(laps.countInDay(ctx.getPrizeId()));
-        return getActivePrizeStatisticsService().updateById(aps);
+        return statisticsService.updateById(aps);
     }
 
     @Override
@@ -138,11 +138,10 @@ public class LocalResourceActivePrizeStatistics extends AbstractResourceLoadLoca
         return null;
     }
 
-    private IActivePrizeStatisticsService getActivePrizeStatisticsService(){
-        return SpringContextHolder.getBean(ActivePrizeStatisticsServiceImpl.ACTIVE_PRIZE_STATISTICS_SERVICE_IMPL);
-    }
-
     @Autowired
     @Qualifier(LocalResourceActivePrize.PROVIDE_COUNT_LOCAL_RESOURCE)
     private AbstractResourceLoadLocal<DrawRequestContext, LocalProvideCount> resource;
+
+    @Autowired
+    private IActivePrizeStatisticsService statisticsService;
 }
