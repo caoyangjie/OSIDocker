@@ -11,6 +11,8 @@
             </encoder>
         </appender>
     </root>
+	
     <logger name="com.querydsl.sql" level="DEBUG"/>
+	
     <logger name="AppMethodLogger" level="INFO"/>
 </configuration>
