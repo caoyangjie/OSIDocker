@@ -1,0 +1,31 @@
+@startuml
+class Foo
+note left: On last defined class
+
+note top of Object
+  In java, <size:18>every</size> <u>class</u>
+  <b>extends</b>
+  <i>this</i> one.
+end note
+
+note as N1
+  This note is <u>also</u>
+  <b><color:royalBlue>on several</color>
+  <s>words</s> lines
+  And this is hosted by <img:sourceforge.jpg>
+end note
+class Dummy{
+}
+
+Dummy --> Foo : A link
+note on link #red: note that is red
+Dummy --> Foo2 : Another link
+note right on link #green
+	this is my note on right link
+	and in green
+end note
+Foo --|> Object
+Foo2 --|> Object
+hide Foo
+show Foo
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+:user: -l-> (dumpLeft)
+:user: -r-> (dumpRight)
+:user: -d-> (dumpDown)
+:user: -u-> (dumpUp)
+:user: -u-> (dumpu)
+:user: -d-> (dumpd)
+:user: -l-> (dumpl)
+:user: -r-> (dumpr)
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+participant UserApplication as app
+participant EnableEasyTransaction as EET
+participant EasyTrasactionTrrigerConfiguration as ETTC
+participant EasyTransCoreConfiguration as ETCC
+
+app->EET: 开启@EnableEasyTransaction注解
+EET->ETTC: 通过@Import(EasyTransactionTrrigerConfiguration.class)注解进行类导入
+ETTC->ETCC: 在EasyTransCoreConfiguration中通过@ConditionalOnBean(EasyTransactionTrrigerConfiguration.class)
+
+@enduml

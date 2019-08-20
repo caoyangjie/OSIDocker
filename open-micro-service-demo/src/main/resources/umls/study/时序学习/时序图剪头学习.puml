@@ -1,0 +1,14 @@
+@startuml
+Bob -[#red]>x Alice
+Bob -> Alice
+Bob ->> Alice
+Bob -[#0000FF]\ Alice
+Bob \\- Alice
+Bob //-- Alice
+
+Bob ->o Alice
+Bob o\\-- Alice
+
+Bob <[#00FFFF]-> Alice
+Bob <->o Alice
+@enduml

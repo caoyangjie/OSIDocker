@@ -1,0 +1,6 @@
+@startuml
+class System << (S,#FF7700) Singleton >>
+class Date << (D,orchid) >>
+enum StatusEnum << (E,#FF0077) Enum >>
+abstract class AbstractExecute <<Abstract>>
+@enduml

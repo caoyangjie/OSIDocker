@@ -1,0 +1,10 @@
+@startuml
+'!define cur_path F:\platform\action\OSIDocker\open-micro-service-demo\src\main\resources\umls\study
+'!include cur_path\ReadMe.md
+!define send(a,b,c) a->b : c
+send(Alice, Bob, Hello)
+send(Bob, Alice, ok)
+'!define work(a,b,c,d,e,f) a->b->c->d->e : f
+'work(1,2,3,4,5,6)
+'work(1,2,3,4,5,6)
+@enduml

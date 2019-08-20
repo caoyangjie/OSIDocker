@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+:actor1: --> (usecase 1)
+:actor1: --> (usecase 3)
+:actor2: --> (usecese 2)
+@enduml

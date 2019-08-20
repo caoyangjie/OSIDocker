@@ -28,21 +28,21 @@ public class ZooKeeperConnectSession {
 		try {
 			this.zookeeper = new ZooKeeper(
 					"192.168.31.181:2181",
-					50000, 
+					50000,
 					new ZooKeeperWatcher());
 			// 给一个状态CONNECTING，连接中
 			System.out.println(zookeeper.getState());
-			
+
 			try {
 				// CountDownLatch
 				// java多线程并发同步的一个工具类
 				// 会传递进去一些数字，比如说1,2 ，3 都可以
 				// 然后await()，如果数字不是0，那么久卡住，等待
-				
+
 				// 其他的线程可以调用coutnDown()，减1
 				// 如果数字减到0，那么之前所有在await的线程，都会逃出阻塞的状态
 				// 继续向下运行
-				
+
 				connectedSemaphore.await();
 			} catch(InterruptedException e) {
 				e.printStackTrace();
@@ -53,7 +53,7 @@ public class ZooKeeperConnectSession {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 获取分布式锁
 	 * @param lockKey
@@ -61,7 +61,7 @@ public class ZooKeeperConnectSession {
 	public void acquireDistributedLock(String lockKey) {
 		String path = LOCK_CACHE + lockKey;
 		try {
-			zookeeper.create(path, "".getBytes(), 
+			zookeeper.create(path, "".getBytes(),
 					Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
 			System.out.println("success to acquire lock for cacheData[lockKey=" + lockKey + "]");
 		} catch (Exception e) {
@@ -70,8 +70,8 @@ public class ZooKeeperConnectSession {
 			int count = 0;
 			while(true) {
 				try {
-					Thread.sleep(1000); 
-					zookeeper.create(path, "".getBytes(), 
+					Thread.sleep(1000);
+					zookeeper.create(path, "".getBytes(),
 							Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
 				} catch (Exception e2) {
 					count++;
@@ -100,7 +100,7 @@ public class ZooKeeperConnectSession {
         }
         return false;
     }
-	
+
 	/**
 	 * 释放掉一个分布式锁
 	 * @param lockKey
@@ -108,7 +108,7 @@ public class ZooKeeperConnectSession {
 	public void releaseDistributedLock(String lockKey) {
 		String path = LOCK_CACHE + lockKey;
 		try {
-			zookeeper.delete(path, -1); 
+			zookeeper.delete(path, -1);
 			System.out.println("release the lock for cacheData[lockKey=" + lockKey + "]......");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,7 +153,7 @@ public class ZooKeeperConnectSession {
 
         }
     }
-	
+
 	/**
 	 * 建立zk session的watcher
 	 * @author Administrator
@@ -165,29 +165,29 @@ public class ZooKeeperConnectSession {
 			System.out.println("Receive watched event: " + event.getState());
 			if(KeeperState.SyncConnected == event.getState()) {
 				connectedSemaphore.countDown();
-			} 
+			}
 		}
 	}
-	
+
 	/**
 	 * 封装单例的静态内部类
 	 * @author Administrator
 	 *
 	 */
 	private static class Singleton {
-		
+
 		private static ZooKeeperConnectSession instance;
-		
+
 		static {
 			instance = new ZooKeeperConnectSession();
 		}
-		
+
 		public static ZooKeeperConnectSession getInstance() {
 			return instance;
 		}
-		
+
 	}
-	
+
 	/**
 	 * 获取单例
 	 * @return

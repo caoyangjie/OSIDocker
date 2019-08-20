@@ -3,9 +3,11 @@ package com.osidocker.open.micro.utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class FileSearch implements Runnable {
     private String initPath;
@@ -16,7 +18,7 @@ public class FileSearch implements Runnable {
         this.initPath = initPath;
         this.end = end;
         this.phaser = phaser;
-        results = new ArrayList<String>();
+        results = new LinkedList<>();
     }
 
     private void directoryProcess(File file) {
@@ -89,10 +91,11 @@ public class FileSearch implements Runnable {
         if (!checkResults()) {
             return;
         }
-        filterResults();
-        if (!checkResults()) {
-            return;
-        }
+        results = results.stream().distinct().collect(Collectors.toList());
+//        filterResults();
+//        if (!checkResults()) {
+//            return;
+//        }
         showInfo();
         phaser.arriveAndDeregister();
         System.out.printf("%s: Work completed.\n", Thread.currentThread()

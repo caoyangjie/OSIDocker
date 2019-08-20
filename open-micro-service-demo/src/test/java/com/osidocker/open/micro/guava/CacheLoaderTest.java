@@ -23,6 +23,9 @@ import static org.junit.Assert.assertThat;
  */
 @Slf4j
 public class CacheLoaderTest {
+
+    public static final String WANGJI = "wangji";
+
     @Test
     public void testBaisc() throws ExecutionException, InterruptedException {
         LoadingCache<String, Employee> cache = CacheBuilder.newBuilder()
@@ -91,7 +94,7 @@ public class CacheLoaderTest {
                 .build(CacheLoaderCreator.createCacheLoader());
         cache.getUnchecked("wangji");
         TimeUnit.SECONDS.sleep(3);
-        Employee employee = cache.getIfPresent("wangji"); //不会重新加载创建cache
+        Employee employee = cache.getIfPresent(WANGJI); //不会重新加载创建cache
         log.info("被销毁：" + (employee == null ? "是的" : "否"));
         cache.getUnchecked("guava");
 

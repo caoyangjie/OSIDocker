@@ -1,0 +1,21 @@
+@startuml
+Object <|-- Entry
+class Entry<? extends BaseModel>{
+    ..private 字段..
+    - id
+    ..protected 字段..
+    # name
+    ..package 字段..
+    ~ field
+    ..public字段..
+    + value
+    ==方法区==
+    ..静态方法..
+    {static} staticMethod();
+    ..抽象方法..
+    {abstract} abstractMethod();
+}
+note left of Entry: 这是一个note说明,可以说明
+note "in java every class must extends this" as N1
+Object . N1
+@enduml
