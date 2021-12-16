@@ -344,6 +344,16 @@
             <version>3.9</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.ctrip.framework.apollo</groupId>
+            <artifactId>apollo-openapi</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>5.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>
