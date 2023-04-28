@@ -14,9 +14,9 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.osidocker.open.micro.entity.CodeImage;
-import jp.sourceforge.qrcode.QRCodeDecoder;
-import jp.sourceforge.qrcode.exception.DecodingFailedException;
+//import com.osidocker.open.micro.entity.CodeImage;
+//import jp.sourceforge.qrcode.QRCodeDecoder;
+//import jp.sourceforge.qrcode.exception.DecodingFailedException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -285,21 +285,22 @@ public class BarCodeFactory {
      */
     public static String decode(String imagePath){
         // QRCode 二维码图片的文件
-        File imageFile = new File(imagePath);
-        BufferedImage bufImg = null;
-        String content = null;
-        try {
-            bufImg = ImageIO.read(imageFile);
-            QRCodeDecoder decoder = new QRCodeDecoder();
-            content = new String(decoder.decode(new CodeImage(bufImg)), "utf-8");
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
-        } catch (DecodingFailedException dfe) {
-            System.out.println("Error: " + dfe.getMessage());
-            dfe.printStackTrace();
-        }
-        return content;
+//        File imageFile = new File(imagePath);
+//        BufferedImage bufImg = null;
+//        String content = null;
+//        try {
+//            bufImg = ImageIO.read(imageFile);
+//            QRCodeDecoder decoder = new QRCodeDecoder();
+//            content = new String(decoder.decode(new CodeImage(bufImg)), "utf-8");
+//        } catch (IOException e) {
+//            System.out.println("Error: " + e.getMessage());
+//            e.printStackTrace();
+//        } catch (DecodingFailedException dfe) {
+//            System.out.println("Error: " + dfe.getMessage());
+//            dfe.printStackTrace();
+//        }
+//        return content;
+        return "";
     }
 
     /**
