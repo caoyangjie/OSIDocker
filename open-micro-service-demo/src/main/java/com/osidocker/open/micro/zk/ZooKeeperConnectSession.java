@@ -22,7 +22,7 @@ public class ZooKeeperConnectSession {
     public static final String LOCK_CACHE = "/lock-cache";
     private static CountDownLatch connectedSemaphore = new CountDownLatch(1);
 
-	private ZooKeeper zookeeper;
+	public ZooKeeper zookeeper;
 
 	public ZooKeeperConnectSession() {
 		// 去连接zookeeper server，创建会话的时候，是异步去进行的
@@ -30,8 +30,8 @@ public class ZooKeeperConnectSession {
 		try {
 			this.zookeeper = new ZooKeeper(
 					"127.0.0.1:2181,127.0.0.1:2180,127.0.0.1:2179",
-					50000,
-					new ZooKeeperWatcher());
+					60000,
+					new ZooKeeperWatcher(this, "127.0.0.1:2181,127.0.0.1:2180,127.0.0.1:2179", 60000));
 			// 给一个状态CONNECTING，连接中
 			System.out.println(zookeeper.getState());
 
@@ -162,11 +162,28 @@ public class ZooKeeperConnectSession {
 	 *
 	 */
 	private class ZooKeeperWatcher implements Watcher {
+		private ZooKeeperConnectSession zkSession;
+		private String connectString;
+		private int sessionTimeout;
+		public ZooKeeperWatcher(ZooKeeperConnectSession zkSession, String connectString, int sessionTimeout) {
+			this.zkSession = zkSession;
+			this.connectString = connectString;
+			this.sessionTimeout = sessionTimeout;
+		}
+
 		@Override
 		public void process(WatchedEvent event) {
 			System.out.println("Receive watched event: " + event.getState());
 			if(KeeperState.SyncConnected == event.getState()) {
 				connectedSemaphore.countDown();
+			}
+			if (event.getState() == Event.KeeperState.Expired) {
+				// 会话过期，重新连接
+				try {
+					zkSession.zookeeper = new ZooKeeper(connectString, sessionTimeout, this);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
