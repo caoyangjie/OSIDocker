@@ -1,5 +1,6 @@
 package com.osidocker.open.micro.zk;
 
+import lombok.SneakyThrows;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -7,6 +8,7 @@ import org.apache.zookeeper.Watcher.Event.KeeperState;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
+import org.apache.zookeeper.server.WatchManager;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -27,7 +29,7 @@ public class ZooKeeperConnectSession {
 		// 所以要给一个监听器，说告诉我们什么时候才是真正完成了跟zk server的连接
 		try {
 			this.zookeeper = new ZooKeeper(
-					"192.168.31.181:2181",
+					"127.0.0.1:2181,127.0.0.1:2180,127.0.0.1:2179",
 					50000,
 					new ZooKeeperWatcher());
 			// 给一个状态CONNECTING，连接中
@@ -194,5 +196,19 @@ public class ZooKeeperConnectSession {
 	 */
 	public static ZooKeeperConnectSession getInstance() {
 		return Singleton.getInstance();
+	}
+
+	@SneakyThrows
+	public static void main(String[] args) {
+		ZooKeeperConnectSession.getInstance().zookeeper.exists("/abc/key2", new Watcher() {
+			@Override
+			public void process(WatchedEvent event) {
+				System.out.println("设置了值："+ getInstance().getNodeData(event.getPath()));
+			}
+		});
+//		ZooKeeperConnectSession.getInstance().createNode("/abc/key2");
+		ZooKeeperConnectSession.getInstance().setNodeData("/abc/key2","valuedatadd");
+		System.out.println(ZooKeeperConnectSession.getInstance().getNodeData("/abc/key2"));
+//		Thread.sleep(100000);
 	}
 }
