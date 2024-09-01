@@ -8,12 +8,15 @@
  */
 package com.osidocker.open.micro.utils;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -276,5 +279,45 @@ public final class StringUtil {
 
     public static boolean isAllEmpty(String[] prizeId) {
         return Stream.of(prizeId).allMatch(StringUtil::isEmpty);
+    }
+
+
+    public static String hanZi2Pinyin(String value) {
+        StringBuilder pinyin = new StringBuilder();
+
+        for (char c : value.toCharArray()) {
+            String[] pinyins = PinyinHelper.toHanyuPinyinStringArray(c);
+            if (pinyins != null) {
+                pinyin.append(pinyins[0]).append(" "); // 默认取第一个拼音
+            } else {
+                pinyin.append(c).append(" "); // 如果没有拼音，保留原字符
+            }
+        }
+        System.out.println(pinyin.toString().trim()); // 输出拼音
+        return pinyin.toString().trim();
+    }
+
+    public static String hashString(String input) {
+        try {
+            // 创建 MessageDigest 实例
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // 计算哈希值
+            byte[] hashBytes = digest.digest(input.getBytes());
+
+            // 将哈希值转换为十六进制字符串
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            // 取前16个字符
+            return hexString.toString().substring(0, 16);
+        } catch (NoSuchAlgorithmException e) {
+            return hanZi2Pinyin(input);
+        }
     }
 }

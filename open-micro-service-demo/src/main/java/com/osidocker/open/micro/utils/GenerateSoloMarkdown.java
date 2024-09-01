@@ -24,7 +24,7 @@ import java.util.Map;
  **/
 public class GenerateSoloMarkdown {
     public static void main(String[] args) {
-        HaloQueryWithEntities.generate();
+        MySQLQueryWithEntities.generate();
     }
 }
 
