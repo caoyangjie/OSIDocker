@@ -217,14 +217,14 @@ public class ZooKeeperConnectSession {
 
 	@SneakyThrows
 	public static void main(String[] args) {
-		ZooKeeperConnectSession.getInstance().zookeeper.exists("/abc/key2", new Watcher() {
+		ZooKeeperConnectSession.getInstance().zookeeper.exists("/abc/key2/A-jfdskal-211@@234210001", new Watcher() {
 			@Override
 			public void process(WatchedEvent event) {
 				System.out.println("设置了值："+ getInstance().getNodeData(event.getPath()));
 			}
 		});
-//		ZooKeeperConnectSession.getInstance().createNode("/abc/key2");
-		ZooKeeperConnectSession.getInstance().setNodeData("/abc/key2","valuedatadd");
+		ZooKeeperConnectSession.getInstance().createNode("/abc/key2/A-jfdskal-211@@234210001");
+		ZooKeeperConnectSession.getInstance().setNodeData("/abc/key2/A-jfdskal-211@@234210001","valuedatadd");
 		System.out.println(ZooKeeperConnectSession.getInstance().getNodeData("/abc/key2"));
 //		Thread.sleep(100000);
 	}

@@ -199,13 +199,13 @@
             <version>1.0.0</version>
         </dependency>
         -->
-        <dependency>
+       <!-- <dependency>
             <groupId>QRCode</groupId>
             <artifactId>QRCode</artifactId>
             <version>3.0.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/QRCode-3.0.0.jar</systemPath>
-        </dependency>
+        </dependency>-->
         <!-- hystrix需要的依赖 -->
         <dependency>
             <groupId>com.netflix.hystrix</groupId>

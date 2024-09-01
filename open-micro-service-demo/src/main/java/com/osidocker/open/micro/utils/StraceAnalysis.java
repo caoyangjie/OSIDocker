@@ -36,12 +36,12 @@ public class StraceAnalysis {
     private static double precision = 0.00001;
 
     public static void main(String[] args) {
-//        tidNames = analysisStackFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/5044.jstack");
-        tidNames = analysisStackFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/80619.jstack_new");
+        tidNames = analysisStackFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/5044.jstack");
+//        tidNames = analysisStackFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/80619.jstack_new");
 //        tidNames = analysisStackFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/976.jstack");
         tidWithRId = new ConcurrentHashMap<>();
-//        analysisStraceFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/7696.strace", analysisMap, resourceMap);
-        analysisStraceFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/four_min.strace", analysisMap, resourceMap);
+        analysisStraceFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/7696.strace", analysisMap, resourceMap);
+//        analysisStraceFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/four_min.strace", analysisMap, resourceMap);
 //        analysisStraceFile("/software/workspace/OSIDocker/open-micro-service-demo/src/main/resources/strace0509.log", analysisMap, resourceMap);
 //        timeFilter(analysisMap, null, "18:00:23.155440", "18:02:33.211292");
 //        resourceFilter(resourceMap, null);
@@ -52,11 +52,11 @@ public class StraceAnalysis {
 //            System.out.print(bufferMap.get(time));
 //        });
 //        retrospect("9456", "13:09:17.125824", "13:09:18.830982",0);
-        resFilter("83402", "22:16:22.931076", "22:16:25.237999",0);
+//        resFilter("83402", "22:16:22.931076", "22:16:25.237999",0);
 //        resFilter("29433", "22:30:46.477706", "22:30:47.886147",0);
 //        resFilter("84538", "22:16:23.440361", "22:16:24.163479",0);
 //        resFilter("81742", "22:16:23.441743", "22:16:24.191295",0);
-//        resFilter("7393","13:09:15.212047","13:09:18.250768",0);
+        resFilter("7393","13:09:15.212047","13:09:18.250768",0);
         System.out.println(buffer.toString());
     }
 
