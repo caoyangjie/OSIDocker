@@ -24,7 +24,7 @@ import java.util.Map;
  **/
 public class GenerateSoloMarkdown {
     public static void main(String[] args) {
-        MySQLQueryWithEntities.generate();
+        HaloQueryWithEntities.generate();
     }
 }
 
@@ -197,7 +197,9 @@ class ArticleSeries {
 
     private static String replaceImg(String articleContent) {
         // 转换 gitee 上 图床中的图片
-        return articleContent.replaceAll("https://caoyangjie.gitee.io/","https://gitbook.luckycxy.com/");
+        return articleContent.replaceAll("https://caoyangjie.gitee.io/","https://gitbook.luckycxy.com/")
+                .replaceAll("undefined", "")
+                ;
     }
 }
 
